@@ -8,11 +8,12 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DepartmentId {get; set;}
-        public string? DepartmentName {get; set;}
-        public int ManagerId {get; set;}
-        public int CompanyId {get; set;}
-        public Company? Company {get; set;}
-        public List<Employee>? Employees {get; set;}
+        public int DepartmentId { get; set; }
+        [Required]
+        public string DepartmentName { get; set; } = string.Empty;
+        public int ManagerId { get; set; }
+        public int CompanyId { get; set; }
+        public Company? Company { get; set; }
+        public List<Employee>? Employees { get; set; }
     }
 }

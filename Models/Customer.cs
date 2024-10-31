@@ -9,6 +9,9 @@ namespace api.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CustomerId { get; set; }
-        public string? Email {get; set;}
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
+        public string? Email { get; set; }
+        public List<Order>? Orders { get; set; }
     }
 }
