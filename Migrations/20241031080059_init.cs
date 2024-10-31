@@ -76,20 +76,6 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    ImageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.ImageId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Materials",
                 columns: table => new
                 {
@@ -211,7 +197,28 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product_Colors",
+                name: "Images",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.ImageId);
+                    table.ForeignKey(
+                        name: "FK_Images_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductColors",
                 columns: table => new
                 {
                     ColorId = table.Column<int>(type: "int", nullable: false),
@@ -219,15 +226,15 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product_Colors", x => new { x.ColorId, x.ProductId });
+                    table.PrimaryKey("PK_ProductColors", x => new { x.ColorId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_Product_Colors_Colors_ColorId",
+                        name: "FK_ProductColors_Colors_ColorId",
                         column: x => x.ColorId,
                         principalTable: "Colors",
                         principalColumn: "ColorId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Colors_Products_ProductId",
+                        name: "FK_ProductColors_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -235,31 +242,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product_Images",
-                columns: table => new
-                {
-                    ImageId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product_Images", x => new { x.ImageId, x.ProductId });
-                    table.ForeignKey(
-                        name: "FK_Product_Images_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "ImageId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Product_Images_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Product_Materials",
+                name: "ProductMaterials",
                 columns: table => new
                 {
                     ProductId = table.Column<int>(type: "int", nullable: false),
@@ -267,15 +250,15 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product_Materials", x => new { x.MaterialId, x.ProductId });
+                    table.PrimaryKey("PK_ProductMaterials", x => new { x.MaterialId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_Product_Materials_Materials_MaterialId",
+                        name: "FK_ProductMaterials_Materials_MaterialId",
                         column: x => x.MaterialId,
                         principalTable: "Materials",
                         principalColumn: "MaterialId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Materials_Products_ProductId",
+                        name: "FK_ProductMaterials_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -283,7 +266,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product_Sizes",
+                name: "ProductSizes",
                 columns: table => new
                 {
                     SizeId = table.Column<int>(type: "int", nullable: false),
@@ -291,15 +274,15 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product_Sizes", x => new { x.ProductId, x.SizeId });
+                    table.PrimaryKey("PK_ProductSizes", x => new { x.ProductId, x.SizeId });
                     table.ForeignKey(
-                        name: "FK_Product_Sizes_Products_ProductId",
+                        name: "FK_ProductSizes_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Sizes_Size_SizeId",
+                        name: "FK_ProductSizes_Size_SizeId",
                         column: x => x.SizeId,
                         principalTable: "Size",
                         principalColumn: "SizeId",
@@ -335,7 +318,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order_Details",
+                name: "OrderDetails",
                 columns: table => new
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false),
@@ -344,15 +327,15 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order_Details", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_Order_Details_Orders_OrderId",
+                        name: "FK_OrderDetails_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Order_Details_Products_ProductId",
+                        name: "FK_OrderDetails_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -370,8 +353,13 @@ namespace api.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_Details_ProductId",
-                table: "Order_Details",
+                name: "IX_Images_ProductId",
+                table: "Images",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_ProductId",
+                table: "OrderDetails",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -385,24 +373,14 @@ namespace api.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_Colors_ProductId",
-                table: "Product_Colors",
+                name: "IX_ProductColors_ProductId",
+                table: "ProductColors",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_Images_ProductId",
-                table: "Product_Images",
+                name: "IX_ProductMaterials_ProductId",
+                table: "ProductMaterials",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_Materials_ProductId",
-                table: "Product_Materials",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_Sizes_SizeId",
-                table: "Product_Sizes",
-                column: "SizeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -413,34 +391,36 @@ namespace api.Migrations
                 name: "IX_Products_ProviderId",
                 table: "Products",
                 column: "ProviderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSizes_SizeId",
+                table: "ProductSizes",
+                column: "SizeId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Order_Details");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Product_Colors");
+                name: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "Product_Images");
+                name: "ProductColors");
 
             migrationBuilder.DropTable(
-                name: "Product_Materials");
+                name: "ProductMaterials");
 
             migrationBuilder.DropTable(
-                name: "Product_Sizes");
+                name: "ProductSizes");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Colors");
-
-            migrationBuilder.DropTable(
-                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Materials");

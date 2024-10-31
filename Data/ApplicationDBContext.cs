@@ -32,18 +32,13 @@ namespace api.Data
             .WithMany(e => e.Products)
             .UsingEntity<ProductMaterial>();
 
-            modelBuilder.Entity<Product>()
-            .HasMany(e => e.Images)
-            .WithMany(e => e.Products)
-            .UsingEntity<ProductImage>();
-
             modelBuilder.Entity<Department>()
             .HasMany(e => e.Employees)
             .WithOne(e => e.Department);
 
-            modelBuilder.Entity<Employee>()
-            .HasOne(e => e.Department);
-            
+            modelBuilder.Entity<Product>()
+                .HasMany(e => e.Images)
+                .WithOne(e => e.Product);
         }
 
         public DbSet<Category> Categories {get; set;}
@@ -57,7 +52,6 @@ namespace api.Data
         public DbSet<OrderDetail> OrderDetails {get; set;}
         public DbSet<Order> Orders {get; set;}
         public DbSet<ProductColor> ProductColors {get; set;}
-        public DbSet<ProductImage> ProductImages {get; set;}
         public DbSet<ProductMaterial> ProductMaterials {get; set;}
         public DbSet<ProductSize> ProductSizes {get; set;}
         public DbSet<Product> Products {get; set;}

@@ -206,10 +206,15 @@ namespace api.Migrations
                     b.Property<string>("Alt")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Images");
                 });
@@ -259,7 +264,7 @@ namespace api.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("api.Models.Order_Detail", b =>
+            modelBuilder.Entity("api.Models.OrderDetail", b =>
                 {
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -274,7 +279,7 @@ namespace api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Order_Details");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("api.Models.Product", b =>
@@ -315,7 +320,7 @@ namespace api.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("api.Models.Product_color", b =>
+            modelBuilder.Entity("api.Models.ProductColor", b =>
                 {
                     b.Property<int>("ColorId")
                         .HasColumnType("int");
@@ -327,25 +332,10 @@ namespace api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Product_Colors");
+                    b.ToTable("ProductColors");
                 });
 
-            modelBuilder.Entity("api.Models.Product_image", b =>
-                {
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ImageId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Product_Images");
-                });
-
-            modelBuilder.Entity("api.Models.Product_material", b =>
+            modelBuilder.Entity("api.Models.ProductMaterial", b =>
                 {
                     b.Property<int>("MaterialId")
                         .HasColumnType("int");
@@ -357,10 +347,10 @@ namespace api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Product_Materials");
+                    b.ToTable("ProductMaterials");
                 });
 
-            modelBuilder.Entity("api.Models.Product_size", b =>
+            modelBuilder.Entity("api.Models.ProductSize", b =>
                 {
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -372,7 +362,7 @@ namespace api.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("Product_Sizes");
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("api.Models.Provider", b =>
@@ -433,6 +423,17 @@ namespace api.Migrations
                     b.Navigation("Department");
                 });
 
+            modelBuilder.Entity("api.Models.Image", b =>
+                {
+                    b.HasOne("api.Models.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("api.Models.Order", b =>
                 {
                     b.HasOne("api.Models.Customer", "Customer")
@@ -452,7 +453,7 @@ namespace api.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("api.Models.Order_Detail", b =>
+            modelBuilder.Entity("api.Models.OrderDetail", b =>
                 {
                     b.HasOne("api.Models.Order", "Order")
                         .WithMany("Details")
@@ -461,7 +462,7 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.HasOne("api.Models.Product", "Product")
-                        .WithMany("Order_Details")
+                        .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -490,7 +491,7 @@ namespace api.Migrations
                     b.Navigation("Provider");
                 });
 
-            modelBuilder.Entity("api.Models.Product_color", b =>
+            modelBuilder.Entity("api.Models.ProductColor", b =>
                 {
                     b.HasOne("api.Models.Color", "Color")
                         .WithMany("Product_Colors")
@@ -509,26 +510,7 @@ namespace api.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("api.Models.Product_image", b =>
-                {
-                    b.HasOne("api.Models.Image", "Image")
-                        .WithMany("Product_Imagescts")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.Product", "Product")
-                        .WithMany("Product_Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("api.Models.Product_material", b =>
+            modelBuilder.Entity("api.Models.ProductMaterial", b =>
                 {
                     b.HasOne("api.Models.Material", "Material")
                         .WithMany("Product_Materials")
@@ -537,7 +519,7 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.HasOne("api.Models.Product", "Product")
-                        .WithMany("Product_Materials")
+                        .WithMany("ProductMaterials")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -547,10 +529,10 @@ namespace api.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("api.Models.Product_size", b =>
+            modelBuilder.Entity("api.Models.ProductSize", b =>
                 {
                     b.HasOne("api.Models.Product", "Product")
-                        .WithMany("Product_Sizes")
+                        .WithMany("ProductSizes")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -586,11 +568,6 @@ namespace api.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("api.Models.Image", b =>
-                {
-                    b.Navigation("Product_Imagescts");
-                });
-
             modelBuilder.Entity("api.Models.Material", b =>
                 {
                     b.Navigation("Product_Materials");
@@ -603,15 +580,15 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Product", b =>
                 {
-                    b.Navigation("Order_Details");
+                    b.Navigation("Images");
+
+                    b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductMaterials");
+
+                    b.Navigation("ProductSizes");
 
                     b.Navigation("Product_Colors");
-
-                    b.Navigation("Product_Images");
-
-                    b.Navigation("Product_Materials");
-
-                    b.Navigation("Product_Sizes");
                 });
 
             modelBuilder.Entity("api.Models.Provider", b =>

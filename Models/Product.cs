@@ -16,7 +16,6 @@ namespace api.Models
         public decimal Cost {get; set;}
         public int Stock {get; set;}
         public List<Image>? Images {get; set;}
-        public List<ProductImage>? Product_Images {get; set;}
         public List<Color>? Colors {get; set;}
         public List<ProductColor>? Product_Colors {get; set;}
         public List<Size>? Sizes {get; set;}
