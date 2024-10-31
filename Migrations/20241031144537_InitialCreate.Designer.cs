@@ -12,8 +12,13 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:Migrations/20241031144537_InitialCreate.Designer.cs
+    [Migration("20241031144537_InitialCreate")]
+    partial class InitialCreate
+========
     [Migration("20241031145547_init")]
     partial class init
+>>>>>>>> master:Migrations/20241031145547_init.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
