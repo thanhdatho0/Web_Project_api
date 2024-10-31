@@ -36,9 +36,9 @@ namespace api.Data
             .HasMany(e => e.Employees)
             .WithOne(e => e.Department);
 
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<Color>()
                 .HasMany(e => e.Images)
-                .WithOne(e => e.Product);
+                 .WithOne(e => e.Color);
 
             // Employee vs Order
             modelBuilder.Entity<Employee>()
@@ -73,9 +73,7 @@ namespace api.Data
             // Check tuổi Employee
             modelBuilder.Entity<Employee>().ToTable(t =>
             t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16"));
-
         }
-
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Company> Companies { get; set; }
@@ -86,10 +84,10 @@ namespace api.Data
         public DbSet<Material> Materials { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<ProductMaterial> ProductMaterials { get; set; }
         public DbSet<ProductSize> ProductSizes { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductColor> ProductColors { get; set; }
 
     }
 }

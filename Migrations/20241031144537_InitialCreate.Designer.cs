@@ -12,8 +12,13 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:Migrations/20241031144537_InitialCreate.Designer.cs
     [Migration("20241031144537_InitialCreate")]
     partial class InitialCreate
+========
+    [Migration("20241031145547_init")]
+    partial class init
+>>>>>>>> master:Migrations/20241031145547_init.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,6 +224,9 @@ namespace api.Migrations
                     b.Property<string>("Alt")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -226,6 +234,8 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("ColorId");
 
                     b.HasIndex("ProductId");
 
@@ -451,11 +461,19 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Image", b =>
                 {
+                    b.HasOne("api.Models.Color", "Color")
+                        .WithMany("Images")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("api.Models.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Color");
 
                     b.Navigation("Product");
                 });
@@ -520,13 +538,13 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.ProductColor", b =>
                 {
                     b.HasOne("api.Models.Color", "Color")
-                        .WithMany("Product_Colors")
+                        .WithMany("ProductsHasColor")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("api.Models.Product", "Product")
-                        .WithMany("Product_Colors")
+                        .WithMany("ColorsOfProduct")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -581,7 +599,9 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Color", b =>
                 {
-                    b.Navigation("Product_Colors");
+                    b.Navigation("Images");
+
+                    b.Navigation("ProductsHasColor");
                 });
 
             modelBuilder.Entity("api.Models.Company", b =>
@@ -616,6 +636,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Product", b =>
                 {
+                    b.Navigation("ColorsOfProduct");
+
                     b.Navigation("Images");
 
                     b.Navigation("OrderDetails");
@@ -623,8 +645,6 @@ namespace api.Migrations
                     b.Navigation("ProductMaterials");
 
                     b.Navigation("ProductSizes");
-
-                    b.Navigation("Product_Colors");
                 });
 
             modelBuilder.Entity("api.Models.Provider", b =>
