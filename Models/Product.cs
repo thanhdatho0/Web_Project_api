@@ -6,6 +6,7 @@ namespace api.Models
     public class Product
     {
         //Properties
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId {get; set;}
         public string? Name {get; set;}
@@ -15,9 +16,9 @@ namespace api.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Cost {get; set;}
         public int Stock {get; set;}
-        public List<Image>? Images {get; set;}
-        public List<Color>? Colors {get; set;}
-        public List<ProductColor>? Product_Colors {get; set;}
+        public List<Image> Images {get; set;}
+        public List<Color> Colors {get; set;}
+        public List<ProductColor> ColorsOfProduct { get; set; }
         public List<Size>? Sizes {get; set;}
         public List<ProductSize>? ProductSizes {get; set;}
         public List<Material>? Materials {get; set;}
