@@ -34,6 +34,7 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryId");
@@ -50,9 +51,11 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorId"));
 
                     b.Property<string>("HexaCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ColorId");
@@ -72,6 +75,7 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -134,6 +138,7 @@ namespace api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DepartmentName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ManagerId")
@@ -173,7 +178,9 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Male")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("ParentNumber")
                         .IsRequired()
@@ -192,7 +199,10 @@ namespace api.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", t =>
+                        {
+                            t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16");
+                        });
                 });
 
             modelBuilder.Entity("api.Models.Image", b =>
@@ -228,6 +238,7 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaterialId"));
 
                     b.Property<string>("MaterialType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaterialId");
@@ -249,8 +260,10 @@ namespace api.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("OrderExportDateTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("OrderExportDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DateTime")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("OrderNotice")
                         .HasColumnType("nvarchar(max)");
@@ -300,6 +313,7 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
@@ -310,6 +324,11 @@ namespace api.Migrations
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isDeletet")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("ProductId");
 
@@ -374,12 +393,15 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProviderId"));
 
                     b.Property<string>("ProviderCompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProviderEmail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProviderPhone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProviderId");
@@ -396,6 +418,7 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeId"));
 
                     b.Property<string>("SizeValue")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SizeId");
@@ -437,13 +460,13 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Order", b =>
                 {
                     b.HasOne("api.Models.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("api.Models.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -563,9 +586,19 @@ namespace api.Migrations
                     b.Navigation("Departments");
                 });
 
+            modelBuilder.Entity("api.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("api.Models.Department", b =>
                 {
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("api.Models.Employee", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("api.Models.Material", b =>

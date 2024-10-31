@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace api.Migrations
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -31,8 +31,8 @@ namespace api.Migrations
                 {
                     ColorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    HexaCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    HexaCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,7 +45,7 @@ namespace api.Migrations
                 {
                     CompanyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Slogan = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FoundDate = table.Column<DateTime>(type: "DateTime", nullable: true),
@@ -81,7 +81,7 @@ namespace api.Migrations
                 {
                     MaterialId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MaterialType = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MaterialType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,9 +94,9 @@ namespace api.Migrations
                 {
                     ProviderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProviderEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ProviderEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProviderPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProviderCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,7 +109,7 @@ namespace api.Migrations
                 {
                     SizeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SizeValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SizeValue = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,7 +122,7 @@ namespace api.Migrations
                 {
                     DepartmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ManagerId = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -143,11 +143,12 @@ namespace api.Migrations
                 {
                     ProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
+                    isDeletet = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     ProviderId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -181,7 +182,7 @@ namespace api.Migrations
                     DepartmentId = table.Column<int>(type: "int", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Male = table.Column<bool>(type: "bit", nullable: false),
+                    Male = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -189,6 +190,7 @@ namespace api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                    table.CheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16");
                     table.ForeignKey(
                         name: "FK_Employees_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -297,7 +299,7 @@ namespace api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    OrderExportDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    OrderExportDateTime = table.Column<DateTime>(type: "DateTime", nullable: false, defaultValueSql: "GETDATE()"),
                     OrderNotice = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
