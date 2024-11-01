@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\api.csproj": {}
+    "D:\\Web-React-App\\api\\api.csproj": {}
   },
   "projects": {
-    "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\api.csproj": {
+    "D:\\Web-React-App\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\api.csproj",
+        "projectUniqueName": "D:\\Web-React-App\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\api.csproj",
+        "projectPath": "D:\\Web-React-App\\api\\api.csproj",
         "packagesPath": "C:\\Users\\thanh\\.nuget\\packages\\",
-        "outputPath": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\obj\\",
+        "outputPath": "D:\\Web-React-App\\api\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
           "C:\\Users\\thanh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -58,17 +54,17 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0-rc.2.24474.1, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0-rc.2.24474.1, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0-rc.2.24474.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
