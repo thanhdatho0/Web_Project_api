@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
-    
+
     public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _context;
@@ -35,7 +35,7 @@ namespace api.Repository
         public async Task<Category?> UpdateAsync(int id, CategoryUpdateDto categoryUpdateDTO)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
-            if(category == null) return null;
+            if (category == null) return null;
             category.Name = categoryUpdateDTO.Name;
             category.Description = categoryUpdateDTO.Description;
             await _context.SaveChangesAsync();
@@ -45,7 +45,7 @@ namespace api.Repository
         public async Task<Category?> DeleteAsync(int id)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
-            if(category == null) return null;
+            if (category == null) return null;
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return category;

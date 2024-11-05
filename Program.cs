@@ -11,12 +11,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>{
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IColorRepository, ColorRepository>();
 
 var app = builder.Build();
 
@@ -31,7 +33,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(x => x.AllowAnyHeader()
                    .AllowAnyMethod()
-                   .SetIsOriginAllowed(origin => true) 
+                   .SetIsOriginAllowed(origin => true)
                     );
 
 app.MapControllers();
