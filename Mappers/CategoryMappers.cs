@@ -9,22 +9,29 @@ namespace api.Mappers
 {
     public static class CategoryMappers
     {
-        public static CategoryDto ToCategoryDto(this Category categoryModel){
-            return new CategoryDto{
+        public static CategoryDto ToCategoryDto(this Category categoryModel)
+        {
+            return new CategoryDto
+            {
+                CategoryId = categoryModel.CategoryId,
                 Name = categoryModel.Name,
                 Description = categoryModel.Description
             };
         }
 
-        public static Category ToCategoryFromCreateDto(this CategoryCreateDto categoryDto){
-            return new Category{
+        public static Category ToCategoryFromCreateDto(this CategoryCreateDto categoryDto)
+        {
+            return new Category
+            {
                 Name = categoryDto.Name,
                 Description = categoryDto.Description
             };
         }
 
-        public static Category ToCategoryFromUpdateDto(this CategoryUpdateDto categoryDto){
-            return new Category{
+        public static Category ToCategoryFromUpdateDto(this CategoryUpdateDto categoryDto)
+        {
+            return new Category
+            {
                 Name = categoryDto.Name,
                 Description = categoryDto.Description
             };

@@ -5,8 +5,11 @@ namespace api.Mappers;
 
 public static class ProductMappers
 {
-    public static ProductDto ToProductDto(this Product productModel){
-        return new ProductDto{
+    public static ProductDto ToProductDto(this Product productModel)
+    {
+        return new ProductDto
+        {
+            ProductId = productModel.ProductId,
             Name = productModel.Name,
             CategoryName = productModel.Category?.Name,
             Description = productModel.Description,
@@ -16,8 +19,10 @@ public static class ProductMappers
         };
     }
 
-    public static Product ToProductFromCreateDto(this ProductCreateDto productDto){
-        return new Product{
+    public static Product ToProductFromCreateDto(this ProductCreateDto productDto)
+    {
+        return new Product
+        {
             Name = productDto.Name,
             Description = productDto.Description,
             Cost = productDto.Cost,
@@ -28,8 +33,10 @@ public static class ProductMappers
         };
     }
 
-    public static Product ToProductFromUpdateDto(this ProductUpdateDto productDto){
-        return new Product{
+    public static Product ToProductFromUpdateDto(this ProductUpdateDto productDto)
+    {
+        return new Product
+        {
             Name = productDto.Name,
             Description = productDto.Description,
             Cost = productDto.Cost,
