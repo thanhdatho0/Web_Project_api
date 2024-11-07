@@ -11,13 +11,11 @@ namespace api.Controllers
 
     public class ColorController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IColorRepository _colorRepo;
 
-        public ColorController(ApplicationDbContext context, IColorRepository colorRepo)
+        public ColorController(IColorRepository colorRepo)
         {
             _colorRepo = colorRepo;
-            _context = context;
         }
 
         [HttpGet]
