@@ -88,6 +88,8 @@ namespace api.Data
         public DbSet<ProductMaterial> ProductMaterials { get; set; }
         public DbSet<ProductSize> ProductSizes { get; set; }
         public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        public DbSet<Size> Sizes { get; set; }
 
     }
 }

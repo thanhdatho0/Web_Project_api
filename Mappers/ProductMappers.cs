@@ -15,11 +15,13 @@ public static class ProductMappers
             Description = productModel.Description,
             Cost = productModel.Cost,
             Price = productModel.Price,
-            Stock = productModel.Stock
+            Stock = productModel.Stock,
+            CategoryId = productModel.CategoryId,
+            ProviderId = productModel.ProviderId
         };
     }
 
-    public static Product ToProductFromCreateDto(this ProductCreateDto productDto)
+    public static Product ToProductFromCreateDto(this ProductCreateDto productDto, int categoryId, int providerId)
     {
         return new Product
         {
@@ -28,8 +30,8 @@ public static class ProductMappers
             Cost = productDto.Cost,
             Price = productDto.Price,
             Stock = productDto.Stock,
-            CategoryId = productDto.CategoryId,
-            ProviderId = productDto.ProviderId
+            CategoryId = categoryId,
+            ProviderId = providerId
         };
     }
 
