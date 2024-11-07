@@ -9,4 +9,9 @@ public class ProductDto
     public string? Description { get; set; }
     public decimal Cost { get; set; }
     public int Stock { get; set; }
+    public bool isDeletet { get; set; }
+    public int CategoryId { get; set; }
+    public int ProviderId { get; set; }
+
+
 }

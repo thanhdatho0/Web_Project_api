@@ -12,18 +12,20 @@ namespace api.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
     private readonly IProductRepository _productRepo;
+    private readonly ICategoryRepository _categoryRepo;
+    private readonly IProviderRepository _providerRepo;
 
-    public ProductController(ApplicationDbContext context, IProductRepository productRepo)
+    public ProductController(IProductRepository productRepo, ICategoryRepository categoryRepo, IProviderRepository providerRepo)
     {
-        _context = context;
         _productRepo = productRepo;
+        _categoryRepo = categoryRepo;
+        _providerRepo = providerRepo;
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllProducts()
-    
+    public async Task<IActionResult> GetAllProducts()
+
     {
         var products = await _productRepo.GetAllAsync();
         var productsDto = products.Select(x => x.ToProductDto());
@@ -31,34 +33,41 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetProductById(int id)
+    public async Task<IActionResult> GetProductById(int id)
     {
         var product = await _productRepo.GetByIdAsync(id);
-        if(product == null) return NotFound();
+        if (product == null) return NotFound();
         return Ok(product.ToProductDto());
     }
 
-    [HttpPost]
-    public async Task<ActionResult> Create([FromBody] ProductCreateDto productDto)
+    [HttpPost("{categoryId},{providerId}")]
+    public async Task<IActionResult> Create([FromRoute] int categoryId, [FromRoute] int providerId, [FromBody] ProductCreateDto productDto)
     {
-        var product = productDto.ToProductFromCreateDto();
-        await _productRepo.CreateAsync(product);
-        return CreatedAtAction(nameof(GetProductById), new {id = product.ProductId}, product.ToProductDto());
+        if (!await _categoryRepo.CategoryExists(categoryId)) return BadRequest("Category does not exist!");
+        if (!await _providerRepo.ProviderExists(providerId)) return BadRequest("Provider does not exists!");
+
+        var productModel = productDto.ToProductFromCreateDto(categoryId, providerId);
+        await _productRepo.CreateAsync(productModel);
+        return CreatedAtAction(nameof(GetProductById), new { id = productModel.ProductId }, productModel.ToProductDto());
+
+
     }
-    
+
     [HttpPut]
     [Route("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductUpdateDto productDto){
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductUpdateDto productDto)
+    {
         var product = await _productRepo.UpdateAsync(id, productDto);
         return Ok(product?.ToProductDto());
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id){
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
         var product = await _productRepo.DeleteAsync(id);
-        if(product == null) return NotFound();
+        if (product == null) return NotFound();
         return NoContent();
     }
-    
+
 }

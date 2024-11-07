@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.DTOs.Category;
 using api.Models;
 
@@ -15,7 +11,8 @@ namespace api.Mappers
             {
                 CategoryId = categoryModel.CategoryId,
                 Name = categoryModel.Name,
-                Description = categoryModel.Description
+                Description = categoryModel.Description,
+                Products = categoryModel.Products?.Select(p => p.ToProductDto()).ToList()
             };
         }
 

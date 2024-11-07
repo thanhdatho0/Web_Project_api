@@ -17,12 +17,12 @@ namespace api.Repository
 
         public async Task<List<Category>> GetAllAsync()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.Include(c => c.Products).ToListAsync();
         }
 
         public async Task<Category?> GetByIdAsync(int id)
         {
-            return await _context.Categories.FindAsync(id);
+            return await _context.Categories.Include(c => c.Products).FirstOrDefaultAsync(i => i.CategoryId == id);
         }
 
         public async Task<Category> CreateAsync(Category category)
@@ -49,6 +49,11 @@ namespace api.Repository
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return category;
+        }
+
+        public Task<bool> CategoryExists(int id)
+        {
+            return _context.Categories.AnyAsync(c => c.CategoryId == id);
         }
     }
 }
