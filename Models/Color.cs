@@ -15,7 +15,6 @@ namespace api.Models
                 public string HexaCode { get; set; } = string.Empty;
                 [Required]
                 public string Name { get; set; } = string.Empty;
-                // public List<Product> Products { get; set; }
                 public List<ProductColor>? ProductColors { get; set; } = new List<ProductColor>();
                 public List<Image>? Images { get; set; }
         }
