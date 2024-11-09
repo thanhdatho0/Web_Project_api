@@ -14,30 +14,63 @@ namespace api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>()
-            .HasMany(e => e.Orders)
-            .WithMany(e => e.Products)
-            .UsingEntity<OrderDetail>();
+            // Order vs Product
+            modelBuilder.Entity<OrderDetail>(entity => entity.HasKey(o => new { o.OrderId, o.ProductId }));
 
-            modelBuilder.Entity<Product>()
-            .HasMany(e => e.Colors)
-            .WithMany(e => e.Products)
-            .UsingEntity<ProductColor>();
+            modelBuilder.Entity<OrderDetail>()
+            .HasOne(od => od.Product)
+            .WithMany(p => p.OrderDetails)
+            .HasForeignKey(od => od.ProductId);
 
-            modelBuilder.Entity<Product>()
-            .HasMany(e => e.Sizes)
-            .WithMany(e => e.Products)
-            .UsingEntity<ProductSize>();
+            modelBuilder.Entity<OrderDetail>()
+           .HasOne(od => od.Order)
+           .WithMany(o => o.OrderDetails)
+           .HasForeignKey(od => od.OrderId);
 
-            modelBuilder.Entity<Product>()
-            .HasMany(e => e.Materials)
-            .WithMany(e => e.Products)
-            .UsingEntity<ProductMaterial>();
+            // Product vs Color
+            modelBuilder.Entity<ProductColor>(entity => entity.HasKey(pc => new { pc.ColorId, pc.ProductId }));
 
+            modelBuilder.Entity<ProductColor>()
+            .HasOne(pc => pc.Color)
+            .WithMany(c => c.ProductColors)
+            .HasForeignKey(pc => pc.ColorId);
+
+            modelBuilder.Entity<ProductColor>()
+            .HasOne(pc => pc.Product)
+            .WithMany(p => p.ProductColors)
+            .HasForeignKey(pc => pc.ProductId);
+
+            // Product vs size
+            modelBuilder.Entity<ProductSize>(entity => entity.HasKey(pz => new { pz.ProductId, pz.SizeId }));
+
+            modelBuilder.Entity<ProductSize>()
+            .HasOne(pz => pz.Product)
+            .WithMany(p => p.ProductSizes)
+            .HasForeignKey(pz => pz.ProductId);
+
+            modelBuilder.Entity<ProductSize>()
+           .HasOne(pz => pz.Size)
+           .WithMany(s => s.ProductSizes)
+           .HasForeignKey(pz => pz.SizeId);
+
+            // Product vs Material
+            modelBuilder.Entity<ProductMaterial>(x => x.HasKey(pm => new { pm.MaterialId, pm.ProductId }));
+
+            modelBuilder.Entity<ProductMaterial>()
+            .HasOne(pm => pm.Product)
+            .WithMany(e => e.ProductMaterials)
+            .HasForeignKey(pm => pm.ProductId);
+
+            modelBuilder.Entity<ProductMaterial>()
+           .HasOne(pm => pm.Material)
+           .WithMany(e => e.ProductMaterials)
+           .HasForeignKey(pm => pm.MaterialId);
+
+            // Department vs Employee
             modelBuilder.Entity<Department>()
             .HasMany(e => e.Employees)
             .WithOne(e => e.Department);
-
+            // Color vs image
             modelBuilder.Entity<Color>()
                 .HasMany(e => e.Images)
                  .WithOne(e => e.Color);
