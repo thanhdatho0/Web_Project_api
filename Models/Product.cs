@@ -24,15 +24,11 @@ namespace api.Models
                 [Required]
                 [Range(0, int.MaxValue)]
                 public int Stock { get; set; }
-                public bool isDeletet { get; set; }
+                public bool isDeleted { get; set; }
                 public List<Image> Images { get; set; }
-                public List<Color> Colors { get; set; }
-                public List<ProductColor> ColorsOfProduct { get; set; }
-                public List<Size>? Sizes { get; set; }
+                public List<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
                 public List<ProductSize>? ProductSizes { get; set; }
-                public List<Material>? Materials { get; set; }
                 public List<ProductMaterial>? ProductMaterials { get; set; }
-                public List<Order>? Orders { get; set; }
                 public List<OrderDetail>? OrderDetails { get; set; }
                 public int ProviderId { get; set; }
                 public Provider? Provider { get; set; }

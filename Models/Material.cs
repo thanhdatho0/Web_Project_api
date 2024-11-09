@@ -13,6 +13,6 @@ namespace api.Models
         [Required]
         public string MaterialType { get; set; } = string.Empty;
         public List<Product>? Products { get; set; }
-        public List<ProductMaterial>? Product_Materials { get; set; }
+        public List<ProductMaterial>? ProductMaterials { get; set; }
     }
 }

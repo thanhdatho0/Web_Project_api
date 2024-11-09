@@ -25,7 +25,7 @@ namespace api.Controllers
             return Ok(categoryDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var category = await _categoryRepo.GetByIdAsync(id);
@@ -43,19 +43,20 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CategoryUpdateDto categoryDto)
         {
             var category = await _categoryRepo.UpdateAsync(id, categoryDto);
-            return Ok(category?.ToCategoryDto());
+            if (category == null) return NotFound("Category not found");
+            return Ok(category.ToCategoryDto());
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var category = await _categoryRepo.DeleteAsync(id);
-            if (category == null) return NotFound();
+            if (category == null) return NotFound("Category doese not exists");
             return NoContent();
         }
 

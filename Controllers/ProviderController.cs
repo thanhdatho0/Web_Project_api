@@ -24,7 +24,7 @@ namespace api.Controllers
             return Ok(providerDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var provider = await _providerRepo.GetByIdAsync(id);
@@ -42,19 +42,20 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProviderUpdateDto providerDto)
         {
             var provider = await _providerRepo.UpdateAsync(id, providerDto);
+            if (provider == null) return NotFound("Provider not found");
             return Ok(provider?.ToProviderDto());
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var provider = await _providerRepo.DeleteAsync(id);
-            if (provider == null) return NotFound();
+            if (provider == null) return NotFound("Provider does not exists");
             return NoContent();
         }
 

@@ -15,6 +15,6 @@ namespace api.Models
         public DateTime OrderExportDateTime { get; set; }
         public string? OrderNotice { get; set; }
         public List<Product>? Products { get; set; }
-        public List<OrderDetail>? Details { get; set; }
+        public List<OrderDetail>? OrderDetails { get; set; }
     }
 }

@@ -1,4 +1,3 @@
-
 // namespace api.DTOs.PImage
 // {
 //     public class ImageDto

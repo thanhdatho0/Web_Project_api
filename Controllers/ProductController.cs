@@ -32,7 +32,7 @@ public class ProductController : ControllerBase
         return Ok(productsDto);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> GetProductById(int id)
     {
         var product = await _productRepo.GetByIdAsync(id);
@@ -40,7 +40,7 @@ public class ProductController : ControllerBase
         return Ok(product.ToProductDto());
     }
 
-    [HttpPost("{categoryId},{providerId}")]
+    [HttpPost("{categoryId:int},{providerId:int}")]
     public async Task<IActionResult> Create([FromRoute] int categoryId, [FromRoute] int providerId, [FromBody] ProductCreateDto productDto)
     {
         if (!await _categoryRepo.CategoryExists(categoryId)) return BadRequest("Category does not exist!");
@@ -54,19 +54,20 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductUpdateDto productDto)
     {
         var product = await _productRepo.UpdateAsync(id, productDto);
-        return Ok(product?.ToProductDto());
+        if (product == null) return NotFound("Product not found");
+        return Ok(product.ToProductDto());
     }
 
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var product = await _productRepo.DeleteAsync(id);
-        if (product == null) return NotFound();
+        if (product == null) return NotFound("Product does not exists");
         return NoContent();
     }
 

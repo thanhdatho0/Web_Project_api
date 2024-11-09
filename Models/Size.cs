@@ -13,6 +13,6 @@ namespace api.Models
         [Required]
         public string SizeValue { get; set; } = string.Empty;
         public List<Product>? Products { get; set; }
-        public List<ProductSize>? Product_Sizes { get; set; }
+        public List<ProductSize>? ProductSizes { get; set; }
     }
 }

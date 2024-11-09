@@ -26,7 +26,7 @@ namespace api.Controllers
             return Ok(colorsDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var color = await _colorRepo.GetByIdAsync(id);
@@ -43,22 +43,22 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ColorUpdateDto colorUpdateDto)
         {
             var color = await _colorRepo.UpdateAsync(id, colorUpdateDto);
             if (color == null)
-                return NotFound();
+                return NotFound("Color does not found");
             return Ok(color.ToColorDto());
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var color = await _colorRepo.DeleteAsync(id);
             if (color == null)
-                return NotFound();
+                return NotFound("Color does not exists");
             return NoContent();
         }
 
