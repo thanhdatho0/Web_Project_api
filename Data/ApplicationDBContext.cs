@@ -1,13 +1,15 @@
 using api.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,7 +59,7 @@ namespace api.Data
 
             // Đặt giá trị mặc định cho isDelete là false
             modelBuilder.Entity<Product>()
-            .Property(p => p.isDeletet)
+            .Property(p => p.isDeleted)
             .HasDefaultValue(false);
 
             // Đặt giá trị mặc đinh cho Male là true
@@ -73,6 +75,27 @@ namespace api.Data
             // Check tuổi Employee
             modelBuilder.Entity<Employee>().ToTable(t =>
             t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16"));
+            
+            
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER"
+                },
+            };
+            
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasNoKey();
+            modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
+            modelBuilder.Entity<IdentityUserRole<string>>().HasNoKey();
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }
