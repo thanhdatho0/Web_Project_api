@@ -24,7 +24,7 @@ namespace api.Models
                 [Required]
                 [Range(0, int.MaxValue)]
                 public int Stock { get; set; }
-                public bool isDeletet { get; set; }
+                public bool isDeleted { get; set; }
                 public List<Image> Images { get; set; }
                 public List<Color> Colors { get; set; }
                 public List<ProductColor> ColorsOfProduct { get; set; }

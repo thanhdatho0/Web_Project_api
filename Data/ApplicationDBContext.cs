@@ -57,7 +57,7 @@ namespace api.Data
 
             // Đặt giá trị mặc định cho isDelete là false
             modelBuilder.Entity<Product>()
-            .Property(p => p.isDeletet)
+            .Property(p => p.isDeleted)
             .HasDefaultValue(false);
 
             // Đặt giá trị mặc đinh cho Male là true
