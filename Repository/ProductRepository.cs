@@ -1,5 +1,6 @@
 using api.Data;
 using api.DTOs.Product;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,16 @@ public class ProductRepository : IProductRepository
     {
         _context = context;
     }
-    public async Task<List<Product>> GetAllAsync()
+    public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
-        return await _context.Products.ToListAsync();
+        var products = _context.Products.AsQueryable();
+
+        if (!String.IsNullOrEmpty(query.CategoryId))
+            products = products.Where(p => p.CategoryId == int.Parse(query.CategoryId));
+
+        var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+        return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
     }
 
     public async Task<Product?> GetByIdAsync(int id)
@@ -34,7 +42,9 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> UpdateAsync(int id, ProductUpdateDto productUpdateDto)
     {
         var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
-        if (product == null) return null;
+        if (product == null)
+            return null;
+
         product.Name = productUpdateDto.Name;
         product.Description = productUpdateDto.Description;
         product.Cost = productUpdateDto.Cost;
@@ -47,9 +57,20 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> DeleteAsync(int id)
     {
         var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
-        if (product == null) return null;
+
+        if (product == null)
+            return null;
+
         _context.Products.Remove(product);
+
         await _context.SaveChangesAsync();
+
         return product;
+    }
+
+    public Task<bool> ProductExists(int id)
+    {
+        return _context.Products.AnyAsync(p => p.ProductId == id);
+
     }
 }

@@ -9,7 +9,7 @@ namespace api.Data
     {
         public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,10 +70,16 @@ namespace api.Data
             modelBuilder.Entity<Department>()
             .HasMany(e => e.Employees)
             .WithOne(e => e.Department);
+
             // Color vs image
             modelBuilder.Entity<Color>()
                 .HasMany(e => e.Images)
                  .WithOne(e => e.Color);
+
+            // Product vs image
+            modelBuilder.Entity<Product>()
+            .HasMany(p => p.Images)
+            .WithOne(i => i.Product);
 
             // Employee vs Order
             modelBuilder.Entity<Employee>()
@@ -108,8 +114,8 @@ namespace api.Data
             // Check tuổi Employee
             modelBuilder.Entity<Employee>().ToTable(t =>
             t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16"));
-            
-            
+
+
             List<IdentityRole> roles = new List<IdentityRole>
             {
                 new IdentityRole
@@ -117,14 +123,14 @@ namespace api.Data
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
-                
+
                 new IdentityRole
                 {
                     Name = "User",
                     NormalizedName = "USER"
                 },
             };
-            
+
             modelBuilder.Entity<IdentityRole>().HasData(roles);
             modelBuilder.Entity<IdentityUserLogin<string>>().HasNoKey();
             modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
