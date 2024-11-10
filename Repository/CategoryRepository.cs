@@ -1,5 +1,6 @@
 using api.Data;
 using api.DTOs.Category;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,14 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<List<Category>> GetAllAsync()
+        public async Task<List<Category>> GetAllAsync(QueryOject query)
         {
-            return await _context.Categories.Include(c => c.Products).ToListAsync();
+            var categories = _context.Categories.Include(c => c.Products).AsQueryable();
+
+            if (!String.IsNullOrEmpty(query.Name))
+                categories = categories.Where(c => c.Name == query.Name);
+
+            return await categories.ToListAsync();
         }
 
         public async Task<Category?> GetByIdAsync(int id)

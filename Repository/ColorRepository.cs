@@ -13,6 +13,12 @@ namespace api.Repository
         {
             _context = context;
         }
+
+        public Task<bool> ColorExists(int id)
+        {
+            return _context.Colors.AnyAsync(c => c.ColorId == id);
+        }
+
         public async Task<Color> CreateAsync(Color color)
         {
             await _context.Colors.AddAsync(color);

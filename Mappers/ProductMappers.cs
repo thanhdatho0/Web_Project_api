@@ -17,7 +17,8 @@ public static class ProductMappers
             Price = productModel.Price,
             Stock = productModel.Stock,
             CategoryId = productModel.CategoryId,
-            ProviderId = productModel.ProviderId
+            ProviderId = productModel.ProviderId,
+            Images = productModel.Images?.Select(i => i.ToImageDto()).ToList()
         };
     }
 

@@ -15,7 +15,8 @@ namespace api.Mappers
             {
                 ColorId = colorModel.ColorId,
                 HexaCode = colorModel.HexaCode,
-                Name = colorModel.Name
+                Name = colorModel.Name,
+                Images = colorModel.Images?.Select(i => i.ToImageDto()).ToList()
             };
         }
         public static Color ToColorFromCreateDto(this ColorCreateDto colorCreateDto)

@@ -19,13 +19,13 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] QueryOject query)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var categories = await _categoryRepo.GetAllAsync();
+            var categories = await _categoryRepo.GetAllAsync(query);
 
             var categoryDto = categories.Select(s => s.ToCategoryDto());
 

@@ -5,6 +5,7 @@ using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using api.Helpers;
 
 
 namespace api.Controllers;
@@ -26,12 +27,12 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var products = await _productRepo.GetAllAsync();
+        var products = await _productRepo.GetAllAsync(query);
 
         var productsDto = products.Select(x => x.ToProductDto());
 

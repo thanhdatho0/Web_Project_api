@@ -11,5 +11,7 @@ namespace api.Interfaces
         Task<Color> CreateAsync(Color color);
         Task<Color?> UpdateAsync(int id, ColorUpdateDto colorUpdateDto);
         Task<Color?> DeleteAsync(int id);
+        Task<bool> ColorExists(int id);
+
     }
 }
