@@ -46,12 +46,12 @@ namespace api.Controllers
             var image = await _imageRepo.GetByIdAsyns(id);
 
             if (image == null)
-                return NotFound();
+                return NotFound("Not found Imgage");
 
             return Ok(image.ToImageDto());
         }
 
-        [HttpPost("{prodId:int}, {colorId:int}")]
+        [HttpPost("{prodId:int},{colorId:int}")]
         public async Task<IActionResult> Create([FromRoute] int prodId, [FromRoute] int colorId, [FromBody] ImageCreateDto imageDto)
         {
             if (!ModelState.IsValid)
@@ -65,9 +65,12 @@ namespace api.Controllers
 
             var imageModel = imageDto.ToImageFromCreateDto(prodId, colorId);
 
+            if (imageModel == null)
+                return BadRequest("Not create");
+
             await _imageRepo.CreateAsyns(imageModel);
 
-            return CreatedAtAction(nameof(GetById), new { id = imageModel }, imageModel.ToImageDto());
+            return CreatedAtAction(nameof(GetById), new { id = imageModel.ImageId }, imageModel.ToImageDto());
         }
 
         [HttpPut]
