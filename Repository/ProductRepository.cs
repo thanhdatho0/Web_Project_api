@@ -24,7 +24,7 @@ public class ProductRepository : IProductRepository
 
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
-        return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
+        return await products.Skip(skipNumber).Take(query.PageSize).Include(p => p.Images).ToListAsync();
     }
 
     public async Task<Product?> GetByIdAsync(int id)

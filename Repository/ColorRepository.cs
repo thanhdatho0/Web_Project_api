@@ -36,7 +36,7 @@ namespace api.Repository
 
         public async Task<List<Color>> GetAllAsync()
         {
-            return await _context.Colors.ToListAsync();
+            return await _context.Colors.Include(c => c.Images).ToListAsync();
         }
 
         public async Task<Color?> GetByIdAsync(int id)

@@ -12,8 +12,8 @@ namespace api.Mappers
                 ImageId = imageModel.ImageId,
                 Url = imageModel.Url,
                 Alt = imageModel.Alt,
-                ColorId = imageModel.ColorId,
-                ProductId = imageModel.ProductId
+                ProductId = imageModel.ProductId,
+                ColorId = imageModel.ColorId
 
             };
         }
@@ -24,8 +24,8 @@ namespace api.Mappers
             {
                 Url = imageDto.Url,
                 Alt = imageDto.Alt,
-                ColorId = colorId,
-                ProductId = productId
+                ProductId = productId,
+                ColorId = colorId
             };
         }
 

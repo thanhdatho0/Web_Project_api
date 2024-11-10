@@ -7,6 +7,6 @@ namespace api.Models
         public string? ProviderEmail { get; set; }
         public string ProviderPhone { get; set; } = string.Empty;
         public string ProviderCompanyName { get; set; } = string.Empty;
-        public List<Product>? ProviderProducts { get; set; }
+        public List<Product>? ProviderProducts { get; set; } = new List<Product>();
     }
 }

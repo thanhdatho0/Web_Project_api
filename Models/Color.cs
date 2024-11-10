@@ -16,6 +16,6 @@ namespace api.Models
                 [Required]
                 public string Name { get; set; } = string.Empty;
                 public List<ProductColor>? ProductColors { get; set; } = new List<ProductColor>();
-                public List<Image>? Images { get; set; }
+                public List<Image>? Images { get; set; } = new List<Image>();
         }
 }
