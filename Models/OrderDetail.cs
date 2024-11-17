@@ -1,8 +1,8 @@
-
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
+    [Table("OrderDetails")]
     public class OrderDetail
     {
         public int OrderId { get; set; }

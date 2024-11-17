@@ -1,8 +1,8 @@
-
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
+    [Table("Orders")]
     public class Order
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
