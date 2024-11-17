@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
+    [Table("ProductSizes")]
     public class ProductSize
     {
         public int SizeId { get; set; }

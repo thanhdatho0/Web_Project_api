@@ -1,10 +1,9 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
-
+        [Table("Colors")]
         public class Color
         {
                 [Key]

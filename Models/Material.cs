@@ -1,9 +1,9 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
+    [Table("Materials")]
     public class Material
     {
         //Properties

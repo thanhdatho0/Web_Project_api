@@ -1,6 +1,8 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace api.Models
 {
+    [Table("Providers")]
     public class Provider
     {
         public int ProviderId { get; set; }
