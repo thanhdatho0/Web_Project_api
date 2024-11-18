@@ -10,7 +10,7 @@ using api.Helpers;
 
 namespace api.Controllers
 {
-    [Route("api/product")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController : ControllerBase
     {

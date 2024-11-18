@@ -7,7 +7,7 @@ using api.Helpers;
 
 namespace api.Controllers
 {
-    [Route("api/category")]
+    [Route("api/categories")]
     [ApiController]
     public class CategoryController : ControllerBase
     {

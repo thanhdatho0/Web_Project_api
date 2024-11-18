@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/color")]
+    [Route("api/colors")]
     [ApiController]
 
     public class ColorController : ControllerBase

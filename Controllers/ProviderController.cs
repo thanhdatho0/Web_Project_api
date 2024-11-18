@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/provider")]
+    [Route("api/providers")]
     [ApiController]
     public class ProviderController : ControllerBase
     {
