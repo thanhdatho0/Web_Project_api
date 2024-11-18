@@ -19,10 +19,11 @@ public static class ProductMappers
             CategoryId = productModel.CategoryId,
             ProviderId = productModel.ProviderId,
             Images = productModel.Images?.Select(i => i.ToImageDto()).ToList()
+            // Colors = productModel.ProductColors?.Select(pc => pc.ToPrColorDto()).ToList()
         };
     }
 
-    public static Product ToProductFromCreateDto(this ProductCreateDto productDto, int categoryId, int providerId)
+    public static Product ToProductFromCreateDto(this ProductCreateDto productDto)
     {
         return new Product
         {
@@ -31,8 +32,8 @@ public static class ProductMappers
             Cost = productDto.Cost,
             Price = productDto.Price,
             Stock = productDto.Stock,
-            CategoryId = categoryId,
-            ProviderId = providerId
+            CategoryId = productDto.CategoryId,
+            ProviderId = productDto.ProviderId
         };
     }
 

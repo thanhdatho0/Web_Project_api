@@ -22,4 +22,11 @@ public class ProductCreateDto
     [Required(ErrorMessage = "Stock is required.")]
     [Range(0, int.MaxValue, ErrorMessage = "Stock must be a non-negative integer.")]
     public int Stock { get; set; }
+
+    [Required(ErrorMessage = "CategoryId is required.")]
+    public int CategoryId { get; set; }
+    [Required(ErrorMessage = "ProviderId is required.")]
+    public int ProviderId { get; set; }
+
+
 }
