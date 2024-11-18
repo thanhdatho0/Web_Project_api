@@ -1,3 +1,4 @@
+using api.DTOs.PColor;
 using api.DTOs.Product;
 using api.Models;
 
@@ -18,8 +19,16 @@ public static class ProductMappers
             Stock = productModel.Stock,
             CategoryId = productModel.CategoryId,
             ProviderId = productModel.ProviderId,
-            Images = productModel.Images?.Select(i => i.ToImageDto()).ToList()
-            // Colors = productModel.ProductColors?.Select(pc => pc.ToPrColorDto()).ToList()
+            Colors = productModel.ProductColors.Where(pc => pc.ProductId == productModel.ProductId)
+            .Select(pc => new ColorDto
+            {
+                ColorId = pc.ColorId,
+                Name = pc.Color.Name,
+                HexaCode = pc.Color.HexaCode,
+                Images = pc.Color.Images.Where(i => i.ProductId == productModel.ProductId)
+                .Select(i => i.ToImageDto()).ToList()
+            }).ToList()
+
         };
     }
 
