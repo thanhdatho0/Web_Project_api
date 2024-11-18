@@ -52,19 +52,19 @@ namespace api.Controllers
             return Ok(product.ToProductDto());
         }
 
-        [HttpPost("{categoryId:int},{providerId:int}")]
-        public async Task<IActionResult> Create([FromRoute] int categoryId, [FromRoute] int providerId, [FromBody] ProductCreateDto productDto)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ProductCreateDto productDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _categoryRepo.CategoryExists(categoryId))
+            if (!await _categoryRepo.CategoryExists(productDto.CategoryId))
                 return BadRequest("Category does not exist!");
 
-            if (!await _providerRepo.ProviderExists(providerId))
+            if (!await _providerRepo.ProviderExists(productDto.ProviderId))
                 return BadRequest("Provider does not exists!");
 
-            var productModel = productDto.ToProductFromCreateDto(categoryId, providerId);
+            var productModel = productDto.ToProductFromCreateDto();
 
             await _productRepo.CreateAsync(productModel);
 
