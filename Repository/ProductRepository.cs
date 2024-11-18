@@ -17,14 +17,17 @@ public class ProductRepository : IProductRepository
     }
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
-        var products = _context.Products.AsQueryable();
+        var products = _context.Products.Include(p => p.Category)
+      .Include(p => p.ProductColors)
+          .ThenInclude(pc => pc.Color)
+              .ThenInclude(c => c.Images).AsQueryable();
 
         if (!String.IsNullOrEmpty(query.CategoryId))
             products = products.Where(p => p.CategoryId == int.Parse(query.CategoryId));
 
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
-        return await products.Skip(skipNumber).Take(query.PageSize).Include(p => p.Images).ToListAsync();
+        return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
     }
 
     public async Task<Product?> GetByIdAsync(int id)
