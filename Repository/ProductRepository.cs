@@ -2,7 +2,9 @@ using api.Data;
 using api.DTOs.Product;
 using api.Helpers;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
@@ -17,10 +19,11 @@ public class ProductRepository : IProductRepository
     }
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
-        var products = _context.Products.Include(p => p.Category)
+        var products = _context.Products.Include(p => p.Category)!
                                 .Include(p => p.ProductColors)
                                 .ThenInclude(pc => pc.Color)
-                                .ThenInclude(c => c.Images).AsQueryable();
+                                .ThenInclude(c => c!.Images).AsQueryable();
+          
 
         if (!String.IsNullOrEmpty(query.CategoryId))
             products = products.Where(p => p.CategoryId == int.Parse(query.CategoryId));

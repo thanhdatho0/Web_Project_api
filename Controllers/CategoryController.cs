@@ -47,6 +47,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> Create([FromBody] CategoryCreateDto categoryDto)
         {
             if (!ModelState.IsValid)
