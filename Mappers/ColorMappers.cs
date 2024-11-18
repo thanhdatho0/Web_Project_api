@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Data;
 using api.DTOs.PColor;
+using api.DTOs.PImage;
 using api.Models;
 
 namespace api.Mappers
@@ -36,5 +38,7 @@ namespace api.Mappers
             };
 
         }
+
+        
     }
 }

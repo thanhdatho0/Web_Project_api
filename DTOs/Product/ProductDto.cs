@@ -12,11 +12,8 @@ public class ProductDto
     public string? Description { get; set; }
     public decimal Cost { get; set; }
     public int Stock { get; set; }
-    public bool isDeletet { get; set; }
+    public bool isDeleted { get; set; }
     public int CategoryId { get; set; }
     public int ProviderId { get; set; }
     public List<ColorDto>? Colors { get; set; }
-    // public List<ImageDto>? Images { get; set; }
-    // public List<Colo
-
 }
