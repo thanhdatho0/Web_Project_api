@@ -18,9 +18,9 @@ public class ProductRepository : IProductRepository
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
         var products = _context.Products.Include(p => p.Category)
-      .Include(p => p.ProductColors)
-          .ThenInclude(pc => pc.Color)
-              .ThenInclude(c => c.Images).AsQueryable();
+                                .Include(p => p.ProductColors)
+                                .ThenInclude(pc => pc.Color)
+                                .ThenInclude(c => c.Images).AsQueryable();
 
         if (!String.IsNullOrEmpty(query.CategoryId))
             products = products.Where(p => p.CategoryId == int.Parse(query.CategoryId));
@@ -32,7 +32,11 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(int id)
     {
-        return await _context.Products.FindAsync(id);
+        return await _context.Products.Include(p => p.Category)
+                .Include(p => p.ProductColors)
+                .ThenInclude(pc => pc.Color)
+                .ThenInclude(c => c.Images)
+                .FirstOrDefaultAsync(p => p.ProductId == id);
     }
 
     public async Task<Product> CreateAsync(Product productModel)
