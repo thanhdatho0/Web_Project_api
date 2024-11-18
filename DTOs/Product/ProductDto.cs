@@ -1,3 +1,4 @@
+using api.DTOs.PColor;
 using api.DTOs.PImage;
 
 namespace api.DTOs.Product;
@@ -14,6 +15,8 @@ public class ProductDto
     public bool isDeletet { get; set; }
     public int CategoryId { get; set; }
     public int ProviderId { get; set; }
-    public List<ImageDto>? Images { get; set; }
+    public List<ColorDto>? Colors { get; set; }
+    // public List<ImageDto>? Images { get; set; }
+    // public List<Colo
 
 }
