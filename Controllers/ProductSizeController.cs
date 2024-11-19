@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using api.DTOs.ProductSize;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -34,27 +32,23 @@ namespace api.Controllers
             return Ok(productsize.ToProductSizeDto());
         }
         [HttpPost]
-        public async Task<IActionResult> AddProductColor(int productId, int sizeId)
+        public async Task<IActionResult> AddProductSize([FromBody] ProductSizeCreateDto productSizeDto)
         {
-            var produdct = await _productRepo.GetByIdAsync(productId);
-            var size = await _sizeRepo.GetByIdAsync(sizeId);
+            var produdct = await _productRepo.GetByIdAsync(productSizeDto.ProductId);
+            var size = await _sizeRepo.GetByIdAsync(productSizeDto.SizeId);
 
             if (produdct == null)
                 return BadRequest("Product not found");
 
             if (size == null)
-                return BadRequest("Color not found");
+                return BadRequest("Size not found");
 
-            var productSize = await _productSizeRepo.GetByIdAsync(productId, sizeId);
+            var productSize = await _productSizeRepo.GetByIdAsync(productSizeDto.ProductId, productSizeDto.SizeId);
 
             if (productSize != null)
-                return BadRequest("Cannot add same stock to productcolor");
+                return BadRequest("Cannot add same stock to productsize");
 
-            var productSizeModel = new ProductSize
-            {
-                SizeId = sizeId,
-                ProductId = productId
-            };
+            var productSizeModel = productSizeDto.ToProductSizeFromCreateDto();
 
             await _productSizeRepo.CreateAsync(productSizeModel);
 

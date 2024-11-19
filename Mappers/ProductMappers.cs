@@ -1,5 +1,7 @@
+using System.Runtime.Intrinsics.X86;
 using api.DTOs.PColor;
 using api.DTOs.Product;
+using api.DTOs.Size;
 using api.Models;
 
 namespace api.Mappers;
@@ -12,7 +14,7 @@ public static class ProductMappers
         {
             ProductId = productModel.ProductId,
             Name = productModel.Name,
-            CategoryName = productModel.Category?.Name,
+            CategoryName = productModel.Category!.Name,
             Description = productModel.Description,
             Cost = productModel.Cost,
             Price = productModel.Price,
@@ -20,6 +22,14 @@ public static class ProductMappers
             isDeleted = productModel.isDeleted,
             CategoryId = productModel.CategoryId,
             ProviderId = productModel.ProviderId,
+
+            Sizes = productModel.ProductSizes.Where(pz => pz.ProductId == productModel.ProductId)
+            .Select(pz => new SizeDto
+            {
+                SizeId = pz.SizeId,
+                SizeValue = pz.Size.SizeValue,
+            }).ToList(),
+
             Colors = productModel.ProductColors.Where(pc => pc.ProductId == productModel.ProductId)
             .Select(pc => new ColorDto
             {

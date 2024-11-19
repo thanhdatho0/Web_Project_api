@@ -11,7 +11,7 @@ namespace api.Mappers
             {
                 SizeId = sizeModel.SizeId,
                 SizeValue = sizeModel.SizeValue,
-                ProductSizes = sizeModel.ProductSizes,
+                // Products = sizeModel.ProductSizes.Select(pz => pz.ToProductSizeDto()).ToList()
 
             };
         }

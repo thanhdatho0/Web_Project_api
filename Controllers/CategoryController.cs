@@ -55,6 +55,9 @@ namespace api.Controllers
 
             var category = categoryDto.ToCategoryFromCreateDto();
 
+            if (category == null)
+                return BadRequest("Not create");
+
             await _categoryRepo.CreateAsync(category);
 
             return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category.ToCategoryDto());

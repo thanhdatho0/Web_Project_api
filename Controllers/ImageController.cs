@@ -48,19 +48,19 @@ namespace api.Controllers
             return Ok(image.ToImageDto());
         }
 
-        [HttpPost("{prodId:int},{colorId:int}")]
-        public async Task<IActionResult> Create([FromRoute] int prodId, [FromRoute] int colorId, [FromBody] ImageCreateDto imageDto)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ImageCreateDto imageDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _colorRepo.ColorExists(colorId))
+            if (!await _colorRepo.ColorExists(imageDto.ColorId))
                 return BadRequest("Color does not exist!");
 
-            if (!await _prodRepo.ProductExists(prodId))
+            if (!await _prodRepo.ProductExists(imageDto.ProductId))
                 return BadRequest("Product does not exists!");
 
-            var imageModel = imageDto.ToImageFromCreateDto(prodId, colorId);
+            var imageModel = imageDto.ToImageFromCreateDto();
 
             if (imageModel == null)
                 return BadRequest("Not create");

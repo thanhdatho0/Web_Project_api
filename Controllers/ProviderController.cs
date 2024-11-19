@@ -51,6 +51,9 @@ namespace api.Controllers
 
             var provider = providerDto.ToProviderFromCreateDto();
 
+            if (provider == null)
+                return BadRequest("Not create");
+
             await _providerRepo.CreateAsync(provider);
 
             return CreatedAtAction(nameof(GetById), new { id = provider.ProviderId }, provider.ToProviderDto());
