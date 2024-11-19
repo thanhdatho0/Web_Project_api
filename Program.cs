@@ -122,6 +122,7 @@ builder.Services.AddScoped<ISizeRepository, SizeRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddScoped<IProductColorRepository, ProductColorRepository>();
+builder.Services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
