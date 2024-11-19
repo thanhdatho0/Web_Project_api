@@ -17,6 +17,7 @@ public static class ProductMappers
             Cost = productModel.Cost,
             Price = productModel.Price,
             Stock = productModel.Stock,
+            isDeleted = productModel.isDeleted,
             CategoryId = productModel.CategoryId,
             ProviderId = productModel.ProviderId,
             Colors = productModel.ProductColors.Where(pc => pc.ProductId == productModel.ProductId)
