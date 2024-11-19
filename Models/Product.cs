@@ -20,7 +20,7 @@ namespace api.Models
                 public bool isDeleted { get; set; }
                 public List<Image>? Images { get; set; } = new List<Image>();
                 public List<ProductColor>? ProductColors { get; set; } = new List<ProductColor>();
-                public List<ProductSize>? ProductSizes { get; set; }
+                public List<ProductSize>? ProductSizes { get; set; } = new List<ProductSize>();
                 public List<ProductMaterial>? ProductMaterials { get; set; }
                 public List<OrderDetail>? OrderDetails { get; set; }
                 public int ProviderId { get; set; }

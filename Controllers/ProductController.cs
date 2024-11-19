@@ -66,6 +66,9 @@ namespace api.Controllers
 
             var productModel = productDto.ToProductFromCreateDto();
 
+            if (productModel == null)
+                return BadRequest("Not create");
+
             await _productRepo.CreateAsync(productModel);
 
             return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());

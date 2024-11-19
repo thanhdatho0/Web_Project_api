@@ -1,5 +1,6 @@
 
 using api.DTOs.Product;
+using api.DTOs.ProductColor;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -35,10 +36,10 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProductColor(int productId, int colorId)
+        public async Task<IActionResult> AddProductColor([FromBody] ProductColorCreateDto productColorDto)
         {
-            var produdct = await _productRepo.GetByIdAsync(productId);
-            var color = await _colorRepo.GetByIdAsync(colorId);
+            var produdct = await _productRepo.GetByIdAsync(productColorDto.ProductId);
+            var color = await _colorRepo.GetByIdAsync(productColorDto.ColorId);
 
             if (produdct == null)
                 return BadRequest("Product not found");
@@ -46,16 +47,12 @@ namespace api.Controllers
             if (color == null)
                 return BadRequest("Color not found");
 
-            var productColor = await _productColorRepo.GetByIdAsync(productId, colorId);
+            var productColor = await _productColorRepo.GetByIdAsync(productColorDto.ProductId, productColorDto.ColorId);
 
             if (productColor != null)
                 return BadRequest("Cannot add same stock to productcolor");
 
-            var productColorModel = new ProductColor
-            {
-                ColorId = colorId,
-                ProductId = productId
-            };
+            var productColorModel = productColorDto.ToProductColorFromCreateDto();
 
             await _productColorRepo.CreateAsync(productColorModel);
 

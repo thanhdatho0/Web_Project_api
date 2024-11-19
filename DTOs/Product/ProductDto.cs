@@ -1,5 +1,5 @@
 using api.DTOs.PColor;
-using api.DTOs.PImage;
+using api.DTOs.Size;
 
 namespace api.DTOs.Product;
 
@@ -15,5 +15,6 @@ public class ProductDto
     public bool isDeleted { get; set; }
     public int CategoryId { get; set; }
     public int ProviderId { get; set; }
+    public List<SizeDto>? Sizes { get; set; }
     public List<ColorDto>? Colors { get; set; }
 }

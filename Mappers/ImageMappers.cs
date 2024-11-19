@@ -10,22 +10,22 @@ namespace api.Mappers
             return new ImageDto
             {
                 ImageId = imageModel.ImageId,
-                Url = imageModel.Url,
-                Alt = imageModel.Alt,
+                Url = imageModel.Url!,
+                Alt = imageModel.Alt!,
                 ProductId = imageModel.ProductId,
                 ColorId = imageModel.ColorId
 
             };
         }
 
-        public static Image ToImageFromCreateDto(this ImageCreateDto imageDto, int productId, int colorId)
+        public static Image ToImageFromCreateDto(this ImageCreateDto imageDto)
         {
             return new Image
             {
                 Url = imageDto.Url,
                 Alt = imageDto.Alt,
-                ProductId = productId,
-                ColorId = colorId
+                ProductId = imageDto.ProductId,
+                ColorId = imageDto.ColorId
             };
         }
 

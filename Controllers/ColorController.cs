@@ -53,6 +53,9 @@ namespace api.Controllers
 
             var color = colorCreateDto.ToColorFromCreateDto();
 
+            if (color == null)
+                return BadRequest("Not create");
+
             await _colorRepo.CreateAsync(color);
 
             return CreatedAtAction(nameof(GetById), new { id = color.ColorId }, color.ToColorDto());

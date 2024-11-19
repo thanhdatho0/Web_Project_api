@@ -52,6 +52,9 @@ namespace api.Controllers
 
             var size = sizeCreateDto.ToSizeFromCreateDto();
 
+            if (size == null)
+                return BadRequest("Not create");
+
             await _sizeRepo.CreateAsync(size);
 
             return CreatedAtAction(nameof(GetById), new { id = size.SizeId }, size.ToSizeDto());

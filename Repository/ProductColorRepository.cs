@@ -21,7 +21,7 @@ namespace api.Repository
 
         public async Task<ProductColor?> GetByIdAsync(int productId, int colorId)
         {
-            return await _context.ProductColors.FirstOrDefaultAsync(pc => pc.ColorId == colorId && pc.ProductId == productId);
+            return await _context.ProductColors.Include(pc => pc.Product).Include(pc => pc.Color).FirstOrDefaultAsync(pc => pc.ColorId == colorId && pc.ProductId == productId);
         }
         public async Task<ProductColor?> CreateAsync(ProductColor productColorModel)
         {
