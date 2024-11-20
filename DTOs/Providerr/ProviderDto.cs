@@ -8,6 +8,6 @@ namespace api.DTOs.Providerr
         public string? ProviderEmail { get; set; }
         public string ProviderPhone { get; set; } = string.Empty;
         public string ProviderCompanyName { get; set; } = string.Empty;
-        public List<ProductDto>? Products { get; set; }
+        public List<ProductProviderDto>? Products { get; set; }
     }
 }
