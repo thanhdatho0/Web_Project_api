@@ -43,6 +43,20 @@ public static class ProductMappers
         };
     }
 
+    public static ProductProviderDto ToProductProviderDto(this Product productModel)
+    {
+        return new ProductProviderDto
+        {
+            ProductId = productModel.ProductId,
+            Name = productModel.Name,
+            Description = productModel.Description,
+            Cost = productModel.Cost,
+            Price = productModel.Price,
+            Stock = productModel.Stock,
+            isDeleted = productModel.isDeleted,
+            ProviderId = productModel.ProviderId,
+        };
+    }
     public static Product ToProductFromCreateDto(this ProductCreateDto productDto)
     {
         return new Product
