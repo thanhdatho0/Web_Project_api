@@ -27,6 +27,7 @@ public class ProductCreateDto
     public int CategoryId { get; set; }
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
-
-
+    [Required(ErrorMessage = "SizeId is required.")]
+    public List<int>? SizeId { get; set; }
+    public List<int>? MaterialId { get; set; }
 }

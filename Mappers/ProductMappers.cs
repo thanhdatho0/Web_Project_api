@@ -1,4 +1,5 @@
 using System.Runtime.Intrinsics.X86;
+using api.DTOs.Material;
 using api.DTOs.PColor;
 using api.DTOs.Product;
 using api.DTOs.Size;
@@ -27,14 +28,21 @@ public static class ProductMappers
             .Select(pz => new SizeDto
             {
                 SizeId = pz.SizeId,
-                SizeValue = pz.Size.SizeValue,
+                SizeValue = pz.Size!.SizeValue,
             }).ToList(),
+            
+            Materials = productModel.ProductMaterials?.Where(pm => pm.ProductId == productModel.ProductId)
+                .Select(pm => new MaterialDto
+                {
+                    MaterialId = pm.MaterialId,
+                    MaterialType = pm.Material!.MaterialType,
+                }).ToList(),
 
             Colors = productModel.ProductColors?.Where(pc => pc.ProductId == productModel.ProductId)
             .Select(pc => new ColorDto
             {
                 ColorId = pc.ColorId,
-                Name = pc.Color.Name,
+                Name = pc.Color!.Name,
                 HexaCode = pc.Color.HexaCode,
                 Images = pc.Color.Images?.Where(i => i.ProductId == productModel.ProductId)
                 .Select(i => i.ToImageDto()).ToList()
