@@ -19,9 +19,9 @@ public class ProductRepository : IProductRepository
     }
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
-        var products = _context.Products.Include(p => p.Category)
+        var products = _context.Products.Include(p => p.Category)?
                                 .Include(p => p.ProductSizes)
-                                .ThenInclude(pz => pz.Size)
+                                .ThenInclude(pz => pz.Size)?
                                 .Include(p => p.ProductColors)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();

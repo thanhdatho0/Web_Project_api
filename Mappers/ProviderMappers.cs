@@ -13,7 +13,7 @@ namespace api.Mappers
                 ProviderEmail = providerModel.ProviderEmail,
                 ProviderCompanyName = providerModel.ProviderCompanyName,
                 ProviderPhone = providerModel.ProviderPhone,
-                Products = providerModel.ProviderProducts.Select(p => p.ToProductProviderDto()).ToList()
+                Products = providerModel.ProviderProducts?.Select(p => p.ToProductDto()).ToList()
             };
         }
 
