@@ -10,7 +10,7 @@ namespace api.Mappers
             return new ProductColorDto
             {
                 ProductId = productColorModel.ProductId,
-                Name = productColorModel.Product.Name,
+                Name = productColorModel.Product!.Name,
                 Price = productColorModel.Product.Price,
                 Cost = productColorModel.Product.Cost,
                 ColorId = productColorModel.ColorId

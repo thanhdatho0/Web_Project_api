@@ -14,7 +14,7 @@ public static class ProductMappers
         {
             ProductId = productModel.ProductId,
             Name = productModel.Name,
-            CategoryName = productModel.Category!.Name,
+            CategoryName = productModel.Category?.Name,
             Description = productModel.Description,
             Cost = productModel.Cost,
             Price = productModel.Price,
@@ -23,38 +23,23 @@ public static class ProductMappers
             CategoryId = productModel.CategoryId,
             ProviderId = productModel.ProviderId,
 
-            Sizes = productModel.ProductSizes.Where(pz => pz.ProductId == productModel.ProductId)
+            Sizes = productModel.ProductSizes?.Where(pz => pz.ProductId == productModel.ProductId)
             .Select(pz => new SizeDto
             {
                 SizeId = pz.SizeId,
                 SizeValue = pz.Size.SizeValue,
             }).ToList(),
 
-            Colors = productModel.ProductColors.Where(pc => pc.ProductId == productModel.ProductId)
+            Colors = productModel.ProductColors?.Where(pc => pc.ProductId == productModel.ProductId)
             .Select(pc => new ColorDto
             {
                 ColorId = pc.ColorId,
                 Name = pc.Color.Name,
                 HexaCode = pc.Color.HexaCode,
-                Images = pc.Color.Images.Where(i => i.ProductId == productModel.ProductId)
+                Images = pc.Color.Images?.Where(i => i.ProductId == productModel.ProductId)
                 .Select(i => i.ToImageDto()).ToList()
             }).ToList()
 
-        };
-    }
-
-    public static ProductProviderDto ToProductProviderDto(this Product productModel)
-    {
-        return new ProductProviderDto
-        {
-            ProductId = productModel.ProductId,
-            Name = productModel.Name,
-            Description = productModel.Description,
-            Cost = productModel.Cost,
-            Price = productModel.Price,
-            Stock = productModel.Stock,
-            isDeleted = productModel.isDeleted,
-            ProviderId = productModel.ProviderId,
         };
     }
     public static Product ToProductFromCreateDto(this ProductCreateDto productDto)
