@@ -53,7 +53,9 @@ builder.Services.AddControllers().AddNewtonsoftJson(option =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+    // options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
@@ -69,22 +71,13 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireClaim("Permission", "AdminAccess"));
-});
 
-builder.Services.AddAuthorization(options =>
-{
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireRole("Admin"));
-});
 
-builder.Services.AddAuthorization(options =>
-{
     options.AddPolicy("UserPolicy", policy =>
         policy.RequireClaim("Permission", "UserAccess"));
-});
 
-builder.Services.AddAuthorization(options =>
-{
     options.AddPolicy("UserPolicy", policy =>
         policy.RequireRole("User"));
 });
@@ -132,7 +125,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
