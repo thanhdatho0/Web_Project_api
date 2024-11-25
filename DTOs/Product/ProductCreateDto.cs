@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using api.DTOs.PColor;
 
 namespace api.DTOs.Product;
 
@@ -35,4 +36,5 @@ public class ProductCreateDto
     [Required(ErrorMessage = "SizeId is required.")]
     public List<int>? SizeId { get; set; }
     public List<int>? MaterialId { get; set; }
+    public List<ColorToProductDto>? Colors { get; set; }
 }

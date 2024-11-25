@@ -16,7 +16,7 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<Image?> CreateAsyns(Image imageModel)
+        public async Task<Image?> CreateAsync(Image imageModel)
         {
             await _context.Images.AddAsync(imageModel);
             await _context.SaveChangesAsync();
@@ -37,17 +37,17 @@ namespace api.Repository
             return image;
         }
 
-        public async Task<List<Image>> GetAllAsyns()
+        public async Task<List<Image>> GetAllAsync()
         {
             return await _context.Images.ToListAsync();
         }
 
-        public async Task<Image?> GetByIdAsyns(int id)
+        public async Task<Image?> GetByIdAsync(int id)
         {
             return await _context.Images.FindAsync(id);
         }
 
-        public async Task<Image?> UpdateAsyns(int id, ImageUpdateDto imageDto)
+        public async Task<Image?> UpdateAsync(int id, ImageUpdateDto imageDto)
         {
             var image = await _context.Images.FirstOrDefaultAsync(x => x.ImageId == id);
 

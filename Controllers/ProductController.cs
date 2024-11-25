@@ -22,15 +22,21 @@ namespace api.Controllers
         private readonly IProviderRepository _providerRepo;
         private readonly IProductSizeRepository _productSizeRepo;
         private readonly IProductMaterialRepository _productMaterialRepo;
+        private readonly IProductColorRepository _productColorRepo;
+        private readonly IImageRepository _imageRepo;
 
         public ProductController(IProductRepository productRepo, ICategoryRepository categoryRepo, 
-            IProviderRepository providerRepo, IProductSizeRepository productSizeRepo, IProductMaterialRepository productMaterialRepo)
+            IProviderRepository providerRepo, IProductSizeRepository productSizeRepo, 
+            IProductMaterialRepository productMaterialRepo, IImageRepository imageRepo,
+            IProductColorRepository productColorRepo, ISubcategoryRepository subcategoryRepo)
         {
             _productRepo = productRepo;
             _subcategoryRepo = subcategoryRepo;
             _providerRepo = providerRepo;
             _productSizeRepo = productSizeRepo;
             _productMaterialRepo = productMaterialRepo;
+            _imageRepo = imageRepo;
+            _productColorRepo = productColorRepo;
         }
 
         [HttpGet]
@@ -90,6 +96,17 @@ namespace api.Controllers
                 await _productMaterialRepo.CreateAsync(productMaterial);
             }
 
+            foreach (var color in productDto.Colors!)
+            {
+                foreach (var image in color.Images!)
+                {
+                    var imageModel = image.ToImageFromCreateDto();
+                    await _imageRepo.CreateAsync(imageModel);
+                }
+                var colorProduct = new ProductColor { ProductId = productModel.ProductId, ColorId = color.ColorId };
+                await _productColorRepo.CreateAsync(colorProduct);
+            }
+
             return Ok(productDto);
         }
 
@@ -122,6 +139,5 @@ namespace api.Controllers
 
             return NoContent();
         }
-
     }
 }

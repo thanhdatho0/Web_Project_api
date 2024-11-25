@@ -5,7 +5,7 @@ namespace api.Interfaces
 {
     public interface IProviderRepository
     {
-        Task<List<Provider>> GetAllAsyns();
+        Task<List<Provider>> GetAllAsync();
         Task<Provider?> GetByIdAsync(int id);
         Task<Provider> CreateAsync(Provider provider);
         Task<Provider?> UpdateAsync(int id, ProviderUpdateDto providerUpdateDto);

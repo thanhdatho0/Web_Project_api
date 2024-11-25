@@ -12,5 +12,6 @@ namespace api.Models
         [Required]
         public string SizeValue { get; set; } = string.Empty;
         public List<ProductSize>? ProductSizes { get; set; } = new List<ProductSize>();
+        public List<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

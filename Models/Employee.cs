@@ -15,7 +15,8 @@ namespace api.Models
         [Required]
         [Range(1, int.MaxValue)]
         public int ContractUpTo { get; set; }
-        public string ParentNumber { get; set; } = string.Empty;
+        [Length(10, 11, ErrorMessage = "Not a valid number")]
+        public string? ParentPhoneNumber { get; set; }
         public int? DepartmentId { get; set; }
         public Department? Department { get; set; }
         public List<Order>? Orders { get; set; }

@@ -22,7 +22,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var providers = await _providerRepo.GetAllAsyns();
+            var providers = await _providerRepo.GetAllAsync();
 
             var providerDto = providers.Select(s => s.ToProviderDto());
 

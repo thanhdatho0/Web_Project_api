@@ -32,7 +32,7 @@ namespace api.Repository
             return provider;
         }
 
-        public async Task<List<Provider>> GetAllAsyns()
+        public async Task<List<Provider>> GetAllAsync()
         {
             return await _context.Providers.Include(p => p.ProviderProducts).ToListAsync();
         }

@@ -5,10 +5,10 @@ namespace api.Interfaces
 {
     public interface IImageRepository
     {
-        Task<List<Image>> GetAllAsyns();
-        Task<Image?> GetByIdAsyns(int id);
-        Task<Image?> CreateAsyns(Image imageModel);
-        Task<Image?> UpdateAsyns(int id, ImageUpdateDto imageUpdateDto);
+        Task<List<Image>> GetAllAsync();
+        Task<Image?> GetByIdAsync(int id);
+        Task<Image?> CreateAsync(Image imageModel);
+        Task<Image?> UpdateAsync(int id, ImageUpdateDto imageUpdateDto);
         Task<Image?> DeleteAsync(int id);
     }
 }

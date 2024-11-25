@@ -27,7 +27,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var images = await _imageRepo.GetAllAsyns();
+            var images = await _imageRepo.GetAllAsync();
 
             var imagesDto = images.Select(x => x.ToImageDto());
 
@@ -40,7 +40,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var image = await _imageRepo.GetByIdAsyns(id);
+            var image = await _imageRepo.GetByIdAsync(id);
 
             if (image == null)
                 return NotFound("Not found Imgage");
@@ -65,7 +65,7 @@ namespace api.Controllers
             if (imageModel == null)
                 return BadRequest("Not create");
 
-            await _imageRepo.CreateAsyns(imageModel);
+            await _imageRepo.CreateAsync(imageModel);
 
             return CreatedAtAction(nameof(GetById), new { id = imageModel.ImageId }, imageModel.ToImageDto());
         }
@@ -77,7 +77,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var image = await _imageRepo.UpdateAsyns(id, imageDto);
+            var image = await _imageRepo.UpdateAsync(id, imageDto);
 
             if (image == null)
                 return NotFound("Image not found");

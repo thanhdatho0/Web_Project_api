@@ -6,6 +6,5 @@ namespace api.DTOs.Size
     {
         public int SizeId { get; set; }
         public string SizeValue { get; set; } = string.Empty;
-        // public List<ProductColorDto>? Products { get; set; }
     }
 }

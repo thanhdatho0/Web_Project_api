@@ -34,6 +34,5 @@ namespace api.Mappers
                 Name = categoryDto.Name,
             };
         }
-
     }
 }
