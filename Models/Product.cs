@@ -17,7 +17,12 @@ namespace api.Models
                 [Column(TypeName = "decimal(18,2)")]
                 public decimal Cost { get; set; }
                 public int Stock { get; set; }
+                public decimal DiscountPercentage { get; set; }
                 public bool isDeleted { get; set; }
+                [Column(TypeName = "timestamp")]
+                public DateTime CreatedAt { get; set; }
+                [Column(TypeName = "timestamp")]
+                public DateTime UpdatedAt { get; set; }
                 public List<Image>? Images { get; set; } = new List<Image>();
                 public List<ProductColor>? ProductColors { get; set; } = new List<ProductColor>();
                 public List<ProductSize>? ProductSizes { get; set; } = new List<ProductSize>();
@@ -25,7 +30,7 @@ namespace api.Models
                 public List<OrderDetail>? OrderDetails { get; set; }
                 public int ProviderId { get; set; }
                 public Provider? Provider { get; set; }
-                public int CategoryId { get; set; }
-                public Category? Category { get; set; }
+                public int SubcategoryId { get; set; }
+                public Subcategory? Subcategory { get; set; }
         }
 }

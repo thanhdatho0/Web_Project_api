@@ -23,3 +23,23 @@ docker ps
 --Dừng và xoá container (nếu cần):
 docker stop <container-name>
 docker rm <container-name>
+
+-- Tạo database
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+-- xoa migrations
+dotnet ef migrations remove
+
+-- xoa tất cả table trong postgresql
+DO $$ DECLARE
+    table_name TEXT;
+BEGIN
+    FOR table_name IN
+        SELECT tablename
+        FROM pg_tables
+        WHERE schemaname = 'public'
+    LOOP
+        EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(table_name) || ' CASCADE';
+    END LOOP;
+END $$;

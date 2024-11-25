@@ -15,6 +15,11 @@ public class ProductUpdateDto
     [MaxLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
     public string? Description { get; set; }
 
+    [Required(ErrorMessage = "DiscountPercentage is required.")]
+    [Range(0.01, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
+    public decimal DiscountPercentage { get; set; }
+
+
     [Required(ErrorMessage = "Cost is required.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "Cost must be a positive value.")]
     public decimal Cost { get; set; }
@@ -22,4 +27,5 @@ public class ProductUpdateDto
     [Required(ErrorMessage = "Stock is required.")]
     [Range(0, int.MaxValue, ErrorMessage = "Stock must be a non-negative integer.")]
     public int Stock { get; set; }
+
 }

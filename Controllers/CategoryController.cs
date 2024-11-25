@@ -1,25 +1,23 @@
+
 using api.DTOs.Category;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using api.Helpers;
 
 namespace api.Controllers
 {
-    [Route("api/categories")]
     [ApiController]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepo;
-
         public CategoryController(ICategoryRepository categoryRepo)
         {
             _categoryRepo = categoryRepo;
         }
 
         [HttpGet]
-        // [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] QueryOject query)
         {
             if (!ModelState.IsValid)
@@ -27,7 +25,7 @@ namespace api.Controllers
 
             var categories = await _categoryRepo.GetAllAsync(query);
 
-            var categoryDto = categories.Select(s => s.ToCategoryDto());
+            var categoryDto = categories.Select(c => c.ToCategoryDto());
 
             return Ok(categoryDto);
         }
@@ -47,7 +45,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AdminPolicy")]
+        // [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> Create([FromBody] CategoryCreateDto categoryDto)
         {
             if (!ModelState.IsValid)
@@ -76,21 +74,6 @@ namespace api.Controllers
                 return NotFound("Category not found");
 
             return Ok(category.ToCategoryDto());
-        }
-
-        [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var category = await _categoryRepo.DeleteAsync(id);
-
-            if (category == null)
-                return NotFound("Category doese not exists");
-
-            return NoContent();
         }
 
     }

@@ -19,7 +19,7 @@ public class ProductRepository : IProductRepository
     }
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
-        var products = _context.Products.Include(p => p.Category)?
+        var products = _context.Products.Include(p => p.Subcategory)?
                                 .Include(p => p.ProductSizes)
                                 .ThenInclude(pz => pz.Size)
                                 .Include(p => p.ProductMaterials)
@@ -29,8 +29,8 @@ public class ProductRepository : IProductRepository
                                 .ThenInclude(c => c!.Images).AsQueryable();
 
 
-        if (!String.IsNullOrEmpty(query.CategoryId))
-            products = products.Where(p => p.CategoryId == int.Parse(query.CategoryId));
+        if (!String.IsNullOrEmpty(query.SubcategoryId))
+            products = products.Where(p => p.SubcategoryId == int.Parse(query.SubcategoryId));
 
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
@@ -39,7 +39,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(int id)
     {
-        return await _context.Products.Include(p => p.Category)
+        return await _context.Products.Include(p => p.Subcategory)
                             .Include(p => p.ProductSizes)
                             .ThenInclude(pz => pz.Size)
                             .Include(p => p.ProductColors)
@@ -66,6 +66,8 @@ public class ProductRepository : IProductRepository
         product.Cost = productUpdateDto.Cost;
         product.Price = productUpdateDto.Price;
         product.Stock = productUpdateDto.Stock;
+        product.DiscountPercentage = productUpdateDto.DiscountPercentage;
+        product.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
         return product;
     }

@@ -19,14 +19,19 @@ public class ProductCreateDto
     [Range(0.01, double.MaxValue, ErrorMessage = "Cost must be a positive value.")]
     public decimal Cost { get; set; }
 
+    [Required(ErrorMessage = "DiscountPercentage is required.")]
+    [Range(0.01, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
+    public decimal DiscountPercentage { get; set; }
+
     [Required(ErrorMessage = "Stock is required.")]
     [Range(0, int.MaxValue, ErrorMessage = "Stock must be a non-negative integer.")]
     public int Stock { get; set; }
 
-    [Required(ErrorMessage = "CategoryId is required.")]
-    public int CategoryId { get; set; }
+    [Required(ErrorMessage = "SubcategoryId is required.")]
+    public int SubcategoryId { get; set; }
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
+
     [Required(ErrorMessage = "SizeId is required.")]
     public List<int>? SizeId { get; set; }
     public List<int>? MaterialId { get; set; }
