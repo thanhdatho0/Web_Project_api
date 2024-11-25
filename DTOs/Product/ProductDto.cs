@@ -1,3 +1,4 @@
+using api.DTOs.Material;
 using api.DTOs.PColor;
 using api.DTOs.Size;
 
@@ -19,6 +20,7 @@ public class ProductDto
     public int SubcategoryId { get; set; }
     public int ProviderId { get; set; }
     public List<SizeDto>? Sizes { get; set; }
+    public List<MaterialDto>? Materials { get; set; }
     public List<ColorDto>? Colors { get; set; }
 
 }

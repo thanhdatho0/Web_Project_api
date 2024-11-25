@@ -1,11 +1,14 @@
 using api.Data;
 using api.DTOs.Product;
+using api.DTOs.ProductSize;
+using api.DTOs.Size;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using api.Helpers;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace api.Controllers
@@ -17,12 +20,17 @@ namespace api.Controllers
         private readonly IProductRepository _productRepo;
         private readonly ISubcategoryRepository _subcategoryRepo;
         private readonly IProviderRepository _providerRepo;
+        private readonly IProductSizeRepository _productSizeRepo;
+        private readonly IProductMaterialRepository _productMaterialRepo;
 
-        public ProductController(IProductRepository productRepo, ISubcategoryRepository subcategoryRepo, IProviderRepository providerRepo)
+        public ProductController(IProductRepository productRepo, ICategoryRepository categoryRepo, 
+            IProviderRepository providerRepo, IProductSizeRepository productSizeRepo, IProductMaterialRepository productMaterialRepo)
         {
             _productRepo = productRepo;
             _subcategoryRepo = subcategoryRepo;
             _providerRepo = providerRepo;
+            _productSizeRepo = productSizeRepo;
+            _productMaterialRepo = productMaterialRepo;
         }
 
         [HttpGet]
@@ -70,8 +78,19 @@ namespace api.Controllers
                 return BadRequest("Not create");
 
             await _productRepo.CreateAsync(productModel);
+            foreach (var size in productDto.SizeId!)
+            {
+                var productSize = new ProductSize { ProductId = productModel.ProductId, SizeId = size };
+                await _productSizeRepo.CreateAsync(productSize);
+            }
 
-            return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
+            foreach (var material in productDto.MaterialId!)
+            {
+                var productMaterial = new ProductMaterial { ProductId = productModel.ProductId, MaterialId = material };
+                await _productMaterialRepo.CreateAsync(productMaterial);
+            }
+
+            return Ok(productDto);
         }
 
         [HttpPut]

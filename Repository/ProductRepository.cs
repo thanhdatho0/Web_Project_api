@@ -21,7 +21,9 @@ public class ProductRepository : IProductRepository
     {
         var products = _context.Products.Include(p => p.Subcategory)?
                                 .Include(p => p.ProductSizes)
-                                .ThenInclude(pz => pz.Size)?
+                                .ThenInclude(pz => pz.Size)
+                                .Include(p => p.ProductMaterials)
+                                .ThenInclude(pm => pm.Material)?
                                 .Include(p => p.ProductColors)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
