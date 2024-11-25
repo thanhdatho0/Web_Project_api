@@ -49,6 +49,7 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddControllers().AddNewtonsoftJson(option =>
 {
     option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -107,6 +108,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ISubcategoryRepository, SubcategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IColorRepository, ColorRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
@@ -125,8 +127,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

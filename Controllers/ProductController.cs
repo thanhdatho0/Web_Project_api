@@ -15,13 +15,13 @@ namespace api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepo;
-        private readonly ICategoryRepository _categoryRepo;
+        private readonly ISubcategoryRepository _subcategoryRepo;
         private readonly IProviderRepository _providerRepo;
 
-        public ProductController(IProductRepository productRepo, ICategoryRepository categoryRepo, IProviderRepository providerRepo)
+        public ProductController(IProductRepository productRepo, ISubcategoryRepository subcategoryRepo, IProviderRepository providerRepo)
         {
             _productRepo = productRepo;
-            _categoryRepo = categoryRepo;
+            _subcategoryRepo = subcategoryRepo;
             _providerRepo = providerRepo;
         }
 
@@ -58,8 +58,8 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _categoryRepo.CategoryExists(productDto.CategoryId))
-                return BadRequest("Category does not exist!");
+            if (!await _subcategoryRepo.SubcategoryExists(productDto.SubcategoryId))
+                return BadRequest("Subcategory does not exist!");
 
             if (!await _providerRepo.ProviderExists(productDto.ProviderId))
                 return BadRequest("Provider does not exists!");

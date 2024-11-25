@@ -10,7 +10,7 @@ namespace api.Models
         public int EmployeeId { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Salary { get; set; }
-        [Column(TypeName = "DateTime")]
+        [Column(TypeName = "timestamp")]
         public DateTime StartDate { get; set; }
         [Required]
         [Range(1, int.MaxValue)]

@@ -97,6 +97,16 @@ namespace api.Data
             .HasMany(e => e.Orders)
             .WithOne(o => o.Customer);
 
+            // Category vs Subcategory 
+            modelBuilder.Entity<Category>()
+            .HasMany(c => c.Subcategories)
+            .WithOne(s => s.Category);
+
+            // Subcategory vs Product
+            modelBuilder.Entity<Subcategory>()
+            .HasMany(s => s.Products)
+            .WithOne(p => p.Subcategory);
+
             // Đặt giá trị mặc định cho isDelete là false
             modelBuilder.Entity<Product>()
             .Property(p => p.isDeleted)
@@ -107,15 +117,44 @@ namespace api.Data
             .Property(e => e.Male)
             .HasDefaultValue(true);
 
+            modelBuilder.Entity<Product>()
+            .Property(p => p.CreatedAt)
+            .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
+
+            modelBuilder.Entity<Product>()
+           .Property(p => p.UpdatedAt)
+           .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
+
             // Đặt giá trị OrderExportDateTime là ngày hiện tại khi nhập
             modelBuilder.Entity<Order>()
             .Property(o => o.OrderExportDateTime)
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
+
+            // rang buoc kieu unique
+            modelBuilder.Entity<Category>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+
+            modelBuilder.Entity<Subcategory>()
+            .HasIndex(c => c.SubcategoryName)
+            .IsUnique();
+
+            modelBuilder.Entity<Color>()
+            .HasIndex(c => new { c.HexaCode, c.Name })
+            .IsUnique();
+
+            modelBuilder.Entity<Product>()
+           .HasIndex(c => c.Name)
+           .IsUnique();
+
+            modelBuilder.Entity<Size>()
+            .HasIndex(c => c.SizeValue)
+            .IsUnique();
 
             // Check tuổi Employee
             modelBuilder.Entity<Employee>().ToTable(t =>
-            t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16"));
-
+            // t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16"));
+            t.HasCheckConstraint("CK_Employee_Age", "EXTRACT(YEAR FROM AGE(NOW(), \"DateOfBirth\")) >= 16"));
 
             List<IdentityRole> roles = new List<IdentityRole>
             {
@@ -137,6 +176,7 @@ namespace api.Data
             modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ut => new { ut.UserId, ut.LoginProvider });
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ur => new { ur.UserId, ur.RoleId });
         }
+        public DbSet<Subcategory> Subcategories { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Company> Companies { get; set; }

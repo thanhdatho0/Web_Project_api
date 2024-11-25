@@ -14,13 +14,16 @@ public static class ProductMappers
         {
             ProductId = productModel.ProductId,
             Name = productModel.Name,
-            CategoryName = productModel.Category?.Name,
+            SubcategoryName = productModel.Subcategory?.SubcategoryName,
             Description = productModel.Description,
             Cost = productModel.Cost,
             Price = productModel.Price,
+            DiscountPercentage = productModel.DiscountPercentage,
             Stock = productModel.Stock,
             isDeleted = productModel.isDeleted,
-            CategoryId = productModel.CategoryId,
+            CreatedAt = productModel.CreatedAt,
+            UpdatedAt = productModel.UpdatedAt,
+            SubcategoryId = productModel.SubcategoryId,
             ProviderId = productModel.ProviderId,
 
             Sizes = productModel.ProductSizes?.Where(pz => pz.ProductId == productModel.ProductId)
@@ -50,8 +53,9 @@ public static class ProductMappers
             Description = productDto.Description,
             Cost = productDto.Cost,
             Price = productDto.Price,
+            DiscountPercentage = productDto.DiscountPercentage,
             Stock = productDto.Stock,
-            CategoryId = productDto.CategoryId,
+            SubcategoryId = productDto.SubcategoryId,
             ProviderId = productDto.ProviderId
         };
     }
@@ -65,6 +69,7 @@ public static class ProductMappers
             Cost = productDto.Cost,
             Price = productDto.Price,
             Stock = productDto.Stock,
+            DiscountPercentage = productDto.DiscountPercentage,
         };
     }
 }

@@ -7,14 +7,18 @@ public class ProductDto
 {
     public int ProductId { get; set; }
     public string Name { get; set; } = "";
-    public string? CategoryName { get; set; } = "";
+    public string? SubcategoryName { get; set; } = "";
     public decimal Price { get; set; }
     public string? Description { get; set; }
     public decimal Cost { get; set; }
+    public decimal DiscountPercentage { get; set; }
     public int Stock { get; set; }
     public bool isDeleted { get; set; }
-    public int CategoryId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public int SubcategoryId { get; set; }
     public int ProviderId { get; set; }
     public List<SizeDto>? Sizes { get; set; }
     public List<ColorDto>? Colors { get; set; }
+
 }
