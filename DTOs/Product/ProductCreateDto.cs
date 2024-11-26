@@ -24,9 +24,11 @@ public class ProductCreateDto
     [Range(0.01, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
     public decimal DiscountPercentage { get; set; }
 
-    [Required(ErrorMessage = "Stock is required.")]
-    [Range(0, int.MaxValue, ErrorMessage = "Stock must be a non-negative integer.")]
-    public int Stock { get; set; }
+    [Required(ErrorMessage = "InStock is required.")]
+    [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a non-negative integer.")]
+    public int Quantity { get; set; }
+    [Required(ErrorMessage = "Unit is required.")]
+    public string? Unit { get; set; }
 
     [Required(ErrorMessage = "SubcategoryId is required.")]
     public int SubcategoryId { get; set; }
