@@ -43,4 +43,9 @@ public class DepartmentRepository : IDepartmentRepository
         await _context.SaveChangesAsync();
         return department;
     }
+
+    public Task<bool> DepartmentExists(int id)
+    {
+        return _context.Departments.AnyAsync(d => d.DepartmentId == id);
+    }
 }
