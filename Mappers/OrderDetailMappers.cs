@@ -11,6 +11,7 @@ public static class OrderDetailMappers
         {
             ProductName = orderDetail.Product?.Name,
             ProductPrice = orderDetail.Product!.Price,
+            PriceAfterDiscount = orderDetail.Product!.Price*(1-orderDetail.Product!.DiscountPercentage),
             Size = orderDetail.Size!.SizeValue,
             Color = orderDetail.Color!.Name,
             Quantity = orderDetail.Amount

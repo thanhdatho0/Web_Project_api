@@ -18,7 +18,7 @@ namespace api.Repository
 
         public async Task<List<Subcategory>> GetAllAsync(QueryOject query)
         {
-            var subcategories = _context.Subcategories.Include(c => c.Products).AsQueryable();
+            var subcategories = _context.Subcategories.AsQueryable();
 
             if (!String.IsNullOrEmpty(query.Name))
                 subcategories = subcategories.Where(c => c.SubcategoryName == query.Name);

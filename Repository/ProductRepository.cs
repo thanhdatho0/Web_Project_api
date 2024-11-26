@@ -61,13 +61,16 @@ public class ProductRepository : IProductRepository
         if (product == null)
             return null;
 
-        product.Name = productUpdateDto.Name;
-        product.Description = productUpdateDto.Description;
-        product.Cost = productUpdateDto.Cost;
-        product.Price = productUpdateDto.Price;
-        product.Stock = productUpdateDto.Stock;
-        product.DiscountPercentage = productUpdateDto.DiscountPercentage;
-        product.UpdatedAt = DateTime.Now;
+        // product.Name = productUpdateDto.Name;
+        // product.Description = productUpdateDto.Description;
+        // product.Cost = productUpdateDto.Cost;
+        // product.Price = productUpdateDto.Price;
+        // product.InStock = productUpdateDto.InStock;
+        // product.DiscountPercentage = productUpdateDto.DiscountPercentage;
+        // product.UpdatedAt = DateTime.Now;
+        int latestQuantity = productUpdateDto.Quantity;
+        product = productUpdateDto.ToProductFromUpdateDto(); 
+        product.InStock += (product.Quantity - latestQuantity);
         await _context.SaveChangesAsync();
         return product;
     }

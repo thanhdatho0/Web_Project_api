@@ -16,7 +16,7 @@ namespace api.Data
         {
             base.OnModelCreating(modelBuilder);
             // Order vs Product
-            modelBuilder.Entity<OrderDetail>(entity => entity.HasKey(o => new { o.OrderId, o.ProductId }));
+            modelBuilder.Entity<OrderDetail>(entity => entity.HasKey(o => new { o.OrderId, o.ProductId, o.ColorId, o.SizeId }));
 
             modelBuilder.Entity<OrderDetail>()
             .HasOne(od => od.Product)
@@ -27,6 +27,16 @@ namespace api.Data
            .HasOne(od => od.Order)
            .WithMany(o => o.OrderDetails)
            .HasForeignKey(od => od.OrderId);
+            
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Color)
+                .WithMany(c => c.OrderDetails)
+                .HasForeignKey(od => od.ColorId);
+            
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Size)
+                .WithMany(c => c.OrderDetails)
+                .HasForeignKey(od => od.SizeId);
 
             // Product vs Color
             modelBuilder.Entity<ProductColor>(entity => entity.HasKey(pc => new { pc.ColorId, pc.ProductId }));
@@ -109,7 +119,7 @@ namespace api.Data
 
             // Đặt giá trị mặc định cho isDelete là false
             modelBuilder.Entity<Product>()
-            .Property(p => p.isDeleted)
+            .Property(p => p.IsDeleted)
             .HasDefaultValue(false);
 
             // Đặt giá trị mặc đinh cho Male là true

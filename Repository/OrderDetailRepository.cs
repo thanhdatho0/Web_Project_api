@@ -8,7 +8,6 @@ namespace api.Repository;
 public class OrderDetailRepository : IOrderDetailRepository
 {
     private readonly ApplicationDbContext _dbContext;
-
     public OrderDetailRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -32,6 +31,8 @@ public class OrderDetailRepository : IOrderDetailRepository
 
     public async Task<OrderDetail> CreateAsync(OrderDetail orderDetail)
     {
+        var product = await _dbContext.Products.FindAsync(orderDetail.ProductId);
+        product!.InStock -= orderDetail.Amount;
         await _dbContext.OrderDetails.AddAsync(orderDetail);
         await _dbContext.SaveChangesAsync();
         return orderDetail;

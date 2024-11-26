@@ -20,8 +20,8 @@ public static class ProductMappers
             Cost = productModel.Cost,
             Price = productModel.Price,
             DiscountPercentage = productModel.DiscountPercentage,
-            Stock = productModel.Stock,
-            isDeleted = productModel.isDeleted,
+            InStock = productModel.InStock,
+            IsDeleted = productModel.IsDeleted,
             CreatedAt = productModel.CreatedAt,
             UpdatedAt = productModel.UpdatedAt,
             SubcategoryId = productModel.SubcategoryId,
@@ -62,7 +62,9 @@ public static class ProductMappers
             Cost = productDto.Cost,
             Price = productDto.Price,
             DiscountPercentage = productDto.DiscountPercentage,
-            Stock = productDto.Stock,
+            Quantity = productDto.Quantity,
+            InStock = productDto.Quantity,
+            Unit = productDto.Unit,
             SubcategoryId = productDto.SubcategoryId,
             ProviderId = productDto.ProviderId
         };
@@ -76,8 +78,9 @@ public static class ProductMappers
             Description = productDto.Description,
             Cost = productDto.Cost,
             Price = productDto.Price,
-            Stock = productDto.Stock,
+            Quantity = productDto.Quantity,
             DiscountPercentage = productDto.DiscountPercentage,
+            UpdatedAt = DateTime.Now
         };
     }
 }

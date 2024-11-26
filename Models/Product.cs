@@ -15,10 +15,12 @@ namespace api.Models
                 public decimal Price { get; set; }
                 public string? Description { get; set; }
                 [Column(TypeName = "decimal(18,2)")]
-                public decimal Cost { get; set; }
-                public int Stock { get; set; }
+                public decimal Cost { get; set; } //giá nhập kho
+                public int  Quantity { get; set; } // Số hàng nhập
+                public string Unit { get; set; } = string.Empty; // Đơn vị
+                public int InStock { get; set; } //Số lượng hàng tồn kho
                 public decimal DiscountPercentage { get; set; }
-                public bool isDeleted { get; set; }
+                public bool IsDeleted { get; set; }
                 [Column(TypeName = "timestamp")]
                 public DateTime CreatedAt { get; set; }
                 [Column(TypeName = "timestamp")]
