@@ -10,9 +10,7 @@ namespace api.Models
                 //Properties
                 [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
                 public int ColorId { get; set; }
-                [Required]
                 public string HexaCode { get; set; } = string.Empty;
-                [Required]
                 public string Name { get; set; } = string.Empty;
                 public List<ProductColor>? ProductColors { get; set; } = new List<ProductColor>();
                 public List<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();

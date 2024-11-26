@@ -9,7 +9,6 @@ namespace api.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DepartmentId { get; set; }
-        [Required]
         public string? DepartmentName { get; set; }
         public int ManagerId { get; set; }
         public List<Employee>? Employees { get; set; }

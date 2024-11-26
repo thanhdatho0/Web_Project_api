@@ -10,7 +10,6 @@ namespace api.Models
         //Properties
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SubcategoryId { get; set; }
-        [Required]
         public string SubcategoryName { get; set; } = string.Empty;
         public string? Description { get; set; }
         public List<Product>? Products { get; set; } = new List<Product>();

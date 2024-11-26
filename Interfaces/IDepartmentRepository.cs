@@ -10,4 +10,6 @@ public interface IDepartmentRepository
     public Task<Department?> GetByIdAsync(int id);
     public Task<Department?> CreateAsync(Department department);
     public Task<Department?> UpdateAsync(int id, DepartmentUpdateDto departmentUpdateDto);
+    Task<bool> DepartmentExists(int id);
+
 }
