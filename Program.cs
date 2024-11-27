@@ -124,6 +124,8 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRpository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

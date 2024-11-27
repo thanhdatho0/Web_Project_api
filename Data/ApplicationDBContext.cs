@@ -15,6 +15,12 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Category // TargerCustomer
+            modelBuilder.Entity<TargetCustomer>()
+            .HasMany(t => t.Categories)
+            .WithOne(c => c.targetCustomer);
+
+
             // Order vs Product
             modelBuilder.Entity<OrderDetail>(entity => entity.HasKey(o => new { o.OrderId, o.ProductId, o.ColorId, o.SizeId }));
 
@@ -27,12 +33,12 @@ namespace api.Data
            .HasOne(od => od.Order)
            .WithMany(o => o.OrderDetails)
            .HasForeignKey(od => od.OrderId);
-            
+
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Color)
                 .WithMany(c => c.OrderDetails)
                 .HasForeignKey(od => od.ColorId);
-            
+
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Size)
                 .WithMany(c => c.OrderDetails)
@@ -186,6 +192,8 @@ namespace api.Data
             modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ut => new { ut.UserId, ut.LoginProvider });
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ur => new { ur.UserId, ur.RoleId });
         }
+
+        public DbSet<TargetCustomer> TargetCustomers { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }

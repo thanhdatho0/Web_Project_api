@@ -12,8 +12,8 @@ namespace api.Mappers
                 SubcategoryId = subcategoryModel.SubcategoryId,
                 SubcategoryName = subcategoryModel.SubcategoryName,
                 Description = subcategoryModel.Description,
-                // CategoryId = subcategoryModel.CategoryId,
-                // Products = subcategoryModel.Products?.Select(p => p.ToProductDto()).ToList()
+                CategoryId = subcategoryModel.CategoryId,
+                Products = subcategoryModel.Products?.Select(p => p.ToProductDto()).ToList()
             };
         }
 

@@ -86,20 +86,20 @@ namespace api.Controllers
             return Ok(subcategory.ToSubcategoryDto());
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        // [HttpDelete]
+        // [Route("{id:int}")]
+        // public async Task<IActionResult> Delete([FromRoute] int id)
+        // {
+        //     if (!ModelState.IsValid)
+        //         return BadRequest(ModelState);
 
-            var subcategory = await _subcategoryRepo.DeleteAsync(id);
+        //     var subcategory = await _subcategoryRepo.DeleteAsync(id);
 
-            if (subcategory == null)
-                return NotFound("Subcategory doese not exists");
+        //     if (subcategory == null)
+        //         return NotFound("Subcategory doese not exists");
 
-            return NoContent();
-        }
+        //     return NoContent();
+        // }
 
     }
 }

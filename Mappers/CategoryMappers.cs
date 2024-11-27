@@ -15,6 +15,7 @@ namespace api.Mappers
             {
                 CategoryId = categoryModel.CategoryId,
                 Name = categoryModel.Name,
+                TargetCustomerId = categoryModel.TargetCustomerId,
                 Subcategories = categoryModel.Subcategories?.Select(s => s.ToSubcategoryDto()).ToList()
             };
         }
@@ -24,6 +25,7 @@ namespace api.Mappers
             return new Category
             {
                 Name = categoryDto.Name,
+                TargetCustomerId = categoryDto.TargetCustomerId,
             };
         }
 
