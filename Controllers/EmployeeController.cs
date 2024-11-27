@@ -11,12 +11,10 @@ namespace api.Controllers;
 public class EmployeeController : ControllerBase
 {
     private readonly IEmployeeRepository _employeeRepository;
-    private readonly IDepartmentRepository _departmentRepo;
 
-    public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepo)
+    public EmployeeController(IEmployeeRepository employeeRepository)
     {
         _employeeRepository = employeeRepository;
-        _departmentRepo = departmentRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -43,9 +41,6 @@ public class EmployeeController : ControllerBase
 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
-        if (!await _departmentRepo.DepartmentExists(employeeCreateDto.DepartmentId))
-            return BadRequest("Department does not exist!");
 
         var employee = employeeCreateDto.ToCreateEmployeeDto();
         try

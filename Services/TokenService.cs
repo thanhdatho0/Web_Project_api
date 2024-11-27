@@ -19,7 +19,7 @@ public class TokenService : ITokenService
     {
         _config = config;
         _userManager = userManager;
-        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]));
+        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]!));
     }
     
     public async Task<string> CreateToken(AppUser user)
@@ -28,8 +28,8 @@ public class TokenService : ITokenService
         var roleClaims = userRoles.Select(role => new Claim(ClaimTypes.Role, role));
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
             new Claim(ClaimTypes.NameIdentifier, user.Id)
         };
         
