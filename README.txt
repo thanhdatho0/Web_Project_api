@@ -44,12 +44,18 @@ BEGIN
     END LOOP;
 END $$;
 
-
-INSERT INTO "Categories" ("Name")
+INSERT INTO "TargetCustomers" ("TargetCustomerName", "Url", "Alt")
 VALUES
-('Áo nam'), ('Quần nam'), ('Độ bộ nam'), ('Đồ mặc trong nam'), ('Đồ thể thao nam'), ('Phụ kiện nam'),
-('Áo nữ'), ('Quần nữ'), ('Độ bộ nữ'), ('Đồ mặc trong nữ'), ('Đồ thể thao nữ'), ('Đầm và chân váy nữ'), ('Phụ kiện nữ'),
-('Áo trẻ em'), ('Quần trẻ em'), ('Độ bộ trẻ em'), ('Đồ mặc trong trẻ em'), ('Đồ thể thao trẻ em'), ('Đầm và chân váy bé gái'), ('Phụ kiện trẻ em')
+('Nam' , 'https://yody.vn/images/menu-desktop/menu_man.png', 'Nam'),
+('Nữ' , 'https://yody.vn/images/menu-desktop/menu_woman.png', 'Nữ'),
+('Trẻ em', 'https://yody.vn/images/menu-desktop/menu_woman.png', 'Trẻ em')
+
+
+INSERT INTO "Categories" ("Name", "TargetCustomerId")
+VALUES
+('Áo nam',1), ('Quần nam',1), ('Độ bộ nam',1), ('Đồ mặc trong nam',1), ('Đồ thể thao nam',1), ('Phụ kiện nam',1),
+('Áo nữ',2), ('Quần nữ',2), ('Độ bộ nữ',2), ('Đồ mặc trong nữ',2), ('Đồ thể thao nữ',2), ('Đầm và chân váy nữ',2), ('Phụ kiện nữ',2),
+('Áo trẻ em',3), ('Quần trẻ em',3), ('Độ bộ trẻ em',3), ('Đồ mặc trong trẻ em',3), ('Đồ thể thao trẻ em',3), ('Đầm và chân váy bé gái',3), ('Phụ kiện trẻ em',3)
 
 
 INSERT INTO "Subcategories" ("SubcategoryName","Description","CategoryId")

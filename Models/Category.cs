@@ -12,5 +12,7 @@ namespace api.Models
         [Column(TypeName = "varchar(100)")]
         public string Name { get; set; } = string.Empty;
         public List<Subcategory>? Subcategories { get; set; } = new List<Subcategory>();
+        public int TargetCustomerId { get; set; }
+        public TargetCustomer? targetCustomer { get; set; }
     }
 }

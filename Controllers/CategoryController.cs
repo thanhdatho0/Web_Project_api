@@ -12,9 +12,11 @@ namespace api.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepo;
-        public CategoryController(ICategoryRepository categoryRepo)
+        private readonly ITargetCustomerRepository _targerCustomerRepo;
+        public CategoryController(ICategoryRepository categoryRepo, ITargetCustomerRepository targerCustomerRepo)
         {
             _categoryRepo = categoryRepo;
+            _targerCustomerRepo = targerCustomerRepo;
         }
 
         [HttpGet]
@@ -50,6 +52,9 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!await _targerCustomerRepo.TargetCustomerExists(categoryDto.TargetCustomerId))
+                return BadRequest("TargetCustomer dose not exist!");
 
             var category = categoryDto.ToCategoryFromCreateDto();
 
