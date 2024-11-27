@@ -77,11 +77,6 @@ namespace api.Data
            .WithMany(e => e.ProductMaterials)
            .HasForeignKey(pm => pm.MaterialId);
 
-            // Department vs Employee
-            modelBuilder.Entity<Department>()
-            .HasMany(e => e.Employees)
-            .WithOne(e => e.Department);
-
             // Color vs image
             modelBuilder.Entity<Color>()
                 .HasMany(e => e.Images)
@@ -190,7 +185,6 @@ namespace api.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Material> Materials { get; set; }
