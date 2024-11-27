@@ -4,13 +4,13 @@ namespace api.DTOs.Employee;
 
 public class EmployeeCreateDto
 {
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public bool Male { get; set; }
 
     [Phone(ErrorMessage = "Please enter a valid phone number.")]
-    public string? PhoneNumber { get; set; }
-    public string? Address { get; set; }
+    public string PhoneNumber { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Date of Birth is required.")]
     [DataType(DataType.Date, ErrorMessage = "Invalid date format (yyyy-MM-dd)")]
@@ -22,13 +22,11 @@ public class EmployeeCreateDto
 
     [Required(ErrorMessage = "Start date is required.")]
     [DataType(DataType.Date, ErrorMessage = "Invalid date format (yyyy-MM-dd)")]
-
     public DateOnly StartDate { get; set; }
 
     [Required(ErrorMessage = "ContractUpTo is required.")]
     public int ContractUpTo { get; set; }
 
     [Phone(ErrorMessage = "Please enter a valid phone number.")]
-    public string? ParentPhoneNumber { get; set; }
-    public int DepartmentId { get; set; }
+    public string ParentPhoneNumber { get; set; } = string.Empty;
 }

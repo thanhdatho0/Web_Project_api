@@ -75,12 +75,18 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireRole("Admin"));
+    
+    options.AddPolicy("EmployeePolicy", policy =>
+        policy.RequireClaim("Permission", "EmployeeAccess"));
 
-    options.AddPolicy("UserPolicy", policy =>
-        policy.RequireClaim("Permission", "UserAccess"));
+    options.AddPolicy("EmployeePolicy", policy =>
+        policy.RequireRole("Employee"));
 
-    options.AddPolicy("UserPolicy", policy =>
-        policy.RequireRole("User"));
+    options.AddPolicy("CustomerPolicy", policy =>
+        policy.RequireClaim("Permission", "CustomerAccess"));
+
+    options.AddPolicy("CustomerPolicy", policy =>
+        policy.RequireRole("Customer"));
 });
 
 
@@ -103,7 +109,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["Jwt:Audience"],
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]!))
     };
 });
 
@@ -121,11 +127,10 @@ builder.Services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
 builder.Services.AddScoped<IProductMaterialRepository, ProductMaterialRepository>();
 builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRpository>();
-
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -140,10 +145,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors(x => x.AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .SetIsOriginAllowed(origin => true)
-                    );
+app.UseCors(x => x
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .SetIsOriginAllowed(origin => true)
+);
 
 app.MapControllers();
 

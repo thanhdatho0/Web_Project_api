@@ -13,7 +13,6 @@ public static class EmployeeMappers
             Salary = employee.Salary,
             StartDate = employee.StartDate,
             ContractUpTo = employee.ContractUpTo,
-            Department = employee.Department?.ToDepartmentDto(),
         };
     }
 
@@ -31,7 +30,6 @@ public static class EmployeeMappers
             StartDate = employeeCreateDto.StartDate,
             ContractUpTo = employeeCreateDto.ContractUpTo,
             ParentPhoneNumber = employeeCreateDto.ParentPhoneNumber,
-            DepartmentId = employeeCreateDto.DepartmentId,
         };
     }
 
@@ -45,8 +43,7 @@ public static class EmployeeMappers
             Salary = employee.Salary,
             StartDate = employee.StartDate,
             ContractUpTo = employee.ContractUpTo,
-            ParentPhoneNumber = employee.ParentPhoneNumber,
-            DepartmentId = employee.DepartmentId,
+            ParentPhoneNumber = employee.ParentPhoneNumber
         };
     }
 }

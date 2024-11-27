@@ -14,6 +14,7 @@ namespace api.Models
         public Customer? Customer { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime OrderExportDateTime { get; set; }
+        [Column(TypeName = "varchar(300)")]
         public string? OrderNotice { get; set; }
         public List<Product>? Products { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }

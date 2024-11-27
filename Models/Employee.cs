@@ -12,9 +12,9 @@ namespace api.Models
         public decimal Salary { get; set; }
         public DateOnly StartDate { get; set; }
         public int ContractUpTo { get; set; }
+        [Length(10, 11, ErrorMessage = "Phone number must be 10 or 11 numbers long.")]
+        [Column(TypeName = "varchar(11)")]
         public string? ParentPhoneNumber { get; set; }
-        public int? DepartmentId { get; set; }
-        public Department? Department { get; set; }
         public List<Order>? Orders { get; set; }
     }
 }
