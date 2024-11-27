@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers
 {
     [ApiController]
-    [Route("api/tagerCustomers")]
+    [Route("api/targetcustomers")]
     public class TargetCustomerController : Controller
     {
         private readonly ITargetCustomerRepository _tagerCustomerRepo;
