@@ -32,6 +32,47 @@ public class ProductRepository : IProductRepository
         if (!String.IsNullOrEmpty(query.CategoryId))
             products = products.Where(p => p.CategoryId == int.Parse(query.CategoryId));
 
+        if (!string.IsNullOrEmpty(query.ProductId))
+            products = products.Where(p => p.ProductId == int.Parse(query.ProductId));
+
+        if (!string.IsNullOrEmpty(query.ColorId))
+        {
+            var colorIds = query.ColorId.Split(',').Select(int.Parse).ToList();
+            products = products.Where(p => colorIds.All(colorId => p.ProductColors.Any(pc => pc.ColorId == colorId)));
+        }
+
+        // if (!string.IsNullOrEmpty(query.SizeId))
+        //     products = products.Where(p => p.ProductSizes.Any(pc => pc.SizeId == int.Parse(query.SizeId)));
+        if (!string.IsNullOrEmpty(query.SizeId))
+        {
+            var sizeIds = query.SizeId.Split(',').Select(int.Parse).ToList();
+            products = products.Where(p => sizeIds.All(sizeId => p.ProductSizes.Any(pc => pc.SizeId == sizeId)));
+        }
+
+
+
+
+        if (!string.IsNullOrEmpty(query.Price))
+        {
+            var price = query.Price.Split(',');
+            foreach (var i in price)
+            {
+                if (i == "duoi-350")
+                {
+                    products = products.Where(p => p.Price < 350000);
+                }
+                else if (i == "350.000-750.000")
+                {
+                    products = products.Where(p => p.Price >= 350000 && p.Price <= 750000);
+                }
+                else if (i == "tren-750")
+                {
+                    products = products.Where(p => p.Price > 750000);
+                }
+            }
+        }
+
+
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
         return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
