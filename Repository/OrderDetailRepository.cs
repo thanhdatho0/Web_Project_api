@@ -5,17 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class OrderDetailRepository : IOrderDetailRepository
+public class OrderDetailRepository(ApplicationDbContext dbContext) : IOrderDetailRepository
 {
-    private readonly ApplicationDbContext _dbContext;
-    public OrderDetailRepository(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
     public async Task<List<OrderDetail>> GetAllAsync()
     {
         var orderDetails = 
-            _dbContext.OrderDetails
+            dbContext.OrderDetails
                 .Include(o => o.Order)
                 .Include(o => o.Product)
                 .Include(o => o.Size)
@@ -25,16 +20,16 @@ public class OrderDetailRepository : IOrderDetailRepository
 
     public async Task<OrderDetail?> GetByIdAsync(int id)
     {
-        var orderDetail = await _dbContext.OrderDetails.FindAsync(id);
+        var orderDetail = await dbContext.OrderDetails.FindAsync(id);
         return orderDetail ?? null;
     }
 
     public async Task<OrderDetail> CreateAsync(OrderDetail orderDetail)
     {
-        var product = await _dbContext.Products.FindAsync(orderDetail.ProductId);
+        var product = await dbContext.Products.FindAsync(orderDetail.ProductId);
         product!.InStock -= orderDetail.Amount;
-        await _dbContext.OrderDetails.AddAsync(orderDetail);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.OrderDetails.AddAsync(orderDetail);
+        await dbContext.SaveChangesAsync();
         return orderDetail;
     }
 

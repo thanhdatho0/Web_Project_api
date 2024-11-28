@@ -9,23 +9,16 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("api/categories")]
-    public class CategoryController : ControllerBase
+    public class CategoryController(ICategoryRepository categoryRepo, ITargetCustomerRepository targetCustomerRepo)
+        : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepo;
-        private readonly ITargetCustomerRepository _targerCustomerRepo;
-        public CategoryController(ICategoryRepository categoryRepo, ITargetCustomerRepository targerCustomerRepo)
-        {
-            _categoryRepo = categoryRepo;
-            _targerCustomerRepo = targerCustomerRepo;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryOject query)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var categories = await _categoryRepo.GetAllAsync(query);
+            var categories = await categoryRepo.GetAllAsync(query);
 
             var categoryDto = categories.Select(c => c.ToCategoryDto());
 
@@ -38,7 +31,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var category = await _categoryRepo.GetByIdAsync(id);
+            var category = await categoryRepo.GetByIdAsync(id);
 
             if (category == null)
                 return NotFound();
@@ -53,15 +46,12 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _targerCustomerRepo.TargetCustomerExists(categoryDto.TargetCustomerId))
+            if (!await targetCustomerRepo.TargetCustomerExists(categoryDto.TargetCustomerId))
                 return BadRequest("TargetCustomer dose not exist!");
 
             var category = categoryDto.ToCategoryFromCreateDto();
 
-            if (category == null)
-                return BadRequest("Not create");
-
-            await _categoryRepo.CreateAsync(category);
+            await categoryRepo.CreateAsync(category);
 
             return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category.ToCategoryDto());
         }
@@ -73,7 +63,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var category = await _categoryRepo.UpdateAsync(id, categoryDto);
+            var category = await categoryRepo.UpdateAsync(id, categoryDto);
 
             if (category == null)
                 return NotFound("Category not found");

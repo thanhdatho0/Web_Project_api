@@ -9,22 +9,15 @@ namespace api.Controllers
     [Route("api/colors")]
     [ApiController]
 
-    public class ColorController : ControllerBase
+    public class ColorController(IColorRepository colorRepo) : ControllerBase
     {
-        private readonly IColorRepository _colorRepo;
-
-        public ColorController(IColorRepository colorRepo)
-        {
-            _colorRepo = colorRepo;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var colors = await _colorRepo.GetAllAsync();
+            var colors = await colorRepo.GetAllAsync();
 
             var colorsDto = colors.Select(c => c.ToColorDto());
 
@@ -37,7 +30,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var color = await _colorRepo.GetByIdAsync(id);
+            var color = await colorRepo.GetByIdAsync(id);
 
             if (color == null)
                 return NotFound();
@@ -53,10 +46,7 @@ namespace api.Controllers
 
             var color = colorCreateDto.ToColorFromCreateDto();
 
-            if (color == null)
-                return BadRequest("Not create");
-
-            await _colorRepo.CreateAsync(color);
+            await colorRepo.CreateAsync(color);
 
             return CreatedAtAction(nameof(GetById), new { id = color.ColorId }, color.ToColorDto());
         }
@@ -68,7 +58,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var color = await _colorRepo.UpdateAsync(id, colorUpdateDto);
+            var color = await colorRepo.UpdateAsync(id, colorUpdateDto);
 
             if (color == null)
                 return NotFound("Color does not found");
@@ -83,7 +73,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var color = await _colorRepo.DeleteAsync(id);
+            var color = await colorRepo.DeleteAsync(id);
 
             if (color == null)
                 return NotFound("Color does not exists");

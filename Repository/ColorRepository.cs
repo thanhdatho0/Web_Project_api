@@ -6,51 +6,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
-    public class ColorRepository : IColorRepository
+    public class ColorRepository(ApplicationDbContext context) : IColorRepository
     {
-        private readonly ApplicationDbContext _context;
-        public ColorRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public Task<bool> ColorExists(int id)
         {
-            return _context.Colors.AnyAsync(c => c.ColorId == id);
+            return context.Colors.AnyAsync(c => c.ColorId == id);
         }
 
         public async Task<Color> CreateAsync(Color color)
         {
-            await _context.Colors.AddAsync(color);
-            await _context.SaveChangesAsync();
+            await context.Colors.AddAsync(color);
+            await context.SaveChangesAsync();
             return color;
         }
         public async Task<Color?> DeleteAsync(int id)
         {
-            var color = await _context.Colors.FirstOrDefaultAsync(c => c.ColorId == id);
+            var color = await context.Colors.FirstOrDefaultAsync(c => c.ColorId == id);
             if (color == null) return null;
-            _context.Colors.Remove(color);
-            await _context.SaveChangesAsync();
+            context.Colors.Remove(color);
+            await context.SaveChangesAsync();
             return color;
         }
 
         public async Task<List<Color>> GetAllAsync()
         {
-            return await _context.Colors.Include(c => c.Images).ToListAsync();
+            return await context.Colors.Include(c => c.Images).ToListAsync();
         }
 
         public async Task<Color?> GetByIdAsync(int id)
         {
-            return await _context.Colors.FindAsync(id);
+            return await context.Colors.FindAsync(id);
         }
 
         public async Task<Color?> UpdateAsync(int id, ColorUpdateDto colorUpdateDto)
         {
-            var color = await _context.Colors.FirstOrDefaultAsync(c => c.ColorId == id);
+            var color = await context.Colors.FirstOrDefaultAsync(c => c.ColorId == id);
             if (color == null) return null;
             color.HexaCode = colorUpdateDto.HexaCode;
             color.Name = colorUpdateDto.Name;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return color;
         }
     }

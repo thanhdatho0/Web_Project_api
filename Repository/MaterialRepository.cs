@@ -6,37 +6,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class MaterialRepository : IMaterialRepository
+public class MaterialRepository(ApplicationDbContext context) : IMaterialRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public MaterialRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
     public async Task<List<Material>> GetAllAsync()
     {
-        return await _context.Materials.ToListAsync();
+        return await context.Materials.ToListAsync();
     }
 
     public async Task<Material?> GetByIdAsync(int materialId)
     {
-        return await _context.Materials.FindAsync(materialId);
+        return await context.Materials.FindAsync(materialId);
     }
 
     public async Task<Material?> CreateAsync(Material material)
     {
-        await _context.Materials.AddAsync(material);
-        await _context.SaveChangesAsync();
+        await context.Materials.AddAsync(material);
+        await context.SaveChangesAsync();
         return material;
     }
 
     public async Task<Material?> UpdateAsync(int id, MaterialCreateDto materialCreateDto)
     {
-        var material = _context.Materials.FirstOrDefault(x => x.MaterialId == id);
+        var material = context.Materials.FirstOrDefault(x => x.MaterialId == id);
         if (material == null) return null;
         material.MaterialType = materialCreateDto.MaterialType;
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return material;
     }
 

@@ -7,23 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers
 {
     [ApiController]
-    [Route("api/targetcustomers")]
-    public class TargetCustomerController : Controller
+    [Route("api/targetCustomers")]
+    public class TargetCustomerController(ITargetCustomerRepository targetCustomerRepo) : Controller
     {
-        private readonly ITargetCustomerRepository _tagerCustomerRepo;
-
-        public TargetCustomerController(ITargetCustomerRepository tagerCustomerRepo)
-        {
-            _tagerCustomerRepo = tagerCustomerRepo;
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetALL()
+        public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var genders = await _tagerCustomerRepo.GetAllAsync();
+            var genders = await targetCustomerRepo.GetAllAsync();
 
             var genderDto = genders.Select(g => g.ToTargetCustomerDto());
 
@@ -36,7 +29,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var gender = await _tagerCustomerRepo.GetByIdAsync(id);
+            var gender = await targetCustomerRepo.GetByIdAsync(id);
 
             if (gender == null)
                 return NotFound();
@@ -52,27 +45,21 @@ namespace api.Controllers
 
             var gender = genderDto.ToTargetCustomerFromCreateDto();
 
-            if (gender == null)
-                return BadRequest("Not create");
-
-            await _tagerCustomerRepo.CreateAsync(gender);
+            await targetCustomerRepo.CreateAsync(gender);
 
             return CreatedAtAction(nameof(GetById), new { id = gender.TargetCustomerId }, gender.ToTargetCustomerDto());
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TargetCustomerUpdateDto genderrDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TargetCustomerUpdateDto targetCustomerUpdateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var gender = await _tagerCustomerRepo.UpdateAsync(id, genderrDto);
+            var targetCustomer = await targetCustomerRepo.UpdateAsync(id, targetCustomerUpdateDto);
 
-            if (gender == null)
-                return NotFound("TargetCustomer not found");
-
-            return Ok(gender?.ToTargetCustomerDto());
+            return Ok(targetCustomer?.ToTargetCustomerDto());
         }
 
     }

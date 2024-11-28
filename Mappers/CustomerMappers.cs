@@ -10,8 +10,8 @@ public static class CustomerMappers
         return new CustomerDto
         {
             CustomerId = customer.CustomerId,
-            FirstName = customer.FirstName!,
-            LastName = customer.LastName!,
+            FirstName = customer.FirstName,
+            LastName = customer.LastName,
             Male = customer.Male,
             PhoneNumber = customer.PhoneNumber,
             Address = customer.Address,

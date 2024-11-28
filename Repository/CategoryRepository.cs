@@ -8,31 +8,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository(ApplicationDbContext context) : ICategoryRepository
     {
-        private readonly ApplicationDbContext _context;
-        public CategoryRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public Task<bool> CategoryExists(int id)
         {
-            return _context.Categories.AnyAsync(c => c.CategoryId == id);
+            return context.Categories.AnyAsync(c => c.CategoryId == id);
         }
 
         public async Task<Category> CreateAsync(Category category)
         {
-            await _context.Categories.AddAsync(category);
-            await _context.SaveChangesAsync();
+            await context.Categories.AddAsync(category);
+            await context.SaveChangesAsync();
             return category;
         }
 
         public async Task<List<Category>> GetAllAsync(QueryOject query)
         {
-            var categories = _context.Categories.Include(c => c.Subcategories).AsQueryable();
+            var categories = context.Categories.Include(c => c.Subcategories).AsQueryable();
 
-            if (!String.IsNullOrEmpty(query.Name))
+            if (!string.IsNullOrEmpty(query.Name))
                 categories = categories.Where(c => c.Name == query.Name);
 
             return await categories.ToListAsync();
@@ -40,18 +34,18 @@ namespace api.Repository
 
         public async Task<Category?> GetByIdAsync(int id)
         {
-            return await _context.Categories.Include(c => c.Subcategories).FirstOrDefaultAsync(c => c.CategoryId == id);
+            return await context.Categories.Include(c => c.Subcategories).FirstOrDefaultAsync(c => c.CategoryId == id);
         }
 
         public async Task<Category?> UpdateAsync(int id, CategoryUpdateDto categoryUpdateDto)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
+            var category = await context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
 
             if (category == null)
                 return null;
 
             category.Name = categoryUpdateDto.Name;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return category;
         }
     }

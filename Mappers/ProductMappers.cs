@@ -1,4 +1,4 @@
-using System.Runtime.Intrinsics.X86;
+
 using api.DTOs.Material;
 using api.DTOs.PColor;
 using api.DTOs.Product;
@@ -15,7 +15,7 @@ public static class ProductMappers
         {
             ProductId = productModel.ProductId,
             Name = productModel.Name,
-            SubcategoryName = productModel.Subcategory?.SubcategoryName,
+            SubcategoryName = productModel.Subcategory.SubcategoryName,
             Description = productModel.Description,
             Cost = productModel.Cost,
             Price = productModel.Price,
@@ -27,21 +27,21 @@ public static class ProductMappers
             SubcategoryId = productModel.SubcategoryId,
             ProviderId = productModel.ProviderId,
 
-            Sizes = productModel.ProductSizes?.Where(pz => pz.ProductId == productModel.ProductId)
+            Sizes = productModel.ProductSizes.Where(pz => pz.ProductId == productModel.ProductId)
             .Select(pz => new SizeDto
             {
                 SizeId = pz.SizeId,
                 SizeValue = pz.Size!.SizeValue,
             }).ToList(),
             
-            Materials = productModel.ProductMaterials?.Where(pm => pm.ProductId == productModel.ProductId)
+            Materials = productModel.ProductMaterials.Where(pm => pm.ProductId == productModel.ProductId)
                 .Select(pm => new MaterialDto
                 {
                     MaterialId = pm.MaterialId,
                     MaterialType = pm.Material!.MaterialType,
                 }).ToList(),
 
-            Colors = productModel.ProductColors?.Where(pc => pc.ProductId == productModel.ProductId)
+            Colors = productModel.ProductColors.Where(pc => pc.ProductId == productModel.ProductId)
             .Select(pc => new ColorDto
             {
                 ColorId = pc.ColorId,
@@ -64,7 +64,7 @@ public static class ProductMappers
             DiscountPercentage = productDto.DiscountPercentage,
             Quantity = productDto.Quantity,
             InStock = productDto.Quantity,
-            Unit = productDto.Unit,
+            Unit = productDto.Unit!,
             SubcategoryId = productDto.SubcategoryId,
             ProviderId = productDto.ProviderId
         };

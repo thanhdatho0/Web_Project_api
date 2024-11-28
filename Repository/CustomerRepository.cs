@@ -6,28 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class CustomerRepository : ICustomerRepository
+public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepository
 {
-    private readonly ApplicationDbContext _dbContext;
-
-    public CustomerRepository(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
     public async Task<List<Customer>> GetAllAsync()
     {
-        return await _dbContext.Customers.ToListAsync();
+        return await dbContext.Customers.ToListAsync();
     }
 
     public async Task<Customer?> GetByIdAsync(int id)
     {
-        return await _dbContext.Customers.FindAsync(id) ?? null;
+        return await dbContext.Customers.FindAsync(id) ?? null;
     }
 
     public async Task<Customer?> CreateAsync(Customer customer)
     {
-        await _dbContext.Customers.AddAsync(customer);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.Customers.AddAsync(customer);
+        await dbContext.SaveChangesAsync();
         return customer;
     }
 

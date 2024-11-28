@@ -13,7 +13,7 @@ namespace api.Mappers
                 TargetCustomerName = targetCustomerModel.TargetCustomerName,
                 Url = targetCustomerModel.Url,
                 Alt = targetCustomerModel.Alt,
-                Categories = targetCustomerModel.Categories?.Select(c => c.ToCategoryDto()).ToList()
+                Categories = targetCustomerModel.Categories.Select(c => c.ToCategoryDto()).ToList()
             };
         }
 
@@ -25,13 +25,13 @@ namespace api.Mappers
             };
         }
 
-        public static TargetCustomer ToTargetCustomerFromUpdateDto(this TargetCustomerUpdateDto targerCusUpdateDto)
+        public static TargetCustomer ToTargetCustomerFromUpdateDto(this TargetCustomerUpdateDto targetCusUpdateDto)
         {
             return new TargetCustomer
             {
-                TargetCustomerName = targerCusUpdateDto.TargetCustomerName,
-                Url = targerCusUpdateDto.Url,
-                Alt = targerCusUpdateDto.Alt,
+                TargetCustomerName = targetCusUpdateDto.TargetCustomerName,
+                Url = targetCusUpdateDto.Url,
+                Alt = targetCusUpdateDto.Alt,
             };
         }
     }

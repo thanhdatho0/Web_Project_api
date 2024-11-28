@@ -10,6 +10,7 @@ namespace api.Models
                 [Key]
                 [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
                 public int ProductId { get; set; }
+                [Column(TypeName = "varchar(100)")]
                 public string Name { get; set; } = string.Empty;
                 [Column(TypeName = "decimal(18,2)")]
                 public decimal Price { get; set; }
@@ -27,14 +28,14 @@ namespace api.Models
                 public DateTime CreatedAt { get; set; }
                 [Column(TypeName = "timestamp")]
                 public DateTime UpdatedAt { get; set; }
-                public List<Image>? Images { get; set; } = new List<Image>();
-                public List<ProductColor>? ProductColors { get; set; } = new List<ProductColor>();
-                public List<ProductSize>? ProductSizes { get; set; } = new List<ProductSize>();
-                public List<ProductMaterial>? ProductMaterials { get; set; } = new List<ProductMaterial>();
-                public List<OrderDetail>? OrderDetails { get; set; }
+                public List<Image> Images { get; set; } = [];
+                public List<ProductColor> ProductColors { get; set; } = [];
+                public List<ProductSize> ProductSizes { get; set; } = [];
+                public List<ProductMaterial> ProductMaterials { get; set; } = [];
+                public List<OrderDetail> OrderDetails { get; set; } = [];
                 public int ProviderId { get; set; }
                 public Provider? Provider { get; set; }
                 public int SubcategoryId { get; set; }
-                public Subcategory? Subcategory { get; set; }
+                public Subcategory Subcategory { get; set; } = new();
         }
 }
