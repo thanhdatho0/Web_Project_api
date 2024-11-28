@@ -1,7 +1,6 @@
 using api.DTOs.Subcategory;
 using api.Interfaces;
 using api.Mappers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Helpers;
 
@@ -9,17 +8,9 @@ namespace api.Controllers
 {
     [Route("api/subcategories")]
     [ApiController]
-    public class SubcategoryController : ControllerBase
+    public class SubcategoryController(ISubcategoryRepository subcategoryRepo, ICategoryRepository categoryRepo)
+        : ControllerBase
     {
-        private readonly ISubcategoryRepository _subcategoryRepo;
-        private readonly ICategoryRepository _categoryRepo;
-
-        public SubcategoryController(ISubcategoryRepository subcategoryRepo, ICategoryRepository categoryRepo)
-        {
-            _subcategoryRepo = subcategoryRepo;
-            _categoryRepo = categoryRepo;
-        }
-
         [HttpGet]
         // [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] QueryOject query)
@@ -27,7 +18,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var subcategories = await _subcategoryRepo.GetAllAsync(query);
+            var subcategories = await subcategoryRepo.GetAllAsync(query);
 
             var subcategoryDto = subcategories.Select(s => s.ToSubcategoryDto());
 
@@ -40,7 +31,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var subcategory = await _subcategoryRepo.GetByIdAsync(id);
+            var subcategory = await subcategoryRepo.GetByIdAsync(id);
 
             if (subcategory == null)
                 return NotFound();
@@ -55,18 +46,15 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _categoryRepo.CategoryExists(subcategoryDto.CategoryId))
+            if (!await categoryRepo.CategoryExists(subcategoryDto.CategoryId))
                 return BadRequest("Category does not exist!");
 
-            if (await _subcategoryRepo.SubcategoryName(subcategoryDto.SubcategoryName))
+            if (await subcategoryRepo.SubcategoryName(subcategoryDto.SubcategoryName))
                 return BadRequest("Subcategory name has already taken!");
 
             var subcategory = subcategoryDto.ToSubcategoryFromCreateDto();
 
-            if (subcategory == null)
-                return BadRequest("Not create");
-
-            await _subcategoryRepo.CreateAsync(subcategory);
+            await subcategoryRepo.CreateAsync(subcategory);
 
             return CreatedAtAction(nameof(GetById), new { id = subcategory.SubcategoryId }, subcategory.ToSubcategoryDto());
         }
@@ -78,7 +66,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var subcategory = await _subcategoryRepo.UpdateAsync(id, subcategoryDto);
+            var subcategory = await subcategoryRepo.UpdateAsync(id, subcategoryDto);
 
             if (subcategory == null)
                 return NotFound("Subcategory not found");
@@ -96,7 +84,7 @@ namespace api.Controllers
         //     var subcategory = await _subcategoryRepo.DeleteAsync(id);
 
         //     if (subcategory == null)
-        //         return NotFound("Subcategory doese not exists");
+        //         return NotFound("Subcategory does not exist");
 
         //     return NoContent();
         // }

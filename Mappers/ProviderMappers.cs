@@ -21,7 +21,7 @@ namespace api.Mappers
         {
             return new Provider
             {
-                ProviderEmail = providerCreateDto.ProviderEmail,
+                ProviderEmail = providerCreateDto.ProviderEmail!,
                 ProviderCompanyName = providerCreateDto.ProviderCompanyName,
                 ProviderPhone = providerCreateDto.ProviderPhone
             };

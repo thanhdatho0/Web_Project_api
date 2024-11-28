@@ -5,12 +5,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser>
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions)
+        : IdentityDbContext<AppUser>(dbContextOptions)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions)
-        {
-
-        }
+        #region DbSet
+        public DbSet<TargetCustomer> TargetCustomers { get; set; }
+        public DbSet<Subcategory> Subcategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Color> Colors { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductMaterial> ProductMaterials { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
+        public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        public DbSet<Size> Sizes { get; set; }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -167,43 +182,33 @@ namespace api.Data
             // t.HasCheckConstraint("CK_Employee_Age", "DATEDIFF(YEAR, DateOfBirth, GETDATE()) >= 16"));
             t.HasCheckConstraint("CK_Employee_Age", "EXTRACT(YEAR FROM AGE(NOW(), \"DateOfBirth\")) >= 16"));
 
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
-                new IdentityRole
+            List<IdentityRole> roles =
+            [
+                new()
                 {
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
 
-                new IdentityRole
+
+                new()
                 {
-                    Name = "User",
-                    NormalizedName = "USER"
+                    Name = "Customer",
+                    NormalizedName = "Customer"
                 },
-            };
+
+
+                new()
+                {
+                    Name = "Employee",
+                    NormalizedName = "Employee",
+                }
+            ];
 
             modelBuilder.Entity<IdentityRole>().HasData(roles);
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(ul => new { ul.UserId, ul.LoginProvider });
-            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ut => new { ut.UserId, ut.LoginProvider });
+            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ut => new { ut.UserId });
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ur => new { ur.UserId, ur.RoleId });
         }
-
-        public DbSet<TargetCustomer> TargetCustomers { get; set; }
-        public DbSet<Subcategory> Subcategories { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Color> Colors { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Image> Images { get; set; }
-        public DbSet<Material> Materials { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ProductMaterial> ProductMaterials { get; set; }
-        public DbSet<ProductSize> ProductSizes { get; set; }
-        public DbSet<ProductColor> ProductColors { get; set; }
-        public DbSet<Provider> Providers { get; set; }
-        public DbSet<Size> Sizes { get; set; }
-
     }
 }

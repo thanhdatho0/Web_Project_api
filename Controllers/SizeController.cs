@@ -1,4 +1,4 @@
-using api.Data;
+
 using api.DTOs.Size;
 using api.Interfaces;
 using api.Mappers;
@@ -9,22 +9,15 @@ namespace api.Controllers
     [Route("api/sizes")]
     [ApiController]
 
-    public class SizeController : ControllerBase
+    public class SizeController(ISizeRepository sizeRepo) : ControllerBase
     {
-        private readonly ISizeRepository _sizeRepo;
-
-        public SizeController(ISizeRepository sizeRepo)
-        {
-            _sizeRepo = sizeRepo;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var sizes = await _sizeRepo.GetAllAsync();
+            var sizes = await sizeRepo.GetAllAsync();
 
             var sizesDto = sizes.Select(c => c.ToSizeDto());
 
@@ -36,7 +29,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var size = await _sizeRepo.GetByIdAsync(id);
+            var size = await sizeRepo.GetByIdAsync(id);
 
             if (size == null)
                 return NotFound();
@@ -52,10 +45,7 @@ namespace api.Controllers
 
             var size = sizeCreateDto.ToSizeFromCreateDto();
 
-            if (size == null)
-                return BadRequest("Not create");
-
-            await _sizeRepo.CreateAsync(size);
+            await sizeRepo.CreateAsync(size);
 
             return CreatedAtAction(nameof(GetById), new { id = size.SizeId }, size.ToSizeDto());
         }
@@ -67,7 +57,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var size = await _sizeRepo.UpdateAsync(id, sizeDto);
+            var size = await sizeRepo.UpdateAsync(id, sizeDto);
 
             if (size == null)
                 return NotFound("Product not found");
@@ -82,7 +72,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var size = await _sizeRepo.DeleteAsync(id);
+            var size = await sizeRepo.DeleteAsync(id);
 
             if (size == null)
                 return NotFound("Product does not exists");

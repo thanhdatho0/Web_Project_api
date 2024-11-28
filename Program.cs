@@ -129,7 +129,7 @@ builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRpository>();
+builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 var app = builder.Build();
 

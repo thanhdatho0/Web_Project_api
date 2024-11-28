@@ -2,66 +2,61 @@
 using api.DTOs.ProductSize;
 using api.Interfaces;
 using api.Mappers;
-using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
     [ApiController]
     [Route("api/productsizes")]
-    public class ProductSizeController : ControllerBase
+    public class ProductSizeController(
+        IProductSizeRepository productSizeRepo,
+        IProductRepository productRepo,
+        ISizeRepository sizeRepo)
+        : ControllerBase
     {
-        private readonly IProductRepository _productRepo;
-        private readonly ISizeRepository _sizeRepo;
-        private readonly IProductSizeRepository _productSizeRepo;
-        public ProductSizeController(IProductSizeRepository productSizeRepo, IProductRepository productRepo
-        , ISizeRepository sizeRepo)
-        {
-            _productSizeRepo = productSizeRepo;
-            _sizeRepo = sizeRepo;
-            _productRepo = productRepo;
-        }
         [HttpGet]
         public async Task<IActionResult> GetById(int productId, int sizeId)
         {
-            var productsize = await _productSizeRepo.GetByIdAsync(productId, sizeId);
+            var productSize = await productSizeRepo.GetByIdAsync(productId, sizeId);
 
-            if (productsize == null)
+            if (productSize == null)
                 return NotFound();
 
-            return Ok(productsize.ToProductSizeDto());
+            return Ok(productSize.ToProductSizeDto());
         }
         [HttpPost]
         public async Task<IActionResult> AddProductSize([FromBody] ProductSizeCreateDto productSizeDto)
         {
-            var produdct = await _productRepo.GetByIdAsync(productSizeDto.ProductId);
-            var size = await _sizeRepo.GetByIdAsync(productSizeDto.SizeId);
+            var product = await productRepo.GetByIdAsync(productSizeDto.ProductId);
+            var size = await sizeRepo.GetByIdAsync(productSizeDto.SizeId);
 
-            if (produdct == null)
+            if (product == null)
                 return BadRequest("Product not found");
 
             if (size == null)
                 return BadRequest("Size not found");
 
-            var productSize = await _productSizeRepo.GetByIdAsync(productSizeDto.ProductId, productSizeDto.SizeId);
+            var productSize = await productSizeRepo.GetByIdAsync(productSizeDto.ProductId, productSizeDto.SizeId);
 
             if (productSize != null)
-                return BadRequest("Cannot add same stock to productsize");
+                return BadRequest("Cannot add same stock to product size");
 
             var productSizeModel = productSizeDto.ToProductSizeFromCreateDto();
 
-            await _productSizeRepo.CreateAsync(productSizeModel);
-
-            if (productSizeModel == null)
+            try
+            {
+                await productSizeRepo.CreateAsync(productSizeModel);
+            }
+            catch
+            {
                 return StatusCode(500, "Could not create");
-
-            else
-                return Ok("Created successfully");
+            }
+            return Ok("Created successfully");
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int productId, int sizeId)
         {
-            var productSize = await _productSizeRepo.DeleteAsync(productId, sizeId);
+            var productSize = await productSizeRepo.DeleteAsync(productId, sizeId);
 
             if (productSize == null)
                 return BadRequest("Not found");

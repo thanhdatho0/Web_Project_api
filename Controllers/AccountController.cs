@@ -3,33 +3,21 @@ using api.DTOs.Account;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
-using api.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
 
 [Route("api/account")]
-public class AccountController : ControllerBase
+public class AccountController(
+    UserManager<AppUser> userManager,
+    ITokenService tokenService,
+    SignInManager<AppUser> signInManager,
+    RoleManager<IdentityRole> roleManager,
+    IEmployeeRepository employeeRepository,
+    ICustomerRepository customerRepository)
+    : ControllerBase
 {
-    private readonly UserManager<AppUser> _userManager;
-    private readonly ITokenService _tokenService;
-    private readonly SignInManager<AppUser> _signInManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IEmployeeRepository _employeeRepository;
-    private readonly ICustomerRepository _customerRepository;
-    public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, 
-        SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, 
-        IEmployeeRepository employeeRepository, ICustomerRepository customerRepository)
-    {
-        _userManager = userManager;
-        _tokenService = tokenService;
-        _signInManager = signInManager;
-        _roleManager = roleManager;
-        _employeeRepository = employeeRepository;
-        _customerRepository = customerRepository;
-    }
-    
     [HttpPost("admin-register")]
     public async Task<ActionResult> RegisterAdmin([FromBody] AdminRegisterDto adminRegisterDto)
     {
@@ -40,10 +28,10 @@ public class AccountController : ControllerBase
                 return BadRequest(ModelState);
 
             // Check if "Admin" role exists, and create it if not
-            var adminRoleExists = await _roleManager.RoleExistsAsync("Admin");
+            var adminRoleExists = await roleManager.RoleExistsAsync("Admin");
             if (!adminRoleExists)
             {
-                var roleResult = await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                var roleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
                 if (!roleResult.Succeeded)
                 {
                     var roleErrors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
@@ -59,7 +47,7 @@ public class AccountController : ControllerBase
             };
 
             // Attempt to create the user
-            var createUser = await _userManager.CreateAsync(appUser, adminRegisterDto.Password);
+            var createUser = await userManager.CreateAsync(appUser, adminRegisterDto.Password);
             if (!createUser.Succeeded)
             {
                 var userErrors = string.Join(", ", createUser.Errors.Select(e => e.Description));
@@ -67,18 +55,18 @@ public class AccountController : ControllerBase
             }
 
             // Assign the user to the "Admin" role
-            var roleAssignment = await _userManager.AddToRoleAsync(appUser, "Admin");
+            var roleAssignment = await userManager.AddToRoleAsync(appUser, "Admin");
             if (!roleAssignment.Succeeded)
             {
                 var roleAssignmentErrors = string.Join(", ", roleAssignment.Errors.Select(e => e.Description));
                 return BadRequest($"Failed to add user to Admin role: {roleAssignmentErrors}");
             }
             
-            await _userManager.AddClaimAsync(appUser, new Claim("Role", "Admin"));
-            var role = await _roleManager.FindByNameAsync("Admin");
+            await userManager.AddClaimAsync(appUser, new Claim("Role", "Admin"));
+            var role = await roleManager.FindByNameAsync("Admin");
             if (role != null)
             {
-                await _roleManager.AddClaimAsync(role, new Claim("Permission", "AdminAccess"));
+                await roleManager.AddClaimAsync(role, new Claim("Permission", "AdminAccess"));
             }
 
             return Ok("Admin Created Successfully");
@@ -96,10 +84,10 @@ public class AccountController : ControllerBase
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
             
-            var adminRoleExists = await _roleManager.RoleExistsAsync("Customer");
+            var adminRoleExists = await roleManager.RoleExistsAsync("Customer");
             if (!adminRoleExists)
             {
-                var roleResult = await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                var roleResult = await roleManager.CreateAsync(new IdentityRole("Customer"));
                 if (!roleResult.Succeeded)
                 {
                     var roleErrors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
@@ -114,7 +102,7 @@ public class AccountController : ControllerBase
                 PhoneNumber = customerRegisterDto.CustomerInfo.PhoneNumber,
             };
             
-            var createUser = await _userManager.CreateAsync(appUser, customerRegisterDto.Password);
+            var createUser = await userManager.CreateAsync(appUser, customerRegisterDto.Password);
             // Attempt to create the user
             if (!createUser.Succeeded)
             {
@@ -122,20 +110,20 @@ public class AccountController : ControllerBase
                 return BadRequest($"Failed to create user: {userErrors}");
             }
             
-            var roleAssignment = await _userManager.AddToRoleAsync(appUser, "Customer");
+            var roleAssignment = await userManager.AddToRoleAsync(appUser, "Customer");
             if (!roleAssignment.Succeeded)
             {
                 var roleAssignmentErrors = string.Join(", ", roleAssignment.Errors.Select(e => e.Description));
                 return BadRequest($"Failed to add user to Admin role: {roleAssignmentErrors}");
             }
-            await _userManager.AddClaimAsync(appUser, new Claim("Role", "Customer"));
-            var role = await _roleManager.FindByNameAsync("Customer");
+            await userManager.AddClaimAsync(appUser, new Claim("Role", "Customer"));
+            var role = await roleManager.FindByNameAsync("Customer");
             if (role != null)
             {
-                await _roleManager.AddClaimAsync(role, new Claim("Permission", "CustomerAccess"));
+                await roleManager.AddClaimAsync(role, new Claim("Permission", "CustomerAccess"));
             }
 
-            await _customerRepository.CreateAsync(customerRegisterDto.CustomerInfo.ToCustomerCreateDto());
+            await customerRepository.CreateAsync(customerRegisterDto.CustomerInfo.ToCustomerCreateDto());
             
             return Ok("Customer Created");
         }
@@ -153,10 +141,10 @@ public class AccountController : ControllerBase
             if(!ModelState.IsValid) return BadRequest(ModelState);
             
             // Check if "Employee" role exists, and create it if not
-            var employeeRoleExists = await _roleManager.RoleExistsAsync("Employee");
+            var employeeRoleExists = await roleManager.RoleExistsAsync("Employee");
             if (!employeeRoleExists)
             {
-                var roleResult = await _roleManager.CreateAsync(new IdentityRole("Employee"));
+                var roleResult = await roleManager.CreateAsync(new IdentityRole("Employee"));
                 if (!roleResult.Succeeded)
                 {
                     var roleErrors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
@@ -172,7 +160,7 @@ public class AccountController : ControllerBase
             };
             
             // Attempt to create the user
-            var createUser = await _userManager.CreateAsync(appUser, employeeRegisterDto.Password);
+            var createUser = await userManager.CreateAsync(appUser, employeeRegisterDto.Password);
             if (!createUser.Succeeded)
             {
                 var userErrors = string.Join(", ", createUser.Errors.Select(e => e.Description));
@@ -180,20 +168,20 @@ public class AccountController : ControllerBase
             }
 
             // Assign the user to the "Admin" role
-            var roleAssignment = await _userManager.AddToRoleAsync(appUser, "Employee");
+            var roleAssignment = await userManager.AddToRoleAsync(appUser, "Employee");
             if (!roleAssignment.Succeeded)
             {
                 var roleAssignmentErrors = string.Join(", ", roleAssignment.Errors.Select(e => e.Description));
                 return BadRequest($"Failed to add user to Employee role: {roleAssignmentErrors}");
             }
             
-            await _userManager.AddClaimAsync(appUser, new Claim("Role", "Employee"));
-            var role = await _roleManager.FindByNameAsync("Employee");
+            await userManager.AddClaimAsync(appUser, new Claim("Role", "Employee"));
+            var role = await roleManager.FindByNameAsync("Employee");
             if (role != null)
             {
-                await _roleManager.AddClaimAsync(role, new Claim("Permission", "EmployeeAccess"));
+                await roleManager.AddClaimAsync(role, new Claim("Permission", "EmployeeAccess"));
             }
-            await _employeeRepository.CreateAsync(employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto());
+            await employeeRepository.CreateAsync(employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto());
 
             return Ok("Employee Created Successfully");
         }
@@ -207,17 +195,29 @@ public class AccountController : ControllerBase
     public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
     {
         if(!ModelState.IsValid) return BadRequest(ModelState);
-        var user = _userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username.ToLower());
+        var user = userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username.ToLower());
         if(user == null) return Unauthorized("Invalid username!");
         
-        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+        var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         if (!result.Succeeded) return Unauthorized("Username or password is incorrect!");
+        var tokenDto = await tokenService.CreateToken(user, true);
+        if(!await tokenService.HasLoginBefore(user.Id))
+        {
+            var userToken = new IdentityUserToken<string>
+            {
+                UserId = Guid.NewGuid().ToString(),
+                LoginProvider = "Identity",
+                Name = "AccessToken",
+                Value = tokenDto.AccessToken
+            };
+            await tokenService.AddTokenToUser(userToken);
+        }
         return Ok(new NewUserDto
         {
             Username = user.UserName!,
             Email = user.Email!,
-            Token = await _tokenService.CreateToken(user)
+            Token = tokenDto.AccessToken
         });
     }
 }

@@ -1,51 +1,33 @@
-using api.Data;
+
 using api.DTOs.Product;
-using api.DTOs.ProductSize;
-using api.DTOs.Size;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using api.Helpers;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace api.Controllers
 {
     [Route("api/products")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController(
+        IProductRepository productRepo,
+        IProviderRepository providerRepo,
+        IProductSizeRepository productSizeRepo,
+        IProductMaterialRepository productMaterialRepo,
+        IImageRepository imageRepo,
+        IProductColorRepository productColorRepo,
+        ISubcategoryRepository subcategoryRepo)
+        : ControllerBase
     {
-        private readonly IProductRepository _productRepo;
-        private readonly ISubcategoryRepository _subcategoryRepo;
-        private readonly IProviderRepository _providerRepo;
-        private readonly IProductSizeRepository _productSizeRepo;
-        private readonly IProductMaterialRepository _productMaterialRepo;
-        private readonly IProductColorRepository _productColorRepo;
-        private readonly IImageRepository _imageRepo;
-
-        public ProductController(IProductRepository productRepo, ICategoryRepository categoryRepo, 
-            IProviderRepository providerRepo, IProductSizeRepository productSizeRepo, 
-            IProductMaterialRepository productMaterialRepo, IImageRepository imageRepo,
-            IProductColorRepository productColorRepo, ISubcategoryRepository subcategoryRepo)
-        {
-            _productRepo = productRepo;
-            _subcategoryRepo = subcategoryRepo;
-            _providerRepo = providerRepo;
-            _productSizeRepo = productSizeRepo;
-            _productMaterialRepo = productMaterialRepo;
-            _imageRepo = imageRepo;
-            _productColorRepo = productColorRepo;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var products = await _productRepo.GetAllAsync(query);
+            var products = await productRepo.GetAllAsync(query);
 
             var productsDto = products.Select(x => x.ToProductDto());
 
@@ -58,7 +40,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = await _productRepo.GetByIdAsync(id);
+            var product = await productRepo.GetByIdAsync(id);
 
             if (product == null)
                 return NotFound();
@@ -72,28 +54,25 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _subcategoryRepo.SubcategoryExists(productDto.SubcategoryId))
+            if (!await subcategoryRepo.SubcategoryExists(productDto.SubcategoryId))
                 return BadRequest("Subcategory does not exist!");
 
-            if (!await _providerRepo.ProviderExists(productDto.ProviderId))
+            if (!await providerRepo.ProviderExists(productDto.ProviderId))
                 return BadRequest("Provider does not exists!");
 
             var productModel = productDto.ToProductFromCreateDto();
 
-            if (productModel == null)
-                return BadRequest("Not create");
-
-            await _productRepo.CreateAsync(productModel);
+            await productRepo.CreateAsync(productModel);
             foreach (var size in productDto.SizeId!)
             {
                 var productSize = new ProductSize { ProductId = productModel.ProductId, SizeId = size };
-                await _productSizeRepo.CreateAsync(productSize);
+                await productSizeRepo.CreateAsync(productSize);
             }
 
             foreach (var material in productDto.MaterialId!)
             {
                 var productMaterial = new ProductMaterial { ProductId = productModel.ProductId, MaterialId = material };
-                await _productMaterialRepo.CreateAsync(productMaterial);
+                await productMaterialRepo.CreateAsync(productMaterial);
             }
 
             foreach (var color in productDto.Colors!)
@@ -101,10 +80,10 @@ namespace api.Controllers
                 foreach (var image in color.Images!)
                 {
                     var imageModel = image.ToImageFromCreateDto();
-                    await _imageRepo.CreateAsync(imageModel);
+                    await imageRepo.CreateAsync(imageModel);
                 }
                 var colorProduct = new ProductColor { ProductId = productModel.ProductId, ColorId = color.ColorId };
-                await _productColorRepo.CreateAsync(colorProduct);
+                await productColorRepo.CreateAsync(colorProduct);
             }
 
             return Ok(productDto);
@@ -117,7 +96,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = await _productRepo.UpdateAsync(id, productDto);
+            var product = await productRepo.UpdateAsync(id, productDto);
 
             if (product == null)
                 return NotFound("Product not found");
@@ -132,7 +111,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = await _productRepo.DeleteAsync(id);
+            var product = await productRepo.DeleteAsync(id);
 
             if (product == null)
                 return NotFound("Product does not exists");

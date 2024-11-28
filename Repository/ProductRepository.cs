@@ -4,31 +4,23 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository(ApplicationDbContext context) : IProductRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public ProductRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
-        var products = _context.Products.Include(p => p.Subcategory)?
+        var products = context.Products.Include(p => p.Subcategory)
                                 .Include(p => p.ProductSizes)
                                 .ThenInclude(pz => pz.Size)
                                 .Include(p => p.ProductMaterials)
-                                .ThenInclude(pm => pm.Material)?
+                                .ThenInclude(pm => pm.Material)
                                 .Include(p => p.ProductColors)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
-
-
+                                
         if (query.SubcategoryId.HasValue)
             products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
 
@@ -69,7 +61,7 @@ public class ProductRepository : IProductRepository
                 }
             }
         }
-
+       
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
         return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
@@ -77,7 +69,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(int id)
     {
-        return await _context.Products.Include(p => p.Subcategory)
+        return await context.Products.Include(p => p.Subcategory)
                             .Include(p => p.ProductSizes)
                             .ThenInclude(pz => pz.Size)
                             .Include(p => p.ProductColors)
@@ -88,14 +80,14 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product> CreateAsync(Product productModel)
     {
-        await _context.Products.AddAsync(productModel);
-        await _context.SaveChangesAsync();
+        await context.Products.AddAsync(productModel);
+        await context.SaveChangesAsync();
         return productModel;
     }
 
     public async Task<Product?> UpdateAsync(int id, ProductUpdateDto productUpdateDto)
     {
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
+        var product = await context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
         if (product == null)
             return null;
 
@@ -109,27 +101,27 @@ public class ProductRepository : IProductRepository
         int latestQuantity = productUpdateDto.Quantity;
         product = productUpdateDto.ToProductFromUpdateDto();
         product.InStock += (product.Quantity - latestQuantity);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return product;
     }
 
     public async Task<Product?> DeleteAsync(int id)
     {
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
+        var product = await context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
 
         if (product == null)
             return null;
 
-        _context.Products.Remove(product);
+        context.Products.Remove(product);
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
         return product;
     }
 
     public Task<bool> ProductExists(int id)
     {
-        return _context.Products.AnyAsync(p => p.ProductId == id);
+        return context.Products.AnyAsync(p => p.ProductId == id);
 
     }
 }

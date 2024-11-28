@@ -5,17 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class ProductMaterialRepository : IProductMaterialRepository
+public class ProductMaterialRepository(ApplicationDbContext context) : IProductMaterialRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public ProductMaterialRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
     public async Task<List<ProductMaterial>> GetAllAsync()
     {
-        return await _context.ProductMaterials.ToListAsync();
+        return await context.ProductMaterials.ToListAsync();
     }
 
     public async Task<ProductMaterial?> GetByIdAsync(int productId, int materialId)
@@ -25,8 +19,8 @@ public class ProductMaterialRepository : IProductMaterialRepository
 
     public async Task<ProductMaterial?> CreateAsync(ProductMaterial productMaterialModel)
     {
-        await _context.ProductMaterials.AddAsync(productMaterialModel);
-        await _context.SaveChangesAsync();
+        await context.ProductMaterials.AddAsync(productMaterialModel);
+        await context.SaveChangesAsync();
         return productMaterialModel;
     }
 
