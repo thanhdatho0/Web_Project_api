@@ -51,7 +51,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                 {
                     products = products.Where(p => p.Price < 350000);
                 }
-                else if (priceRange == "350-750")
+                else if (priceRange == "350.000-750.000")
                 {
                     products = products.Where(p => p.Price >= 350000 && p.Price <= 750000);
                 }
