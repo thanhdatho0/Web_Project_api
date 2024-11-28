@@ -213,11 +213,23 @@ public class AccountController : ControllerBase
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         if (!result.Succeeded) return Unauthorized("Username or password is incorrect!");
+        var tokenDto = await _tokenService.CreateToken(user, true);
+        if(!await _tokenService.HasLoginBefore(user.Id))
+        {
+            var userToken = new IdentityUserToken<string>
+            {
+                UserId = Guid.NewGuid().ToString(),
+                LoginProvider = "Identity",
+                Name = "AccessToken",
+                Value = tokenDto.AccessToken
+            };
+            await _tokenService.AddTokenToUser(userToken);
+        }
         return Ok(new NewUserDto
         {
             Username = user.UserName!,
             Email = user.Email!,
-            Token = await _tokenService.CreateToken(user)
+            Token = tokenDto.AccessToken
         });
     }
 }
