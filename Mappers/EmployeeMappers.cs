@@ -37,9 +37,9 @@ public static class EmployeeMappers
     {
         return new Employee
         {
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            PhoneNumber = employee.PhoneNumber,
+            FirstName = employee.FirstName!,
+            LastName = employee.LastName!,
+            PhoneNumber = employee.PhoneNumber!,
             Salary = employee.Salary,
             StartDate = employee.StartDate,
             ContractUpTo = employee.ContractUpTo,

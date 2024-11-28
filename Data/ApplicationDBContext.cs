@@ -5,13 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser>
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions)
+        : IdentityDbContext<AppUser>(dbContextOptions)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions)
-        {
-
-        }
-        
         #region DbSet
         public DbSet<TargetCustomer> TargetCustomers { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }

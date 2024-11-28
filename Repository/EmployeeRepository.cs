@@ -7,38 +7,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class EmployeeRepository : IEmployeeRepository
+public class EmployeeRepository(ApplicationDbContext context) : IEmployeeRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public EmployeeRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<Employee>> GetAllAsync()
     {
-        return await _context.Employees.ToListAsync();
+        return await context.Employees.ToListAsync();
     }
 
     public async Task<Employee?> GetByIdAsync(int id)
     {
-        return await _context.Employees.FindAsync(id);
+        return await context.Employees.FindAsync(id);
     }
 
     public async Task<Employee?> CreateAsync(Employee employee)
     {
-        await _context.Employees.AddAsync(employee);
-        await _context.SaveChangesAsync();
+        await context.Employees.AddAsync(employee);
+        await context.SaveChangesAsync();
         return employee;
     }
 
     public async Task<Employee?> UpdateAsync(int id, EmployeeUpdateDto employeeUpdateDto)
     {
-        var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+        var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == id);
         if (employee == null) return null;
         employee = employeeUpdateDto.ToEmployeeUpdate();
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return employee;
     }
 

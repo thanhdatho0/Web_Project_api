@@ -6,18 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class OrderRepository : IOrderRepository
+public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
 {
-    private ApplicationDbContext _dbContext;
-
-    public OrderRepository(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
     public async Task<List<Order>> GetAllAsync()
     {
         var orders = 
-            _dbContext.Orders
+            dbContext.Orders
                 .Include(o => o.Employee)
                 .Include(o => o.OrderDetails)!
                 .ThenInclude(o => o.Product)
@@ -31,7 +25,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order?> GetByIdAsync(int id)
     {
-        var order = await _dbContext.Orders
+        var order = await dbContext.Orders
             .Include(o => o.Employee)
             .Include(o => o.OrderDetails)
             .Include(o => o.Customer)
@@ -41,21 +35,21 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> CreateAsync(Order order)
     {
-        await _dbContext.Orders.AddAsync(order);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.Orders.AddAsync(order);
+        await dbContext.SaveChangesAsync();
         return order;
     }
 
     public async Task<Order?> UpdateAsync(int id, OrderUpdateDto orderUpdateDto)
     {
-        var order = await _dbContext.Orders
+        var order = await dbContext.Orders
             .Include(o => o.Employee)
             .Include(o => o.OrderDetails)
             .Include(o => o.Customer)
             .FirstOrDefaultAsync(o => o.OrderId == id);
         if(order == null) return null;
-        _dbContext.Entry(order).CurrentValues.SetValues(orderUpdateDto);
-        await _dbContext.SaveChangesAsync();
+        dbContext.Entry(order).CurrentValues.SetValues(orderUpdateDto);
+        await dbContext.SaveChangesAsync();
         return order;
     }
 }

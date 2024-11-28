@@ -6,14 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace api.Repository
 {
 
-    public class ProductColorRepository : IProductColorRepository
+    public class ProductColorRepository(ApplicationDbContext context) : IProductColorRepository
     {
-        private readonly ApplicationDbContext _context;
-        public ProductColorRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public Task<List<ProductColor>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -21,24 +15,24 @@ namespace api.Repository
 
         public async Task<ProductColor?> GetByIdAsync(int productId, int colorId)
         {
-            return await _context.ProductColors.Include(pc => pc.Product).Include(pc => pc.Color).FirstOrDefaultAsync(pc => pc.ColorId == colorId && pc.ProductId == productId);
+            return await context.ProductColors.Include(pc => pc.Product).Include(pc => pc.Color).FirstOrDefaultAsync(pc => pc.ColorId == colorId && pc.ProductId == productId);
         }
         public async Task<ProductColor?> CreateAsync(ProductColor productColorModel)
         {
-            await _context.ProductColors.AddAsync(productColorModel);
-            await _context.SaveChangesAsync();
+            await context.ProductColors.AddAsync(productColorModel);
+            await context.SaveChangesAsync();
             return productColorModel;
         }
 
         public async Task<ProductColor?> DeleteAsync(int productId, int colorId)
         {
-            var productColorModel = await _context.ProductColors.FirstOrDefaultAsync(pc => pc.ColorId == colorId && pc.ProductId == productId);
+            var productColorModel = await context.ProductColors.FirstOrDefaultAsync(pc => pc.ColorId == colorId && pc.ProductId == productId);
 
             if (productColorModel == null)
                 return null;
 
-            _context.ProductColors.Remove(productColorModel);
-            await _context.SaveChangesAsync();
+            context.ProductColors.Remove(productColorModel);
+            await context.SaveChangesAsync();
             return productColorModel;
 
         }

@@ -86,8 +86,8 @@ public class TokenService : ITokenService
     public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
     {
         Console.WriteLine(tokenDto.AccessToken);
-        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken!);
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == tokenDto.RefreshToken);
+        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+        var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
         if (user is null ||
             user.RefreshToken != tokenDto.RefreshToken ||
             user.RefreshTokenExpiryTime <= DateTime.Now)

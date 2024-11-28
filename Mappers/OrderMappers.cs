@@ -1,5 +1,4 @@
 using api.DTOs.Order;
-using api.DTOs.OrderDetail;
 using api.Models;
 
 namespace api.Mappers;
