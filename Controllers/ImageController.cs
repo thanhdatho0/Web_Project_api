@@ -8,26 +8,16 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("api/images")]
-    public class ImageController : ControllerBase
+    public class ImageController(IColorRepository colorRepo, IImageRepository imageRepo, IProductRepository prodRepo)
+        : ControllerBase
     {
-        private readonly IImageRepository _imageRepo;
-        private readonly IProductRepository _prodRepo;
-        private readonly IColorRepository _colorRepo;
-
-        public ImageController(IColorRepository colorRepo, IImageRepository imageRepo, IProductRepository prodRepo)
-        {
-            _prodRepo = prodRepo;
-            _imageRepo = imageRepo;
-            _colorRepo = colorRepo;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetALl()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var images = await _imageRepo.GetAllAsync();
+            var images = await imageRepo.GetAllAsync();
 
             var imagesDto = images.Select(x => x.ToImageDto());
 
@@ -35,17 +25,14 @@ namespace api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult?> GetById(int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var image = await _imageRepo.GetByIdAsync(id);
+            var image = await imageRepo.GetByIdAsync(id);
 
-            if (image == null)
-                return NotFound("Not found Imgage");
-
-            return Ok(image.ToImageDto());
+            return Ok(image?.ToImageDto());
         }
 
         [HttpPost]
@@ -54,18 +41,15 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _colorRepo.ColorExists(imageDto.ColorId))
+            if (!await colorRepo.ColorExists(imageDto.ColorId))
                 return BadRequest("Color does not exist!");
 
-            if (!await _prodRepo.ProductExists(imageDto.ProductId))
+            if (!await prodRepo.ProductExists(imageDto.ProductId))
                 return BadRequest("Product does not exists!");
 
             var imageModel = imageDto.ToImageFromCreateDto();
 
-            if (imageModel == null)
-                return BadRequest("Not create");
-
-            await _imageRepo.CreateAsync(imageModel);
+            await imageRepo.CreateAsync(imageModel);
 
             return CreatedAtAction(nameof(GetById), new { id = imageModel.ImageId }, imageModel.ToImageDto());
         }
@@ -77,7 +61,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var image = await _imageRepo.UpdateAsync(id, imageDto);
+            var image = await imageRepo.UpdateAsync(id, imageDto);
 
             if (image == null)
                 return NotFound("Image not found");
@@ -92,7 +76,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var image = await _imageRepo.DeleteAsync(id);
+            var image = await imageRepo.DeleteAsync(id);
 
             if (image == null)
                 return NotFound("Image does not exists");

@@ -7,22 +7,15 @@ namespace api.Controllers
 {
     [Route("api/providers")]
     [ApiController]
-    public class ProviderController : ControllerBase
+    public class ProviderController(IProviderRepository providerRepo) : ControllerBase
     {
-        private readonly IProviderRepository _providerRepo;
-
-        public ProviderController(IProviderRepository providerRepo)
-        {
-            _providerRepo = providerRepo;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var providers = await _providerRepo.GetAllAsync();
+            var providers = await providerRepo.GetAllAsync();
 
             var providerDto = providers.Select(s => s.ToProviderDto());
 
@@ -35,7 +28,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var provider = await _providerRepo.GetByIdAsync(id);
+            var provider = await providerRepo.GetByIdAsync(id);
 
             if (provider == null)
                 return NotFound();
@@ -51,10 +44,7 @@ namespace api.Controllers
 
             var provider = providerDto.ToProviderFromCreateDto();
 
-            if (provider == null)
-                return BadRequest("Not create");
-
-            await _providerRepo.CreateAsync(provider);
+            await providerRepo.CreateAsync(provider);
 
             return CreatedAtAction(nameof(GetById), new { id = provider.ProviderId }, provider.ToProviderDto());
         }
@@ -66,12 +56,12 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var provider = await _providerRepo.UpdateAsync(id, providerDto);
+            var provider = await providerRepo.UpdateAsync(id, providerDto);
 
             if (provider == null)
                 return NotFound("Provider not found");
 
-            return Ok(provider?.ToProviderDto());
+            return Ok(provider.ToProviderDto());
         }
 
         [HttpDelete]
@@ -81,7 +71,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var provider = await _providerRepo.DeleteAsync(id);
+            var provider = await providerRepo.DeleteAsync(id);
 
             if (provider == null)
                 return NotFound("Provider does not exists");

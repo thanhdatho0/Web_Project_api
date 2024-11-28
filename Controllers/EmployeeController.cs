@@ -1,27 +1,20 @@
 using api.DTOs.Employee;
 using api.Interfaces;
 using api.Mappers;
-using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeeController : ControllerBase
+public class EmployeeController(IEmployeeRepository employeeRepository) : ControllerBase
 {
-    private readonly IEmployeeRepository _employeeRepository;
-
-    public EmployeeController(IEmployeeRepository employeeRepository)
-    {
-        _employeeRepository = employeeRepository;
-    }
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        var employees = await _employeeRepository.GetAllAsync();
+        var employees = await employeeRepository.GetAllAsync();
         return Ok(employees.Select(x => x.ToEmployeeDto()));
     }
 
@@ -30,7 +23,7 @@ public class EmployeeController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        var employee = await _employeeRepository.GetByIdAsync(id);
+        var employee = await employeeRepository.GetByIdAsync(id);
         if (employee == null) return NotFound();
         return Ok(employee.ToEmployeeDto());
     }
@@ -45,7 +38,7 @@ public class EmployeeController : ControllerBase
         var employee = employeeCreateDto.ToCreateEmployeeDto();
         try
         {
-            await _employeeRepository.CreateAsync(employee);
+            await employeeRepository.CreateAsync(employee);
             return Ok(employee.ToEmployeeDto());
         }
         catch (Exception e)

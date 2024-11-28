@@ -2,25 +2,18 @@
 using api.DTOs.Material;
 using api.Interfaces;
 using api.Mappers;
-using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MaterialController : Controller
+public class MaterialController(IMaterialRepository materialRepository) : Controller
 {
-    private readonly IMaterialRepository _materialRepository;
-    public MaterialController(IMaterialRepository materialRepository)
-    {
-        _materialRepository = materialRepository;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var materials = await _materialRepository.GetAllAsync();
+        var materials = await materialRepository.GetAllAsync();
         return Ok(materials);
     }
 
@@ -28,7 +21,7 @@ public class MaterialController : Controller
     public async Task<IActionResult> Create([FromBody] MaterialCreateDto materialCreateDto)
     {
         var material = materialCreateDto.ToMaterialDto();
-        await _materialRepository.CreateAsync(material);
+        await materialRepository.CreateAsync(material);
         return Ok(materialCreateDto);
     }
 }
