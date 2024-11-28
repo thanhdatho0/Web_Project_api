@@ -20,11 +20,48 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                                 .Include(p => p.ProductColors)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
+                                
+        if (query.SubcategoryId.HasValue)
+            products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
 
+        if (!string.IsNullOrEmpty(query.ColorId))
+        {
+            var colorIds = query.ColorId.Split(',')
+                                        .Select(id => int.Parse(id))
+                                        .ToList();
 
-        if (!string.IsNullOrEmpty(query.SubcategoryId))
-            products = products.Where(p => p.SubcategoryId == int.Parse(query.SubcategoryId));
+            products = products.Where(p => p.ProductColors.Any(pc => colorIds.Contains(pc.ColorId)));
+        }
 
+        if (!string.IsNullOrEmpty(query.SizeId))
+        {
+            var colorIds = query.SizeId.Split(',')
+                                        .Select(id => int.Parse(id))
+                                        .ToList();
+
+            products = products.Where(p => p.ProductSizes.Any(pc => colorIds.Contains(pc.SizeId)));
+        }
+
+        if (!string.IsNullOrEmpty(query.Price))
+        {
+            var priceRanges = query.Price.Split(',');
+            foreach (var priceRange in priceRanges)
+            {
+                if (priceRange == "duoi-350")
+                {
+                    products = products.Where(p => p.Price < 350000);
+                }
+                else if (priceRange == "350-750")
+                {
+                    products = products.Where(p => p.Price >= 350000 && p.Price <= 750000);
+                }
+                else if (priceRange == "tren-750")
+                {
+                    products = products.Where(p => p.Price > 750000);
+                }
+            }
+        }
+       
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
         return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
@@ -62,7 +99,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         // product.DiscountPercentage = productUpdateDto.DiscountPercentage;
         // product.UpdatedAt = DateTime.Now;
         int latestQuantity = productUpdateDto.Quantity;
-        product = productUpdateDto.ToProductFromUpdateDto(); 
+        product = productUpdateDto.ToProductFromUpdateDto();
         product.InStock += (product.Quantity - latestQuantity);
         await context.SaveChangesAsync();
         return product;
