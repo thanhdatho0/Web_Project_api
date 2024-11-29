@@ -174,116 +174,46 @@ VALUES
 ('nhacungcap3@example.vn', '0908765432', 'Đồng Phục Miền Nam'),
 ('nhacungcap4@example.vn', '0934567890', 'Hòa Bình Fashion');
 
-INSERT INTO "Products" ("Name", "Price", "Cost", "Stock", "DiscountPercentage", "ProviderId", "SubcategoryId")
+INSERT INTO "Products" ("Name", "Price", "Description", "Cost", "Quantity", "Unit", "InStock", "DiscountPercentage", "ProviderId", "SubcategoryId")
 VALUES 
 -- Áo Polo Nam
-('Polo Nam Sorona Thêu', 99000, 60000, 50, 0, 1, 1),
-('Áo Polo Phối Kẻ Chéo', 164000, 120000, 30, 0, 2, 1),
-('Áo Polo Nam Cafe Tổ Ong Basic', 99000, 50000, 30, 0, 2, 1),
-('Áo Polo Nam Cafe Chân Nẹp Chéo, Phối Màu', 209000, 170000, 28, 0, 1, 1),
-('Polo Nam Cafe Dệt Tổ Ong In Ngực', 164000, 120000, 38, 0, 2, 1),
+('Polo Nam Sorona Thêu', 99000, 'Áo polo chất liệu Sorona thêu tinh tế', 60000, 9, 'cái', 11, 0, 1, 1),
+('Áo Polo Nam Cafe Tổ Ong Basic', 99000, 'Áo polo thiết kế tổ ong basic, thoải mái', 50000, 30, 'cái', 11, 0, 2, 1),
+('Áo Polo Nam Cafe Chân Nẹp Chéo, Phối Màu', 209000, 'Áo polo phối màu đẹp mắt với chân nẹp chéo', 170000, 28, 'cái', 11, 0, 1, 1),
+('Polo Nam Cafe Dệt Tổ Ong In Ngực', 164000, 'Áo polo cafe tổ ong với họa tiết in ngực', 120000, 38, 'cái', 11, 0, 2, 1),
 
 -- Áo Thun Nam
-('Áo Thun Nam Cổ Tròn', 99000, 46000, 40, 0, 4, 2),
-('Áo Tshirt Nam Cotton USA', 99000, 50000, 32, 0, 4, 2),
-('T-Shirt Nam Relax Can Chi', 230000, 180000, 18, 0, 3, 2),
-('Áo Thun Thể Thao Can Lưng', 99500, 48000, 40, 0, 3, 2),
-('T-Shirt Yoguu Determination', 174500, 100000, 45, 0, 2, 2),
+('Áo Thun Nam Cổ Tròn', 99000, 'Áo thun cổ tròn chất liệu cotton', 46000, 40, 'cái', 11, 0, 4, 2),
+('Áo Tshirt Nam Cotton USA', 99000, 'Áo thun cotton USA mềm mịn', 50000, 32, 'cái', 11, 0, 4, 2),
+('T-Shirt Nam Relax Can Chi', 230000, 'Áo thun relax phong cách can chi', 180000, 18, 'cái', 11, 0, 3, 2),
+('Áo Thun Thể Thao Can Lưng', 99500, 'Áo thể thao can lưng năng động', 48000, 40, 'cái', 11, 0, 3, 2),
+('T-Shirt Yoguu Determination', 174500, 'Áo thun Yoguu thiết kế độc đáo', 100000, 45, 'cái', 11, 0, 2, 2),
 
 -- Áo Sơ Mi Nam
-('Sơ Mi Dài Tay Cafe Túi Ốp Ngực', 149000, 98000, 22, 0, 3, 3),
-('Áo Sơ Mi Dài Tay Nam Cafe', 149000, 98000, 28, 0, 3, 3),
-('Sơ Mi Nam Cộc Tay Họa Tiết', 436000, 350000, 45, 0, 2, 3),
-('Sơ Mi Tay Dài Siêu Co Dãn', 274000, 200000, 17, 0, 2, 3),
-('Sơ Mi Tay Dài Nam Nano Kẻ', 289000, 210000, 26, 0, 2, 3),
+('Sơ Mi Dài Tay Cafe Túi Ốp Ngực', 149000, 'Áo sơ mi dài tay với túi ốp ngực', 98000, 22, 'cái', 11, 0, 3, 3),
+('Áo Sơ Mi Dài Tay Nam Cafe', 149000, 'Sơ mi dài tay phong cách cafe', 98000, 28, 'cái', 11, 0, 3, 3),
+('Sơ Mi Nam Cộc Tay Họa Tiết', 436000, 'Áo sơ mi cộc tay họa tiết trẻ trung', 350000, 45, 'cái', 11, 0, 2, 3),
+('Sơ Mi Tay Dài Siêu Co Dãn', 274000, 'Áo sơ mi dài tay co giãn thoải mái', 200000, 17, 'cái', 11, 0, 2, 3),
+('Sơ Mi Tay Dài Nam Nano Kẻ', 289000, 'Áo sơ mi nano họa tiết kẻ', 210000, 26, 'cái', 11, 0, 2, 3),
 
 -- Áo Khoác Nam
-('Áo Khoác Gió Nam 3C 2 Lớp', 199000, 120000, 12, 0, 1, 4),
-('Áo Phao Nam Có Mũ Siêu Nhẹ Siêu Ấm', 419000, 350000, 22, 0, 1, 4),
-('Áo Khoác Gió Nam 2 Lớp Siêu Co Giãn', 730000, 600000, 16, 0, 2, 4),
-('Áo Phao Nam Trần Trám', 616550, 500000, 12, 0, 2, 4),
+('Áo Khoác Gió Nam 3C 2 Lớp', 199000, 'Áo khoác gió nam 2 lớp giữ ấm', 120000, 12, 'cái', 11, 0, 1, 4),
+('Áo Phao Nam Có Mũ Siêu Nhẹ Siêu Ấm', 419000, 'Áo phao nam siêu nhẹ, thiết kế có mũ', 350000, 22, 'cái', 11, 0, 1, 4),
+('Áo Khoác Gió Nam 2 Lớp Siêu Co Giãn', 300000, 'Áo khoác gió co giãn, 2 lớp thoải mái', 600000, 16, 'cái', 11, 0, 2, 4),
+('Áo Phao Nam Trần Trám', 616550, 'Áo phao nam thiết kế trần trám', 500000, 12, 'cái', 11, 0, 2, 4),
 
--- Áo hoodie - Áo nỉ nam
+-- Áo Hoodie - Áo Nỉ Nam
+('Áo Thu Đông Nam Kẻ In Gấu', 249000, 'Áo thu đông thiết kế kẻ, in gấu dễ thương', 100000, 12, 'cái', 11, 0, 4, 5),
+('Áo Thun Thu Đông Họa Tiết', 249000, 'Áo thun thu đông họa tiết độc đáo', 100000, 20, 'cái', 11, 0, 4, 5),
+('Áo Thu Đông Nam Rip Cổ 4cm', 203000, 'Áo thu đông rip cổ 4cm', 100000, 22, 'cái', 11, 0, 4, 5),
+('Áo Hoodie Yoguu Mũ Có Cúc Bấm', 419300, 'Hoodie thiết kế có mũ và cúc bấm', 300000, 25, 'cái', 11, 0, 4, 5),
 
-('Áo Thu Đông Nam Kẻ In Gấu', 249000, 100000, 12, 0, 4, 5),
-('Áo Thun Thu Đông Họa Tiết', 249000, 100000, 20, 0, 4, 5),
-('Áo Thu Đông Nam Rip Cổ 4cm', 203000, 100000, 22, 0, 4, 5),
-('Áo Hoodie Yoguu Mũ Có Cúc Bấm', 419300, 300000, 25, 0, 4, 5),
-
--- Áo ba lỗ nam
-
-('Áo Ba Lỗ Nam Cơ Bản Gấu Thêu Slogan', 122550, 53000, 12, 0, 2, 6),
-('Áo Ba Lỗ Nam 100% Cotton Siêu Mềm Siêu Thoáng', 99000, 35000, 33, 0, 4, 6),
-('Áo Ba Lỗ Nam Rib Cổ Tròn', 104300, 39000, 20, 0, 1, 6),
-('Áo Ba Lỗ Nam Cơ Bản Gấu Thêu Logo', 122550, 51000, 20, 0, 1, 6),
-
---  Áo thun thể thao nam
-
--- Quần jeans nam
-
-('Quần Jeans Nam Coolmax Thấm Hút Siêu Tốt', 419000, 300000, 14, 0, 1, 8),
-('Quần Jeans Nam Tapered Lycra Thêu Túi', 284000, 100000, 12, 0, 1, 8),
-('Quần Jeans Nam Regular Cafe Đen', 419000, 312000, 22, 0, 1, 8),
-('Quần Jeans Nam Slim Fit Lycra Co Giãn', 149000, 52300, 20, 0, 2, 8),
-('Quần Jeans Nam Slimfit Coolmax All Season', 626000, 453000, 24, 0, 1, 8),
---
-
---Quần kaki nam
-('Quần Kaki Nam Slimfit', 474050 , 300000, 16, 0, 4, 9),
-('Quần Kaki Nam Cạp Chun Ốp Khóa Sườn', 474050, 400000, 19, 0, 4, 9),
-('Quần Kaki Nam Cạp Di Động', 249500 , 159000, 22, 0, 4, 9),
-('Quần Kaki Nam Jogger Cơ Bản', 149000 , 50000, 33, 0, 4, 9),
-('Quần Kaki Nam Jogger Túi Hộp', 149000, 50000, 36, 0, 4, 9),
-
-
---Quần âu nam
-
-('Quần Âu Nam Cafe Cạp Di Động', 540000, 389000, 12, 0, 3, 10),
-('Quần Âu Nam Cạp Chun Ốp Dáng Côn', 569050, 379800, 15, 0, 3, 10),
-('Quần Âu Nam Cafe Khoá Túi', 540550 , 400000, 22, 0, 3, 10),
-('Quần Âu Nam Ngang Mắt Cá Chân', 521550, 478980, 17, 0, 3, 10),
-('Quần Âu Nam Cạp Chun Ốp', 521550 , 400000, 22, 0, 3, 10),
-
---Quần dài nam
-
-
---Quần short nam
-('Quần short thể thao nam phối cạp', 199000, 120000, 12, 0, 1, 12),
-('Quần Sooc Gió Yoguu Có Túi Hộp', 258300 , 100000, 12, 0, 1, 12),
-('Quần Sooc Nỉ Nam Fictional', 134500 , 50000, 15, 0, 1, 12),
-('Quần Sooc Nam Cạp Chun', 149000, 63000, 33, 0, 1, 12),
-
---Đồ bộ ngắn tay nam
-
---Đồ bộ dài tay nam
-
---Áo giữ nhiệt nam
-
-('Áo Thun Đông Nam Giữ Nhiệt Cổ Tròn', 199000, 120000, 12, 0, 1, 15),
-('Áo Thun Đông Nam Giữ Nhiệt Cổ 3cm', 199000 , 120000, 15, 0, 1, 15),
-
---Quần lót nam
-
-('Combo 2 Quần Lót Nam Boxer Phối Cạp Sọc', 179550, 91000, 24, 0, 1, 16),
-('Quần Lót Nam Tam Giác Siêu Thoáng Combo2', 149000 , 40000, 12, 0, 4, 16),
-('Quần lót nam boxer dệt liền mềm mại', 189050, 101000, 24, 0, 1, 16),
-('Quần Lót Nam Boxer Siêu Thoáng Combo 2', 169000, 120000, 8, 0, 1, 16),
-
-
---Quần thể thao nam
-
---Bộ thể thao nam
-
---Giày nam
-('Giày Lười Nam Moccasin Da Mill Đai Khóa', 692300 , 499000, 13, 0, 4, 19),
-
---Thắt lưng nam
-('Thắt Lưng Nam Khoá Cài Mặt Xoay 04',349300 , 189000, 15, 0, 1, 21),
-('Thắt Lưng Nam Khoá Lăn Mặt Kim Loại Phối Da', 499000, 300000, 13, 0, 2, 21),
-('Thắt Lưng Nam Khoá Cài Kim Loại Viền Vuông', 474050 , 300000, 13, 0, 2, 21),
-
---Mũ nam
-('Mũ Lưỡi Trai Unisex Wash Thêu Logo', 94500, 46000, 13, 0, 3, 22);
+-- Quần Jeans Nam
+('Quần Jeans Nam Coolmax Thấm Hút Siêu Tốt', 419000, 'Quần jeans coolmax thấm hút tốt', 300000, 14, 'cái', 11, 0, 1, 8),
+('Quần Jeans Nam Tapered Lycra Thêu Túi', 284000, 'Quần jeans tapered lycra thiết kế thêu túi', 100000, 12, 'cái', 11, 0, 1, 8),
+('Quần Jeans Nam Regular Cafe Đen', 419000, 'Quần jeans regular cafe màu đen', 312000, 22, 'cái', 11, 0, 1, 8),
+('Quần Jeans Nam Slim Fit Lycra Co Giãn', 149000, 'Quần jeans slim fit lycra co giãn thoải mái', 52300, 20, 'cái', 11, 0, 2, 8),
+('Quần Jeans Nam Slimfit Coolmax All Season', 626000, 'Quần jeans slimfit coolmax cho mọi mùa', 453000, 24, 'cái', 11, 0, 1, 8);
 
 
 INSERT INTO "ProductSizes" ("SizeId", "ProductId")
