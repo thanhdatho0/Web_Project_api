@@ -12,6 +12,7 @@ namespace api.Models
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string? Email { get; set; }
-        public List<Order>? Orders { get; set; }
+
+        public List<Order> Orders { get; set; } = [];
     }
 }

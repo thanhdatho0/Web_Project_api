@@ -10,10 +10,10 @@ namespace api.Models
         public int ImageId { get; set; }
         public string Url { get; set; }
         [Column(TypeName = "varchar(100)")] 
-        public string Alt { get; set; } = string.Empty;
+        public string? Alt { get; set; }
         public int ProductId { get; set; }
-        public Product Product { get; set; } = new Product();
+        public Product? Product { get; set; }
         public int ColorId { get; set; }
-        public Color Color { get; set; } = new Color();
+        public Color? Color { get; set; }
     }
 }

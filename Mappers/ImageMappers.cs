@@ -11,10 +11,9 @@ namespace api.Mappers
             {
                 ImageId = imageModel.ImageId,
                 Url = imageModel.Url,
-                Alt = imageModel.Alt,
+                Alt = imageModel.Alt!,
                 ProductId = imageModel.ProductId,
                 ColorId = imageModel.ColorId
-
             };
         }
 
@@ -28,6 +27,17 @@ namespace api.Mappers
                 ColorId = imageDto.ColorId
             };
         }
+
+        public static Image ToImageFromCreateProductDto(this ImageCreateToProductDto imageDto)
+        {
+            return new Image
+            {
+                Url = imageDto.Url,
+                Alt = imageDto.Alt,
+                ColorId = imageDto.ColorId
+            };
+        }
+            
 
         public static Image ToProductFromUpdateDto(this ImageUpdateDto imageDto)
         {

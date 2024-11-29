@@ -11,8 +11,9 @@ namespace api.Models
         public int CategoryId { get; set; }
         [Column(TypeName = "varchar(100)")]
         public string Name { get; set; } = string.Empty;
-        public List<Subcategory>? Subcategories { get; set; } = new List<Subcategory>();
+
+        public List<Subcategory> Subcategories { get; set; } = [];
         public int TargetCustomerId { get; set; }
-        public TargetCustomer? targetCustomer { get; set; }
+        public TargetCustomer? TargetCustomer { get; set; }
     }
 }

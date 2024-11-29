@@ -19,10 +19,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var categories = await categoryRepo.GetAllAsync(query);
-
-            var categoryDto = categories.Select(c => c.ToCategoryDto());
-
-            return Ok(categoryDto);
+            return Ok(categories?.Select(c => c.ToCategoryDto()) ?? []);
         }
 
         [HttpGet("{id:int}")]
@@ -30,13 +27,8 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             var category = await categoryRepo.GetByIdAsync(id);
-
-            if (category == null)
-                return NotFound();
-
-            return Ok(category.ToCategoryDto());
+            return category != null ? Ok(category.ToCategoryDto()) : NotFound();
         }
 
         [HttpPost]
@@ -47,13 +39,18 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             if (!await targetCustomerRepo.TargetCustomerExists(categoryDto.TargetCustomerId))
-                return BadRequest("TargetCustomer dose not exist!");
+                return BadRequest("TargetCustomer does not exist!");
 
             var category = categoryDto.ToCategoryFromCreateDto();
-
-            await categoryRepo.CreateAsync(category);
-
-            return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category.ToCategoryDto());
+            try
+            {
+                await categoryRepo.CreateAsync(category);
+                return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category.ToCategoryDto());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPut]
@@ -62,13 +59,8 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             var category = await categoryRepo.UpdateAsync(id, categoryDto);
-
-            if (category == null)
-                return NotFound("Category not found");
-
-            return Ok(category.ToCategoryDto());
+            return category != null ? Ok(category.ToCategoryDto()) : NotFound("Category not found");
         }
 
     }

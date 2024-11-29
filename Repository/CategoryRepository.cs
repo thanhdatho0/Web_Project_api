@@ -22,7 +22,7 @@ namespace api.Repository
             return category;
         }
 
-        public async Task<List<Category>> GetAllAsync(QueryOject query)
+        public async Task<List<Category>?> GetAllAsync(QueryOject query)
         {
             var categories = context.Categories.Include(c => c.Subcategories).AsQueryable();
 

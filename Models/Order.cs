@@ -16,7 +16,8 @@ namespace api.Models
         public DateTime OrderExportDateTime { get; set; }
         [Column(TypeName = "varchar(300)")]
         public string? OrderNotice { get; set; }
-        public List<Product>? Products { get; set; }
-        public List<OrderDetail>? OrderDetails { get; set; }
+
+        public List<Product> Products { get; set; } = [];
+        public List<OrderDetail> OrderDetails { get; set; } = [];
     }
 }

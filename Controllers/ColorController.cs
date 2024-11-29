@@ -19,9 +19,7 @@ namespace api.Controllers
 
             var colors = await colorRepo.GetAllAsync();
 
-            var colorsDto = colors.Select(c => c.ToColorDto());
-
-            return Ok(colorsDto);
+            return Ok(colors?.Select(c => c.ToColorDto()) ?? []);
         }
 
         [HttpGet("{id:int}")]
@@ -29,13 +27,8 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             var color = await colorRepo.GetByIdAsync(id);
-
-            if (color == null)
-                return NotFound();
-
-            return Ok(color.ToColorDto());
+            return color != null ? Ok(color.ToColorDto()) : NotFound();
         }
 
         [HttpPost]
@@ -45,10 +38,15 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var color = colorCreateDto.ToColorFromCreateDto();
-
-            await colorRepo.CreateAsync(color);
-
-            return CreatedAtAction(nameof(GetById), new { id = color.ColorId }, color.ToColorDto());
+            try
+            {
+                await colorRepo.CreateAsync(color);
+                return CreatedAtAction(nameof(GetById), new { id = color.ColorId }, color.ToColorDto());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPut]
@@ -57,13 +55,8 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             var color = await colorRepo.UpdateAsync(id, colorUpdateDto);
-
-            if (color == null)
-                return NotFound("Color does not found");
-
-            return Ok(color.ToColorDto());
+            return color != null ? Ok(color.ToColorDto()) : NotFound("Color does not found");
         }
 
         [HttpDelete]
@@ -74,13 +67,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var color = await colorRepo.DeleteAsync(id);
-
-            if (color == null)
-                return NotFound("Color does not exists");
-
-            return NoContent();
+            return color != null ? NoContent() : NotFound("Color does not exists");
         }
-
-
     }
 }

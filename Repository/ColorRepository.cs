@@ -1,6 +1,7 @@
 using api.Data;
 using api.DTOs.PColor;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ namespace api.Repository
             return color;
         }
 
-        public async Task<List<Color>> GetAllAsync()
+        public async Task<List<Color>?> GetAllAsync()
         {
             return await context.Colors.Include(c => c.Images).ToListAsync();
         }
@@ -42,8 +43,7 @@ namespace api.Repository
         {
             var color = await context.Colors.FirstOrDefaultAsync(c => c.ColorId == id);
             if (color == null) return null;
-            color.HexaCode = colorUpdateDto.HexaCode;
-            color.Name = colorUpdateDto.Name;
+            color = colorUpdateDto.ToColorFromUpdateDto();
             await context.SaveChangesAsync();
             return color;
         }

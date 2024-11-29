@@ -36,6 +36,6 @@ namespace api.Models
                 public int ProviderId { get; set; }
                 public Provider? Provider { get; set; }
                 public int SubcategoryId { get; set; }
-                public Subcategory Subcategory { get; set; } = new();
+                public Subcategory? Subcategory { get; set; }
         }
 }

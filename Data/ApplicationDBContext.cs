@@ -33,7 +33,7 @@ namespace api.Data
             // Category // TargerCustomer
             modelBuilder.Entity<TargetCustomer>()
             .HasMany(t => t.Categories)
-            .WithOne(c => c.targetCustomer);
+            .WithOne(c => c.TargetCustomer);
 
 
             // Order vs Product

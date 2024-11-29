@@ -79,7 +79,8 @@ namespace api.Controllers
             {
                 foreach (var image in color.Images!)
                 {
-                    var imageModel = image.ToImageFromCreateDto();
+                    var imageModel = image.ToImageFromCreateProductDto();
+                    imageModel.ProductId = productModel.ProductId;
                     await imageRepo.CreateAsync(imageModel);
                 }
                 var colorProduct = new ProductColor { ProductId = productModel.ProductId, ColorId = color.ColorId };

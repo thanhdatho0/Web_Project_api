@@ -12,7 +12,8 @@ namespace api.Models
         public int MaterialId { get; set; }
         [Column(TypeName = "varchar(50)")]
         public string MaterialType { get; set; } = string.Empty;
-        public List<Product>? Products { get; set; }
-        public List<ProductMaterial>? ProductMaterials { get; set; }
+
+        public List<Product> Products { get; set; } = [];
+        public List<ProductMaterial> ProductMaterials { get; set; } = [];
     }
 }

@@ -15,6 +15,7 @@ namespace api.Models
         public string ProviderPhone { get; set; } = string.Empty;
         [Column(TypeName = "varchar(100)")]
         public string ProviderCompanyName { get; set; } = string.Empty;
-        public List<Product>? ProviderProducts { get; set; } = [];
+
+        public List<Product> ProviderProducts { get; set; } = [];
     }
 }

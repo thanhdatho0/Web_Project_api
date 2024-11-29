@@ -14,7 +14,7 @@ namespace api.Models
         public string SubcategoryName { get; set; } = string.Empty;
         [Column(TypeName = "varchar(100)")]
         public string? Description { get; set; }
-        public List<Product>? Products { get; set; } = [];
+        public List<Product> Products { get; set; } = [];
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
     }
