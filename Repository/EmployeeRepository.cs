@@ -35,8 +35,8 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
         return employee;
     }
 
-    public async Task<Employee?> DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+    // public async Task<Employee?> DeleteAsync(int id)
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

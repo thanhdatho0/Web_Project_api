@@ -14,6 +14,6 @@ namespace api.Interfaces
         Task<Size> CreateAsync(Size size);
         Task<Size?> UpdateAsync(int id, SizeUpdateDto sizeUpdateDto);
         Task<Size?> DeleteAsync(int id);
-        Task<bool> SizeExists(int id);
+        // Task<bool> SizeExists(int id);
     }
 }

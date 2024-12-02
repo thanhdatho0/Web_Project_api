@@ -50,12 +50,22 @@ namespace api.Data
             modelBuilder.Entity<Color>()
                 .HasMany(e => e.Images)
                  .WithOne(e => e.Color);
+            
+            // Color vs Inventory
+            modelBuilder.Entity<Color>()
+                .HasMany(e => e.Inventories)
+                .WithOne(e => e.Color);
 
             // Product vs image
             modelBuilder.Entity<Product>()
             .HasMany(p => p.Images)
             .WithOne(i => i.Product);
 
+            //Product vs Inventory
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Inventories)
+                .WithOne(i => i.Product);
+            
             // Employee vs Order
             modelBuilder.Entity<Employee>()
             .HasMany(e => e.Orders)
@@ -80,7 +90,17 @@ namespace api.Data
             modelBuilder.Entity<Subcategory>()
             .HasMany(s => s.Products)
             .WithOne(p => p.Subcategory);
+            
+            //Size vs Inventory
+            modelBuilder.Entity<Size>()
+                .HasMany(s => s.Inventories)
+                .WithOne(i => i.Size);
 
+            //Inventory vs OrderDetails
+            modelBuilder.Entity<Inventory>()
+                .HasMany(i => i.OrderDetails)
+                .WithOne(o => o.Inventory);
+            
             // Đặt giá trị mặc định cho isDelete là false
             modelBuilder.Entity<Product>()
             .Property(p => p.IsDeleted)

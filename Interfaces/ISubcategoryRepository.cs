@@ -10,7 +10,7 @@ namespace api.Interfaces
         Task<Subcategory?> GetByIdAsync(int id);
         Task<Subcategory> CreateAsync(Subcategory subcategory);
         Task<Subcategory?> UpdateAsync(int id, SubcategoryUpdateDto subcategoryUpdateDto);
-        Task<Subcategory?> DeleteAsync(int id);
+        // Task<Subcategory?> DeleteAsync(int id);
         Task<bool> SubcategoryExists(int id);
         Task<bool> SubcategoryName(string name);
     }

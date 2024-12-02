@@ -22,7 +22,6 @@ public static class OrderDetailMappers
     {
         return new OrderDetail
         {
-            InventoryId = orderDetailCreateDto.InventoryId,
             Amount = orderDetailCreateDto.Quantity
         };
     }

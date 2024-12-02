@@ -1,13 +1,16 @@
+
 using api.DTOs.Order;
 using api.Interfaces;
 using api.Mappers;
+using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class OrderController(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository)
+public class OrderController(IOrderRepository orderRepository, 
+    IOrderDetailRepository orderDetailRepository, IInventoryRepository inventoryRepository)
     : ControllerBase
 {
     [HttpGet]
@@ -29,6 +32,10 @@ public class OrderController(IOrderRepository orderRepository, IOrderDetailRepos
         {
             var orderDetail = orderDetailDto.ToOrderDetailCreateDto();
             orderDetail.OrderId = order.OrderId;
+            orderDetail.InventoryId = inventoryRepository
+                .GetByDetailsId(orderDetailDto.ProductId, orderDetailDto.ColorId, orderDetailDto.SizeId)
+                .Result!
+                .InventoryId;
             await orderDetailRepository.CreateAsync(orderDetail);
         }
         return Ok(orderCreateDto);

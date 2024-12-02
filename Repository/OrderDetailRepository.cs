@@ -26,20 +26,23 @@ public class OrderDetailRepository(ApplicationDbContext dbContext) : IOrderDetai
 
     public async Task<OrderDetail> CreateAsync(OrderDetail orderDetail)
     {
-        var product = await dbContext.Products.FindAsync(orderDetail.Inventory!.ProductId);
-        product!.InStock -= orderDetail.Amount;
+        var inventory = await dbContext.Inventories
+            .Include(i => i.Product)
+            .FirstOrDefaultAsync(i => i.InventoryId == orderDetail.InventoryId);
+        inventory!.InStock -= orderDetail.Amount;
+        inventory.Product!.InStock -= orderDetail.Amount;
         await dbContext.OrderDetails.AddAsync(orderDetail);
         await dbContext.SaveChangesAsync();
         return orderDetail;
     }
 
-    public async Task<OrderDetail?> DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> CategoryExists(int id)
-    {
-        throw new NotImplementedException();
-    }
+    // public async Task<OrderDetail?> DeleteAsync(int id)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // public async Task<bool> CategoryExists(int id)
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

@@ -6,7 +6,7 @@ namespace api.Models
     public class OrderDetail
     {
         public int OrderId { get; set; }
-        public Order? Order { get; set; } = new();
+        public Order? Order { get; set; }
         public int InventoryId { get; set; }
         public Inventory? Inventory { get; set; }
         public int Amount { get; set; }

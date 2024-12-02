@@ -15,6 +15,5 @@ public class Inventory
     public Color? Color { get; set; }
     public int Quantity { get; set; }
     public int InStock { get; set; }
-    
     public List<OrderDetail> OrderDetails { get; set; } = [];
 }

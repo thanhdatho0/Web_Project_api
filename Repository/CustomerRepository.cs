@@ -25,13 +25,13 @@ public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepos
         return customer;
     }
 
-    public async Task<Customer?> UpdateAsync(int id, CustomerUpdateDto customerUpdateDto)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Customer?> DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+    // public async Task<Customer?> UpdateAsync(int id, CustomerUpdateDto customerUpdateDto)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // public async Task<Customer?> DeleteAsync(int id)
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

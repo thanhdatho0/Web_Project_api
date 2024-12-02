@@ -13,12 +13,15 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
         var orders = 
             dbContext.Orders
                 .Include(o => o.Employee)
-                .Include(o => o.OrderDetails)!
-                .ThenInclude(o => o.Inventory!.Product)
-                .Include(o => o.OrderDetails)!
-                .ThenInclude(o => o.Inventory!.Color)
-                .Include(o => o.OrderDetails)!
-                .ThenInclude(o => o.Inventory!.Size)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Inventory)
+                .ThenInclude(i => i!.Product)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Inventory)
+                .ThenInclude(i => i!.Color)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Inventory)
+                .ThenInclude(i => i!.Size)
                 .Include(o => o.Customer);
         return await orders.ToListAsync();
     }
