@@ -9,11 +9,11 @@ public static class OrderDetailMappers
     {
         return new OrderDetailDto
         {
-            ProductName = orderDetail.Product?.Name,
-            ProductPrice = orderDetail.Product!.Price,
-            PriceAfterDiscount = orderDetail.Product!.Price*(1-orderDetail.Product!.DiscountPercentage),
-            Size = orderDetail.Size!.SizeValue,
-            Color = orderDetail.Color!.Name,
+            ProductName = orderDetail.Inventory!.Product?.Name,
+            ProductPrice = orderDetail.Inventory!.Product!.Price,
+            PriceAfterDiscount = orderDetail.Inventory!.Product!.Price*(1-orderDetail.Inventory!.Product!.DiscountPercentage),
+            Size = orderDetail.Inventory!.Size!.SizeValue,
+            Color = orderDetail.Inventory!.Color!.Name,
             Quantity = orderDetail.Amount
         };
     }
@@ -22,9 +22,7 @@ public static class OrderDetailMappers
     {
         return new OrderDetail
         {
-            ProductId = orderDetailCreateDto.ProductId,
-            ColorId = orderDetailCreateDto.ColorId,
-            SizeId = orderDetailCreateDto.SizeId,
+            InventoryId = orderDetailCreateDto.InventoryId,
             Amount = orderDetailCreateDto.Quantity
         };
     }

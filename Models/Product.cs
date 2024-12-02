@@ -29,10 +29,7 @@ namespace api.Models
                 [Column(TypeName = "timestamp")]
                 public DateTime UpdatedAt { get; set; }
                 public List<Image> Images { get; set; } = [];
-                public List<ProductColor> ProductColors { get; set; } = [];
-                public List<ProductSize> ProductSizes { get; set; } = [];
-                public List<ProductMaterial> ProductMaterials { get; set; } = [];
-                public List<OrderDetail> OrderDetails { get; set; } = [];
+                public List<Inventory> Inventories { get; set; } = [];
                 public int ProviderId { get; set; }
                 public Provider? Provider { get; set; }
                 public int SubcategoryId { get; set; }

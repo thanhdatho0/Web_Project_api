@@ -32,7 +32,7 @@ namespace api.Repository
 
         public async Task<List<Size>> GetAllAsync()
         {
-            return await context.Sizes.Include(c => c.ProductSizes).ToListAsync();
+            return await context.Sizes.ToListAsync();
         }
 
         public async Task<Size?> GetByIdAsync(int id)

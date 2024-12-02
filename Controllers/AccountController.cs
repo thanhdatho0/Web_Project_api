@@ -98,7 +98,7 @@ public class AccountController(
             var appUser = new AppUser
             {
                 UserName = customerRegisterDto.Username,
-                Email = customerRegisterDto.Email,
+                Email = customerRegisterDto.CustomerInfo.Email,
                 PhoneNumber = customerRegisterDto.CustomerInfo.PhoneNumber,
             };
             

@@ -13,11 +13,9 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
         var products = context.Products.Include(p => p.Subcategory)
-                                .Include(p => p.ProductSizes)
+                                .Include(p => p.Inventories)
                                 .ThenInclude(pz => pz.Size)
-                                .Include(p => p.ProductMaterials)
-                                .ThenInclude(pm => pm.Material)
-                                .Include(p => p.ProductColors)
+                                .Include(p => p.Inventories)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
 
@@ -30,7 +28,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                                         .Select(id => int.Parse(id))
                                         .ToList();
 
-            products = products.Where(p => p.ProductColors.Any(pc => colorIds.Contains(pc.ColorId)));
+            products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.ColorId)));
         }
 
         if (!string.IsNullOrEmpty(query.SizeId))
@@ -39,7 +37,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                                         .Select(id => int.Parse(id))
                                         .ToList();
 
-            products = products.Where(p => p.ProductSizes.Any(pc => colorIds.Contains(pc.SizeId)));
+            products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.SizeId)));
         }
 
         if (!string.IsNullOrEmpty(query.Price))
@@ -69,7 +67,13 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                 "date" => products.OrderByDescending(p => p.UpdatedAt),
                 "low" => products.OrderBy(p => p.Price),
                 "hight" => products.OrderByDescending(p => p.Price),
-                "trend" => products.Include(p => p.OrderDetails.Sum(od => od.Amount)),
+                "trend" => products
+                    .Include(p => p.Inventories)
+                    .ThenInclude(i => i.OrderDetails)
+                    .AsQueryable()
+                    .OrderByDescending(p => p.Inventories
+                        .SelectMany(i => i.OrderDetails)
+                        .Sum(od => od.Amount)),
                 _ => products.OrderByDescending(p => p.CreatedAt)
             };
 
@@ -83,9 +87,9 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
     public async Task<Product?> GetByIdAsync(int id)
     {
         return await context.Products.Include(p => p.Subcategory)
-                            .Include(p => p.ProductSizes)
+                            .Include(p => p.Inventories)
                             .ThenInclude(pz => pz.Size)
-                            .Include(p => p.ProductColors)
+                            .Include(p => p.Inventories)
                             .ThenInclude(pc => pc.Color)
                             .ThenInclude(c => c!.Images)
                             .FirstOrDefaultAsync(p => p.ProductId == id);

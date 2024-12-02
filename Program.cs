@@ -122,15 +122,12 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddScoped<IProductColorRepository, ProductColorRepository>();
-builder.Services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
-builder.Services.AddScoped<IProductMaterialRepository, ProductMaterialRepository>();
-builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

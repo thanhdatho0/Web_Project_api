@@ -14,9 +14,7 @@ namespace api.Models
                 public string HexaCode { get; set; } = string.Empty;
                 [Column(TypeName = "varchar(50)")]
                 public string Name { get; set; } = string.Empty;
-
-                public List<ProductColor> ProductColors { get; set; } = [];
-                public List<OrderDetail> OrderDetails { get; set; } = [];
+                public List<Inventory> Inventories { get; set; } = [];
                 public List<Image> Images { get; set; } = [];
         }
 }

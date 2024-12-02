@@ -12,9 +12,9 @@ public class OrderDetailRepository(ApplicationDbContext dbContext) : IOrderDetai
         var orderDetails = 
             dbContext.OrderDetails
                 .Include(o => o.Order)
-                .Include(o => o.Product)
-                .Include(o => o.Size)
-                .Include(o => o.Color);
+                .Include(o => o.Inventory!.Product)
+                .Include(o => o.Inventory!.Size)
+                .Include(o => o.Inventory!.Color);
         return await orderDetails.ToListAsync();
     }
 
@@ -26,7 +26,7 @@ public class OrderDetailRepository(ApplicationDbContext dbContext) : IOrderDetai
 
     public async Task<OrderDetail> CreateAsync(OrderDetail orderDetail)
     {
-        var product = await dbContext.Products.FindAsync(orderDetail.ProductId);
+        var product = await dbContext.Products.FindAsync(orderDetail.Inventory!.ProductId);
         product!.InStock -= orderDetail.Amount;
         await dbContext.OrderDetails.AddAsync(orderDetail);
         await dbContext.SaveChangesAsync();

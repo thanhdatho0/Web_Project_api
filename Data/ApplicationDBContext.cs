@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,15 +17,12 @@ namespace api.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<Material> Materials { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductMaterial> ProductMaterials { get; set; }
-        public DbSet<ProductSize> ProductSizes { get; set; }
-        public DbSet<ProductColor> ProductColors { get; set; }
         public DbSet<Provider> Providers { get; set; }
         public DbSet<Size> Sizes { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,69 +33,19 @@ namespace api.Data
             .HasMany(t => t.Categories)
             .WithOne(c => c.TargetCustomer);
 
-
             // Order vs Product
-            modelBuilder.Entity<OrderDetail>(entity => entity.HasKey(o => new { o.OrderId, o.ProductId, o.ColorId, o.SizeId }));
-
-            modelBuilder.Entity<OrderDetail>()
-            .HasOne(od => od.Product)
-            .WithMany(p => p.OrderDetails)
-            .HasForeignKey(od => od.ProductId);
+            modelBuilder.Entity<OrderDetail>().HasKey(x => new { x.OrderId, x.InventoryId });
 
             modelBuilder.Entity<OrderDetail>()
            .HasOne(od => od.Order)
            .WithMany(o => o.OrderDetails)
            .HasForeignKey(od => od.OrderId);
-
+            
             modelBuilder.Entity<OrderDetail>()
-                .HasOne(od => od.Color)
-                .WithMany(c => c.OrderDetails)
-                .HasForeignKey(od => od.ColorId);
-
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(od => od.Size)
-                .WithMany(c => c.OrderDetails)
-                .HasForeignKey(od => od.SizeId);
-
-            // Product vs Color
-            modelBuilder.Entity<ProductColor>(entity => entity.HasKey(pc => new { pc.ColorId, pc.ProductId }));
-
-            modelBuilder.Entity<ProductColor>()
-            .HasOne(pc => pc.Color)
-            .WithMany(c => c.ProductColors)
-            .HasForeignKey(pc => pc.ColorId);
-
-            modelBuilder.Entity<ProductColor>()
-            .HasOne(pc => pc.Product)
-            .WithMany(p => p.ProductColors)
-            .HasForeignKey(pc => pc.ProductId);
-
-            // Product vs size
-            modelBuilder.Entity<ProductSize>(entity => entity.HasKey(pz => new { pz.ProductId, pz.SizeId }));
-
-            modelBuilder.Entity<ProductSize>()
-            .HasOne(pz => pz.Product)
-            .WithMany(p => p.ProductSizes)
-            .HasForeignKey(pz => pz.ProductId);
-
-            modelBuilder.Entity<ProductSize>()
-           .HasOne(pz => pz.Size)
-           .WithMany(s => s.ProductSizes)
-           .HasForeignKey(pz => pz.SizeId);
-
-            // Product vs Material
-            modelBuilder.Entity<ProductMaterial>(x => x.HasKey(pm => new { pm.MaterialId, pm.ProductId }));
-
-            modelBuilder.Entity<ProductMaterial>()
-            .HasOne(pm => pm.Product)
-            .WithMany(e => e.ProductMaterials)
-            .HasForeignKey(pm => pm.ProductId);
-
-            modelBuilder.Entity<ProductMaterial>()
-           .HasOne(pm => pm.Material)
-           .WithMany(e => e.ProductMaterials)
-           .HasForeignKey(pm => pm.MaterialId);
-
+                .HasOne(od => od.Inventory)
+                .WithMany(i => i.OrderDetails)
+                .HasForeignKey(od => od.InventoryId);
+            
             // Color vs image
             modelBuilder.Entity<Color>()
                 .HasMany(e => e.Images)

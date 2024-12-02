@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using api.DTOs.Inventory;
 using api.DTOs.PColor;
 
 namespace api.DTOs.Product;
@@ -23,20 +24,11 @@ public class ProductCreateDto
     [Required(ErrorMessage = "DiscountPercentage is required.")]
     [Range(0.01, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
     public decimal DiscountPercentage { get; set; }
-
-    [Required(ErrorMessage = "InStock is required.")]
-    [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a non-negative integer.")]
-    public int Quantity { get; set; }
-    [Required(ErrorMessage = "Unit is required.")]
     public string? Unit { get; set; }
 
     [Required(ErrorMessage = "SubcategoryId is required.")]
     public int SubcategoryId { get; set; }
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
-
-    [Required(ErrorMessage = "SizeId is required.")]
-    public List<int>? SizeId { get; set; }
-    public List<int>? MaterialId { get; set; }
-    public List<ColorToProductDto>? Colors { get; set; }
+    public List<InventoryCreateDto> Inventory { get; set; } = [];
 }

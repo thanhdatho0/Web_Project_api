@@ -11,7 +11,6 @@ namespace api.Models
         public int SizeId { get; set; }
         [Column(TypeName = "varchar(5)")]
         public string SizeValue { get; set; } = string.Empty;
-        public List<ProductSize> ProductSizes { get; set; } = [];
-        public List<OrderDetail> OrderDetails { get; set; } = [];
+        public List<Inventory> Inventories { get; set; } = [];
     }
 }

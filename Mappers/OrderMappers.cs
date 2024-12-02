@@ -21,7 +21,7 @@ public static class OrderMappers
                 .Sum(),
             
             Total = order.OrderDetails!
-                .Select(o => o.Amount * o.Product!.Price)
+                .Select(o => o.Amount * o.Inventory!.Product!.Price)
                 .Sum(),
         };
     }

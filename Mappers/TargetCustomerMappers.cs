@@ -22,6 +22,8 @@ namespace api.Mappers
             return new TargetCustomer
             {
                 TargetCustomerName = targetCustomerCreateDto.TargetCustomerName,
+                Url = targetCustomerCreateDto.Url,
+                Alt = targetCustomerCreateDto.Alt,
             };
         }
 

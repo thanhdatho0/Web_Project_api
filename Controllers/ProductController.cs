@@ -14,10 +14,8 @@ namespace api.Controllers
     public class ProductController(
         IProductRepository productRepo,
         IProviderRepository providerRepo,
-        IProductSizeRepository productSizeRepo,
-        IProductMaterialRepository productMaterialRepo,
         IImageRepository imageRepo,
-        IProductColorRepository productColorRepo,
+        IInventoryRepository inventoryRepo,
         ISubcategoryRepository subcategoryRepo)
         : ControllerBase
     {
@@ -61,32 +59,33 @@ namespace api.Controllers
                 return BadRequest("Provider does not exists!");
 
             var productModel = productDto.ToProductFromCreateDto();
-
+            productModel.Quantity = productDto.Inventory.Select(p => p.Quantity).Sum();
+            productModel.InStock = productModel.Quantity;
+            
             await productRepo.CreateAsync(productModel);
-            foreach (var size in productDto.SizeId!)
+            foreach (var inventoryCreateDto in productDto.Inventory)
             {
-                var productSize = new ProductSize { ProductId = productModel.ProductId, SizeId = size };
-                await productSizeRepo.CreateAsync(productSize);
+                var inventory = new Inventory
+                {
+                    ProductId = productModel.ProductId, 
+                    SizeId = inventoryCreateDto.SizeId, 
+                    ColorId = inventoryCreateDto.Color.ColorId, 
+                    Quantity = inventoryCreateDto.Quantity,
+                    InStock = inventoryCreateDto.Quantity,
+                };
+                await inventoryRepo.CreateAsync(inventory);
             }
 
-            foreach (var material in productDto.MaterialId!)
-            {
-                var productMaterial = new ProductMaterial { ProductId = productModel.ProductId, MaterialId = material };
-                await productMaterialRepo.CreateAsync(productMaterial);
-            }
-
-            foreach (var color in productDto.Colors!)
+            foreach (var color in productDto.Inventory.Select(x => x.Color).Distinct())
             {
                 foreach (var image in color.Images!)
                 {
                     var imageModel = image.ToImageFromCreateProductDto();
+                    imageModel.ColorId = color.ColorId;
                     imageModel.ProductId = productModel.ProductId;
                     await imageRepo.CreateAsync(imageModel);
                 }
-                var colorProduct = new ProductColor { ProductId = productModel.ProductId, ColorId = color.ColorId };
-                await productColorRepo.CreateAsync(colorProduct);
             }
-
             return Ok(productDto);
         }
 

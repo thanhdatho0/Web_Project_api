@@ -34,7 +34,6 @@ namespace api.Mappers
             {
                 Url = imageDto.Url,
                 Alt = imageDto.Alt,
-                ColorId = imageDto.ColorId
             };
         }
             
