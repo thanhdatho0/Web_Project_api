@@ -12,6 +12,7 @@ namespace api.Helpers
         public string? SizeId { get; set; } = null;
         public string? Price { get; set; } = null;
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 24;
+        public int PageSize { get; set; } = 10;
+        public string? SortBy { get; set; } = null;
     }
 }

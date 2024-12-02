@@ -20,7 +20,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                                 .Include(p => p.ProductColors)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
-                                
+
         if (query.SubcategoryId.HasValue)
             products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
 
@@ -51,17 +51,30 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
                 {
                     products = products.Where(p => p.Price < 350000);
                 }
-                else if (priceRange == "350.000-750.000")
+                if (priceRange == "350-750")
                 {
                     products = products.Where(p => p.Price >= 350000 && p.Price <= 750000);
                 }
-                else if (priceRange == "tren-750")
+                if (priceRange == "tren-750")
                 {
                     products = products.Where(p => p.Price > 750000);
                 }
             }
         }
-       
+
+        if (!String.IsNullOrEmpty(query.SortBy))
+        {
+            products = query.SortBy switch
+            {
+                "date" => products.OrderByDescending(p => p.UpdatedAt),
+                "low" => products.OrderBy(p => p.Price),
+                "hight" => products.OrderByDescending(p => p.Price),
+                "trend" => products.Include(p => p.OrderDetails.Sum(od => od.Amount)),
+                _ => products.OrderByDescending(p => p.CreatedAt)
+            };
+
+        }
+
         var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
         return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
