@@ -48,14 +48,14 @@ INSERT INTO "TargetCustomers" ("TargetCustomerName", "Url", "Alt")
 VALUES
 ('Nam' , 'https://yody.vn/images/menu-desktop/menu_man.png', 'Nam'),
 ('Nữ' , 'https://yody.vn/images/menu-desktop/menu_woman.png', 'Nữ'),
-('Trẻ em', 'https://yody.vn/images/menu-desktop/menu_woman.png', 'Trẻ em')
+('Trẻ em', 'https://yody.vn/images/menu-desktop/menu_woman.png', 'Trẻ em');
 
 
 INSERT INTO "Categories" ("Name", "TargetCustomerId")
 VALUES
 ('Áo nam',1), ('Quần nam',1), ('Độ bộ nam',1), ('Đồ mặc trong nam',1), ('Đồ thể thao nam',1), ('Phụ kiện nam',1),
 ('Áo nữ',2), ('Quần nữ',2), ('Độ bộ nữ',2), ('Đồ mặc trong nữ',2), ('Đồ thể thao nữ',2), ('Đầm và chân váy nữ',2), ('Phụ kiện nữ',2),
-('Áo trẻ em',3), ('Quần trẻ em',3), ('Độ bộ trẻ em',3), ('Đồ mặc trong trẻ em',3), ('Đồ thể thao trẻ em',3), ('Đầm và chân váy bé gái',3), ('Phụ kiện trẻ em',3)
+('Áo trẻ em',3), ('Quần trẻ em',3), ('Độ bộ trẻ em',3), ('Đồ mặc trong trẻ em',3), ('Đồ thể thao trẻ em',3), ('Đầm và chân váy bé gái',3), ('Phụ kiện trẻ em',3);
 
 
 INSERT INTO "Subcategories" ("SubcategoryName","Description","CategoryId")
@@ -159,20 +159,13 @@ VALUES
 ('#2E8B57', 'SeaGreen');
 
 
-INSERT INTO "Materials" ("MaterialType")
-VALUES 
-('Cotton'),
-('Polyester'),
-('Leather'),
-('Wool');
-
-
 INSERT INTO "Providers" ("ProviderEmail", "ProviderPhone", "ProviderCompanyName")
 VALUES 
 ('nhacungcap1@example.vn', '0912345678', 'Thời Trang Việt'),
 ('nhacungcap2@example.vn', '0987654321', 'May Mặc Á Châu'),
 ('nhacungcap3@example.vn', '0908765432', 'Đồng Phục Miền Nam'),
 ('nhacungcap4@example.vn', '0934567890', 'Hòa Bình Fashion');
+
 
 INSERT INTO "Products" ("Name", "Price", "Description", "Cost", "Quantity", "Unit", "InStock", "DiscountPercentage", "ProviderId", "SubcategoryId")
 VALUES 
@@ -215,140 +208,6 @@ VALUES
 ('Quần Jeans Nam Slim Fit Lycra Co Giãn', 149000, 'Quần jeans slim fit lycra co giãn thoải mái', 52300, 20, 'cái', 11, 0, 2, 8),
 ('Quần Jeans Nam Slimfit Coolmax All Season', 626000, 'Quần jeans slimfit coolmax cho mọi mùa', 453000, 24, 'cái', 11, 0, 1, 8);
 
-
-INSERT INTO "ProductSizes" ("SizeId", "ProductId")
-VALUES 
-(2, 2),
-(1, 2),
-(3, 2),
-(1, 3),
-(2, 3),
-(3, 3),
-(1, 4),
-(4, 4),
-(1, 5),
-(4, 5),
-(2, 6),
-(3, 6),
-(4, 6),
-(1, 7),
-(2, 7),
-(1, 8),
-(4, 8),
-(2, 9),
-(3, 9),
-(1, 10),
-(1, 11),
-(2, 11),
-(3, 11),
-(4, 11),
-(1, 12),
-(2, 12),
-(1, 13),
-(3, 13),
-(4, 13),
-(1, 15),
-(4, 15),
-(1, 16),
-(3, 16),
-(1,17 ),
-(2, 17),
-(3, 17),
-(1, 18),
-(2, 18),
-(4, 19),
-(1, 20),
-(2, 21),
-(4, 21),
-(1, 22),
-(2, 22),
-(4, 22),
-(1, 23),
-(2, 23),
-(1, 24),
-(4, 24),
-(1, 25),
-(4, 25),
-(3, 26),
-(4, 26),
-(1, 27),
-(2, 27),
-(4, 27),
-(1, 28),
-(3, 28),
-(1, 29),
-(3, 29),
-(1, 40),
-(4, 40),
-(3, 40),
-(1, 41),
-(3, 41),
-(1, 42),
-(3, 42),
-(2, 42),
-(1, 43),
-(2, 43),
-(4, 43),
-(1, 44),
-(3, 44),
-(4, 44),
-(3, 45),
-(1, 46),
-(2, 47),
-(3, 47),
-(4, 47),
-(1, 48),
-(2, 48),
-(3, 48),
-(4, 48),
-(1, 49),
-(3, 49),
-(1, 50),
-(2, 50),
-(1,51 ),
-(2, 52),
-(3, 52),
-(1, 53),
-(2, 53),
-(4, 53),
-(1, 54),
-(2, 54),
-(1, 55),
-(3, 55),
-(1, 56),
-(4, 56),
-(1, 57),
-(2, 57),
-(3, 58)
-
-INSERT INTO "ProductColors" ("ProductId", "ColorId")
-VALUES 
-(2, 6),
-(2, 1),
-(2, 5),
-(3, 2),
-(3, 10),
-(3, 3),
-(3, 5),
-(4, 1),
-(4, 3),
-(4, 5),
-(4, 14),
-(5, 2),
-(5, 20),
-(5, 19),
-(6, 7),
-(6, 3),
-(7, 6),
-(7, 5),
-(7, 1),
-(8, 12),
-(8, 4),
-(9, 9),
-(10, 1),
-(10, 2);
-
-
 INSERT INTO "Images" ("Url", "Alt", "ProductId", "ColorId")
 VALUES 
 ('https://m.yodycdn.com/fit-in/filters:format(webp)/100/438/408/products/ao-polo-nam-apm6225-xng-qam6049-den-2-yody.jpg?v=1690163453110', 'áo nam', 2, 2),
@@ -376,3 +235,22 @@ VALUES
 ('https://m.yodycdn.com/fit-in/filters:format(webp)/products/tsm5231-ddo-3.jpg', 'áo nam', 10, 1),
 ('https://m.yodycdn.com/fit-in/filters:format(webp)/products/stm6061-xre-6.jpg', 'áo nam', 10, 2);
 
+DO $$
+DECLARE
+    product_id INT;
+    size_id INT;
+    color_id INT;
+    instock INT;
+    quantity INT;
+BEGIN
+    FOR product_id IN 1..27 LOOP -- ProductId từ 3 đến 28
+        FOR size_id IN 1..4 LOOP -- SizeId: 1 (S), 2 (M), 3 (L)
+            FOR color_id IN 1..20 LOOP -- ColorId từ 1 đến 5
+                instock := FLOOR(RANDOM() * 41 + 10); -- InStock: ngẫu nhiên từ 10–50
+                quantity := FLOOR(RANDOM() * 101 + 50); -- Quantity: ngẫu nhiên từ 50–150
+                INSERT INTO "Inventories" ("ProductId", "SizeId", "ColorId", "Quantity", "InStock")
+                VALUES (product_id, size_id, color_id, quantity, instock);
+            END LOOP;
+        END LOOP;
+    END LOOP;
+END $$;
