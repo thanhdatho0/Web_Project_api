@@ -7,6 +7,8 @@ namespace api.Helpers
 {
     public class ProductQuery
     {
+        public int? TargetCustomerId { get; set; } = null;
+        public int? CategoryId { get; set; } = null;
         public int? SubcategoryId { get; set; } = null;
         public string? ColorId { get; set; } = null;
         public string? SizeId { get; set; } = null;

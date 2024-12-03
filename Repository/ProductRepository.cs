@@ -13,14 +13,31 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
     {
         var products = context.Products.Include(p => p.Subcategory)
+                                .ThenInclude(s => s!.Category)
                                 .Include(p => p.Inventories)
                                 .ThenInclude(pz => pz.Size)
                                 .Include(p => p.Inventories)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
 
-        if (query.SubcategoryId.HasValue)
-            products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
+        switch (query)
+        {
+            case { TargetCustomerId: not null, CategoryId: not null, SubcategoryId: not null }:
+                products = products
+                    .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId 
+                                && p.Subcategory!.CategoryId == query.CategoryId
+                                && p.SubcategoryId == query.SubcategoryId);
+                break;
+            case { TargetCustomerId: not null, CategoryId: not null }:
+                products = products
+                    .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId 
+                                && p.Subcategory!.CategoryId == query.CategoryId);
+                break;
+            case { TargetCustomerId: not null}:
+                products = products
+                    .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId);
+                break;
+        };
 
         if (!string.IsNullOrEmpty(query.ColorId))
         {
