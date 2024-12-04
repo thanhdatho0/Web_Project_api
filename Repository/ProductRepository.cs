@@ -15,7 +15,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         var products = context.Products.Include(p => p.Subcategory)
                                 .ThenInclude(s => s!.Category)
                                 .Include(p => p.Inventories)
-                                .ThenInclude(pz => pz.Size)
+                                .ThenInclude(pz => pz.Size).Distinct()
                                 .Include(p => p.Inventories)
                                 .ThenInclude(pc => pc.Color)
                                 .ThenInclude(c => c!.Images).AsQueryable();
@@ -36,6 +36,13 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
             case { TargetCustomerId: not null}:
                 products = products
                     .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId);
+                break;
+            case {CategoryId: not null}:
+                products = products
+                    .Where(p => p.Subcategory!.CategoryId == query.CategoryId);
+                break;
+            case {SubcategoryId: not null}:
+                products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
                 break;
         };
 
