@@ -128,6 +128,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IImageService, ImageService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -150,6 +151,7 @@ app.UseCors(x => x
 
 app.MapControllers();
 
+app.UseStaticFiles();
 
 app.Run();
 

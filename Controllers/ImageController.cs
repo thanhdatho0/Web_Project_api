@@ -8,7 +8,7 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("api/images")]
-    public class ImageController(IColorRepository colorRepo, IImageRepository imageRepo, IProductRepository prodRepo)
+    public class ImageController(IImageRepository imageRepo, IImageService imageService)
         : ControllerBase
     {
         [HttpGet]
@@ -36,22 +36,28 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ImageCreateDto imageDto)
+        public async Task<IActionResult> Create(IFormFile file, [FromForm] ImageCreateDto imageDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await colorRepo.ColorExists(imageDto.ColorId))
-                return BadRequest("Color does not exist!");
+            try
+            {
+                // Construct base URL in the controller
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
 
-            if (!await prodRepo.ProductExists(imageDto.ProductId))
-                return BadRequest("Product does not exists!");
+                var imageDtoResult = await imageService.CreateImageAsync(file, imageDto, baseUrl);
 
-            var imageModel = imageDto.ToImageFromCreateDto();
-
-            await imageRepo.CreateAsync(imageModel);
-
-            return CreatedAtAction(nameof(GetById), new { id = imageModel.ImageId }, imageModel.ToImageDto());
+                return CreatedAtAction(nameof(GetById), new { id = imageDtoResult.ImageId }, imageDtoResult);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // For validation issues (e.g., "Color does not exist!")
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPut]

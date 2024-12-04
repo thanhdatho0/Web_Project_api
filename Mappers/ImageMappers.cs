@@ -21,7 +21,6 @@ namespace api.Mappers
         {
             return new Image
             {
-                Url = imageDto.Url,
                 Alt = imageDto.Alt,
                 ProductId = imageDto.ProductId,
                 ColorId = imageDto.ColorId

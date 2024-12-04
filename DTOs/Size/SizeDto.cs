@@ -1,4 +1,3 @@
-using api.DTOs.ProductColor;
 
 namespace api.DTOs.Size
 {
