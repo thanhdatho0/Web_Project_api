@@ -206,7 +206,7 @@ public class AccountController(
         {
             var userToken = new IdentityUserToken<string>
             {
-                UserId = Guid.NewGuid().ToString(),
+                UserId = user.Id,
                 LoginProvider = "Identity",
                 Name = "AccessToken",
                 Value = tokenDto.AccessToken
