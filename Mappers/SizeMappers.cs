@@ -24,12 +24,9 @@ namespace api.Mappers
             };
         }
 
-        public static Size ToSizeFromUpdateDto(this SizeUpdateDto sizeDto)
+        public static void ToSizeFromUpdateDto(this Size size, SizeUpdateDto sizeDto)
         {
-            return new Size
-            {
-                SizeValue = sizeDto.SizeValue
-            };
+            size.SizeValue = sizeDto.SizeValue;
         }
     }
 }

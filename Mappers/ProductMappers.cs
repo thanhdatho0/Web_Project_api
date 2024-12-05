@@ -60,17 +60,14 @@ public static class ProductMappers
         };
     }
 
-    public static Product ToProductFromUpdateDto(this ProductUpdateDto productDto)
+    public static void ToProductFromUpdateDto(this Product product, ProductUpdateDto productDto)
     {
-        return new Product
-        {
-            Name = productDto.Name,
-            Description = productDto.Description,
-            Cost = productDto.Cost,
-            Price = productDto.Price,
-            Quantity = productDto.Quantity,
-            DiscountPercentage = productDto.DiscountPercentage,
-            UpdatedAt = DateTime.Now
-        };
+        product.Name = productDto.Name;
+        product.Description = productDto.Description;
+        product.Cost = productDto.Cost;
+        product.Price = productDto.Price;
+        product.Quantity = productDto.Quantity;
+        product.DiscountPercentage = productDto.DiscountPercentage;
+        product.UpdatedAt = DateTime.Now;
     }
 }

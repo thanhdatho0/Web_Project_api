@@ -2,6 +2,7 @@ using api.Data;
 using api.DTOs.Subcategory;
 using api.Helpers;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,8 +37,7 @@ namespace api.Repository
         {
             var subcategory = await context.Subcategories.FirstOrDefaultAsync(x => x.SubcategoryId == id);
             if (subcategory == null) return null;
-            subcategory.SubcategoryName = subcategoryUpdateDto.SubcategoryName;
-            subcategory.Description = subcategoryUpdateDto.Description;
+            subcategory.ToSubcategoryFromUpdateDto(subcategoryUpdateDto);
             await context.SaveChangesAsync();
             return subcategory;
         }

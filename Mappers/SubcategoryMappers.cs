@@ -27,13 +27,10 @@ namespace api.Mappers
             };
         }
 
-        public static Subcategory ToSubcategoryFromUpdateDto(this SubcategoryUpdateDto subcategoryDto)
+        public static void ToSubcategoryFromUpdateDto(this Subcategory subcategory, SubcategoryUpdateDto subcategoryDto)
         {
-            return new Subcategory
-            {
-                SubcategoryName = subcategoryDto.SubcategoryName,
-                Description = subcategoryDto.Description
-            };
+            subcategory.SubcategoryName = subcategoryDto.SubcategoryName;
+            subcategory.Description = subcategoryDto.Description;
         }
     }
 }

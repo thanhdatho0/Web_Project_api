@@ -131,16 +131,8 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         var product = await context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
         if (product == null)
             return null;
-
-        // product.Name = productUpdateDto.Name;
-        // product.Description = productUpdateDto.Description;
-        // product.Cost = productUpdateDto.Cost;
-        // product.Price = productUpdateDto.Price;
-        // product.InStock = productUpdateDto.InStock;
-        // product.DiscountPercentage = productUpdateDto.DiscountPercentage;
-        // product.UpdatedAt = DateTime.Now;
-        int latestQuantity = productUpdateDto.Quantity;
-        product = productUpdateDto.ToProductFromUpdateDto();
+        var latestQuantity = productUpdateDto.Quantity;
+        product.ToProductFromUpdateDto(productUpdateDto);
         product.InStock += (product.Quantity - latestQuantity);
         await context.SaveChangesAsync();
         return product;

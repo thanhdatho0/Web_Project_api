@@ -27,14 +27,11 @@ namespace api.Mappers
             };
         }
 
-        public static Provider ToProviderFromUpdateDto(this ProviderUpdateDto providerUpdateDto)
+        public static void ToProviderFromUpdateDto(this Provider provider, ProviderUpdateDto providerUpdateDto)
         {
-            return new Provider
-            {
-                ProviderEmail = providerUpdateDto.ProviderEmail,
-                ProviderCompanyName = providerUpdateDto.ProviderCompanyName,
-                ProviderPhone = providerUpdateDto.ProviderPhone
-            };
+            provider.ProviderEmail = providerUpdateDto.ProviderEmail;
+            provider.ProviderCompanyName = providerUpdateDto.ProviderCompanyName;
+            provider.ProviderPhone = providerUpdateDto.ProviderPhone;
         }
     }
 }

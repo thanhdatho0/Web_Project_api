@@ -37,13 +37,10 @@ namespace api.Mappers
         }
             
 
-        public static Image ToProductFromUpdateDto(this ImageUpdateDto imageDto)
+        public static void ToProductFromUpdateDto(this Image image, ImageUpdateDto imageDto)
         {
-            return new Image
-            {
-                Url = imageDto.Url,
-                Alt = imageDto.Alt,
-            };
+            image.Url = imageDto.Url;
+            image.Alt = imageDto.Alt;
         }
     }
 }

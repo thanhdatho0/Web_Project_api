@@ -27,14 +27,11 @@ namespace api.Mappers
             };
         }
 
-        public static TargetCustomer ToTargetCustomerFromUpdateDto(this TargetCustomerUpdateDto targetCusUpdateDto)
+        public static void ToTargetCustomerFromUpdateDto(this TargetCustomer targetCustomer, TargetCustomerUpdateDto targetCusUpdateDto)
         {
-            return new TargetCustomer
-            {
-                TargetCustomerName = targetCusUpdateDto.TargetCustomerName,
-                Url = targetCusUpdateDto.Url,
-                Alt = targetCusUpdateDto.Alt,
-            };
+            targetCustomer.TargetCustomerName = targetCusUpdateDto.TargetCustomerName;
+            targetCustomer.Url = targetCusUpdateDto.Url;
+            targetCustomer.Alt = targetCusUpdateDto.Alt;
         }
     }
 }

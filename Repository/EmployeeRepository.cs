@@ -30,7 +30,7 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
     {
         var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == id);
         if (employee == null) return null;
-        employee = employeeUpdateDto.ToEmployeeUpdate();
+        employee.ToEmployeeUpdate(employeeUpdateDto);
         await context.SaveChangesAsync();
         return employee;
     }

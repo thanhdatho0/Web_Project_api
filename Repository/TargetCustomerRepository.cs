@@ -2,6 +2,7 @@
 using api.Data;
 using api.DTOs.TargetCustomer;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,10 +46,8 @@ namespace api.Repository
             if (targetCustomer == null)
                 return null;
 
-            targetCustomer.TargetCustomerName = targetCustomerUpdateDto.TargetCustomerName;
-
+            targetCustomer.ToTargetCustomerFromUpdateDto(targetCustomerUpdateDto);
             await context.SaveChangesAsync();
-
             return targetCustomer;
         }
     }

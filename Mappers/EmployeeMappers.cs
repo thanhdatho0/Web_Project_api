@@ -33,17 +33,14 @@ public static class EmployeeMappers
         };
     }
 
-    public static Employee ToEmployeeUpdate(this EmployeeUpdateDto employee)
+    public static void ToEmployeeUpdate(this Employee employee, EmployeeUpdateDto employeeUpdateDto)
     {
-        return new Employee
-        {
-            FirstName = employee.FirstName!,
-            LastName = employee.LastName!,
-            PhoneNumber = employee.PhoneNumber!,
-            Salary = employee.Salary,
-            StartDate = employee.StartDate,
-            ContractUpTo = employee.ContractUpTo,
-            ParentPhoneNumber = employee.ParentPhoneNumber
-        };
+            employee.FirstName = employeeUpdateDto.FirstName!;
+            employee.LastName = employeeUpdateDto.LastName!;
+            employee.PhoneNumber = employeeUpdateDto.PhoneNumber!;
+            employee.Salary = employeeUpdateDto.Salary;
+            employee.StartDate = employeeUpdateDto.StartDate;
+            employee.ContractUpTo = employeeUpdateDto.ContractUpTo;
+            employee.ParentPhoneNumber = employeeUpdateDto.ParentPhoneNumber;
     }
 }

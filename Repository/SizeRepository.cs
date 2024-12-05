@@ -3,6 +3,7 @@ using api.Data;
 using Microsoft.EntityFrameworkCore;
 using api.DTOs.Size;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 
 namespace api.Repository
@@ -50,7 +51,7 @@ namespace api.Repository
             var size = await context.Sizes.FirstOrDefaultAsync(x => x.SizeId == id);
             if (size == null)
                 return null;
-            size.SizeValue = sizeUpdateDto.SizeValue;
+            size.ToSizeFromUpdateDto(sizeUpdateDto);
             await context.SaveChangesAsync();
             return size;
         }

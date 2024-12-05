@@ -2,6 +2,7 @@
 using api.Data;
 using api.DTOs.Providerr;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,9 +46,7 @@ namespace api.Repository
         {
             var provider = await context.Providers.FirstOrDefaultAsync(x => x.ProviderId == id);
             if (provider == null) return null;
-            provider.ProviderCompanyName = providerUpdateDto.ProviderCompanyName;
-            provider.ProviderEmail = providerUpdateDto.ProviderEmail;
-            provider.ProviderPhone = providerUpdateDto.ProviderPhone;
+            provider.ToProviderFromUpdateDto(providerUpdateDto);
             await context.SaveChangesAsync();
             return provider;
         }
