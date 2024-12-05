@@ -43,7 +43,7 @@ namespace api.Repository
         {
             var color = await context.Colors.FirstOrDefaultAsync(c => c.ColorId == id);
             if (color == null) return null;
-            color = colorUpdateDto.ToColorFromUpdateDto();
+            color.ToColorFromUpdateDto(colorUpdateDto);
             await context.SaveChangesAsync();
             return color;
         }

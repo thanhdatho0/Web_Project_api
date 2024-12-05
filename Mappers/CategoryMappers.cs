@@ -26,12 +26,9 @@ namespace api.Mappers
             };
         }
 
-        public static Category ToCategoryFromUpdateDto(this CategoryUpdateDto categoryDto)
+        public static void ToCategoryFromUpdateDto(this Category category, CategoryUpdateDto categoryDto)
         {
-            return new Category
-            {
-                Name = categoryDto.Name,
-            };
+            category.Name = categoryDto.Name;
         }
     }
 }

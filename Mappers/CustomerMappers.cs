@@ -34,17 +34,14 @@ public static class CustomerMappers
         };
     }
 
-    public static Customer ToCustomerUpdateDto(this CustomerUpdateDto customerUpdateDto)
+    public static void ToCustomerUpdateDto(this Customer customer, CustomerUpdateDto customerUpdateDto)
     {
-        return new Customer
-        {
-            FirstName = customerUpdateDto.FirstName,
-            LastName = customerUpdateDto.LastName,
-            Male = customerUpdateDto.Male,
-            PhoneNumber = customerUpdateDto.PhoneNumber,
-            Address = customerUpdateDto.Address,
-            DateOfBirth = customerUpdateDto.DateOfBirth,
-            Email = customerUpdateDto.Email,
-        };
+        customer.FirstName = customerUpdateDto.FirstName;
+        customer.LastName = customerUpdateDto.LastName;
+        customer.Male = customerUpdateDto.Male;
+        customer.PhoneNumber = customerUpdateDto.PhoneNumber;
+        customer.Address = customerUpdateDto.Address;
+        customer.DateOfBirth = customerUpdateDto.DateOfBirth;
+        customer.Email = customerUpdateDto.Email;
     }
 }

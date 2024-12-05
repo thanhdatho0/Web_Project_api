@@ -31,13 +31,7 @@ public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepos
         var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
         if (customer == null) return null;
 
-        customer.FirstName = customerUpdateDto.FirstName;
-        customer.LastName = customerUpdateDto.LastName;
-        customer.Male = customerUpdateDto.Male;
-        customer.PhoneNumber = customerUpdateDto.PhoneNumber;
-        customer.Address = customerUpdateDto.Address;
-        customer.DateOfBirth = customerUpdateDto.DateOfBirth;
-        customer.Email = customerUpdateDto.Email;
+        customer.ToCustomerUpdateDto(customerUpdateDto);
         await dbContext.SaveChangesAsync();
         return customer;
     }

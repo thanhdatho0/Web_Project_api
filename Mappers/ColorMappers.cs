@@ -24,14 +24,10 @@ namespace api.Mappers
                 Name = colorCreateDto.Name
             };
         }
-        public static Color ToColorFromUpdateDto(this ColorUpdateDto colorUpdateDto)
+        public static void ToColorFromUpdateDto(this Color color, ColorUpdateDto colorUpdateDto)
         {
-            return new Color
-            {
-                HexaCode = colorUpdateDto.HexaCode,
-                Name = colorUpdateDto.Name
-            };
-
+            color.HexaCode = colorUpdateDto.HexaCode;
+            color.Name = colorUpdateDto.Name;
         }
 
         
