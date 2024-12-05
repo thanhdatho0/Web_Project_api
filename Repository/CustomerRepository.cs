@@ -9,14 +9,14 @@ namespace api.Repository;
 
 public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepository
 {
-    public async Task<List<Customer>> GetAllAsync()
+    public Task<List<Customer>> GetAllAsync()
     {
-        return await dbContext.Customers.ToListAsync();
+        return dbContext.Customers.AsNoTracking().ToListAsync();
     }
 
     public async Task<Customer?> GetByIdAsync(int id)
     {
-        return await dbContext.Customers.FindAsync(id) ?? null;
+        return await dbContext.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == id) ?? null;
     }
 
     public async Task<Customer?> CreateAsync(Customer customer)

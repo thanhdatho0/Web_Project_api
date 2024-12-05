@@ -11,112 +11,101 @@ namespace api.Repository;
 public class ProductRepository(ApplicationDbContext context) : IProductRepository
 {
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
+{
+    // Bắt đầu truy vấn với IQueryable để tận dụng EF Core
+    var products = context.Products
+        .Include(p => p.Subcategory)
+            .ThenInclude(s => s!.Category)
+        .Include(p => p.Inventories)
+            .ThenInclude(pc => pc.Color)
+            .ThenInclude(c => c!.Images)
+        .Include(p => p.Inventories)
+            .ThenInclude(pz => pz.Size)
+        .AsQueryable();
+
+    // Áp dụng bộ lọc cho TargetCustomerId, CategoryId, và SubcategoryId
+    if (query.TargetCustomerId is not null)
+        products = products.Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId);
+
+    if (query.CategoryId is not null)
+        products = products.Where(p => p.Subcategory!.CategoryId == query.CategoryId);
+
+    if (query.SubcategoryId is not null)
+        products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
+
+    // Lọc theo ColorId
+    if (!string.IsNullOrEmpty(query.ColorId))
     {
-        var products = context.Products.Include(p => p.Subcategory)
-                                .ThenInclude(s => s!.Category)
-                                .Include(p => p.Inventories)
-                                .ThenInclude(pz => pz.Size).Distinct()
-                                .Include(p => p.Inventories)
-                                .ThenInclude(pc => pc.Color)
-                                .ThenInclude(c => c!.Images).AsQueryable();
+        var colorIds = query.ColorId.Split(',')
+                                    .Select(int.Parse)
+                                    .ToList();
 
-        switch (query)
-        {
-            case { TargetCustomerId: not null, CategoryId: not null, SubcategoryId: not null }:
-                products = products
-                    .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId 
-                                && p.Subcategory!.CategoryId == query.CategoryId
-                                && p.SubcategoryId == query.SubcategoryId);
-                break;
-            case { TargetCustomerId: not null, CategoryId: not null }:
-                products = products
-                    .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId 
-                                && p.Subcategory!.CategoryId == query.CategoryId);
-                break;
-            case { TargetCustomerId: not null}:
-                products = products
-                    .Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId);
-                break;
-            case {CategoryId: not null}:
-                products = products
-                    .Where(p => p.Subcategory!.CategoryId == query.CategoryId);
-                break;
-            case {SubcategoryId: not null}:
-                products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
-                break;
-        };
-
-        if (!string.IsNullOrEmpty(query.ColorId))
-        {
-            var colorIds = query.ColorId.Split(',')
-                                        .Select(id => int.Parse(id))
-                                        .ToList();
-
-            products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.ColorId)));
-        }
-
-        if (!string.IsNullOrEmpty(query.SizeId))
-        {
-            var colorIds = query.SizeId.Split(',')
-                                        .Select(id => int.Parse(id))
-                                        .ToList();
-
-            products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.SizeId)));
-        }
-
-        if (!string.IsNullOrEmpty(query.Price))
-        {
-            var priceRanges = query.Price.Split(',');
-            foreach (var priceRange in priceRanges)
-            {
-                if (priceRange == "duoi-350")
-                {
-                    products = products.Where(p => p.Price < 350000);
-                }
-                if (priceRange == "350-750")
-                {
-                    products = products.Where(p => p.Price >= 350000 && p.Price <= 750000);
-                }
-                if (priceRange == "tren-750")
-                {
-                    products = products.Where(p => p.Price > 750000);
-                }
-            }
-        }
-
-        if (!String.IsNullOrEmpty(query.SortBy))
-        {
-            products = query.SortBy switch
-            {
-                "date" => products.OrderByDescending(p => p.UpdatedAt),
-                "low" => products.OrderBy(p => p.Price),
-                "hight" => products.OrderByDescending(p => p.Price),
-                "trend" => products
-                    .Include(p => p.Inventories)
-                    .ThenInclude(i => i.OrderDetails)
-                    .AsQueryable()
-                    .OrderByDescending(p => p.Inventories
-                        .SelectMany(i => i.OrderDetails)
-                        .Sum(od => od.Amount)),
-                _ => products.OrderByDescending(p => p.CreatedAt)
-            };
-
-        }
-
-        var skipNumber = (query.PageNumber - 1) * query.PageSize;
-
-        return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
+        products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.ColorId)));
     }
+
+    // Lọc theo SizeId
+    if (!string.IsNullOrEmpty(query.SizeId))
+    {
+        var sizeIds = query.SizeId.Split(',')
+                                  .Select(int.Parse)
+                                  .ToList();
+
+        products = products.Where(p => p.Inventories.Any(pc => sizeIds.Contains(pc.SizeId)));
+    }
+
+    // Lọc theo Price
+    if (!string.IsNullOrEmpty(query.Price))
+    {
+        var priceRanges = query.Price.Split(',');
+
+        products = priceRanges.Aggregate(products, (current, priceRange) => priceRange switch
+        {
+            "duoi-350" => current.Where(p => p.Price < 350000),
+            "350-750" => current.Where(p => p.Price >= 350000 && p.Price <= 750000),
+            "tren-750" => current.Where(p => p.Price > 750000),
+            _ => current
+        });
+    }
+
+    // Sắp xếp
+    if (!string.IsNullOrEmpty(query.SortBy))
+    {
+        products = query.SortBy switch
+        {
+            "date" => products.OrderByDescending(p => p.UpdatedAt),
+            "low" => products.OrderBy(p => p.Price),
+            "high" => products.OrderByDescending(p => p.Price),
+            "trend" => products
+                .Include(p => p.Inventories)
+                .ThenInclude(i => i.OrderDetails)
+                .OrderByDescending(p => p.Inventories
+                    .SelectMany(i => i.OrderDetails)
+                    .Sum(od => od.Amount)),
+            _ => products.OrderByDescending(p => p.CreatedAt)
+        };
+    }
+
+    // Phân trang
+    var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+    // Truy vấn dữ liệu từ cơ sở dữ liệu
+    return await products
+        .Skip(skipNumber)
+        .Take(query.PageSize)
+        .ToListAsync();
+}
 
     public async Task<Product?> GetByIdAsync(int id)
     {
-        return await context.Products.Include(p => p.Subcategory)
-                            .Include(p => p.Inventories)
-                            .ThenInclude(pz => pz.Size)
-                            .Include(p => p.Inventories)
-                            .ThenInclude(pc => pc.Color)
-                            .ThenInclude(c => c!.Images)
-                            .FirstOrDefaultAsync(p => p.ProductId == id);
+        return await context.Products
+            .AsNoTracking()
+            .Include(p => p.Subcategory)
+            .Include(p => p.Inventories)
+                .ThenInclude(pz => pz.Size)
+            .Include(p => p.Inventories)
+                .ThenInclude(pc => pc.Color)
+                .ThenInclude(c => c!.Images)
+            .FirstOrDefaultAsync(p => p.ProductId == id);
     }
 
     public async Task<Product> CreateAsync(Product productModel)

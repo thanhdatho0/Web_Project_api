@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using api.DTOs.Size;
 using api.Interfaces;
 using api.Mappers;
@@ -18,10 +19,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var sizes = await sizeRepo.GetAllAsync();
-
-            var sizesDto = sizes.Select(c => c.ToSizeDto());
-
-            return Ok(sizesDto);
+            return Ok(sizes);
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)

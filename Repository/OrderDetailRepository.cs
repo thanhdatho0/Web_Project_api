@@ -12,10 +12,10 @@ public class OrderDetailRepository(ApplicationDbContext dbContext) : IOrderDetai
         var orderDetails = 
             dbContext.OrderDetails
                 .Include(o => o.Order)
-                .Include(o => o.Inventory!.Product)
+                .Include(o => o.Inventory)
                 .Include(o => o.Inventory!.Size)
                 .Include(o => o.Inventory!.Color);
-        return await orderDetails.ToListAsync();
+        return await orderDetails.AsNoTracking().ToListAsync();
     }
 
     public async Task<OrderDetail?> GetByIdAsync(int id)

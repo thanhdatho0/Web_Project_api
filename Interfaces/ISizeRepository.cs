@@ -9,7 +9,7 @@ namespace api.Interfaces
 {
     public interface ISizeRepository
     {
-        Task<List<Size>> GetAllAsync();
+        Task<List<SizeDto>> GetAllAsync();
         Task<Size?> GetByIdAsync(int id);
         Task<Size> CreateAsync(Size size);
         Task<Size?> UpdateAsync(int id, SizeUpdateDto sizeUpdateDto);

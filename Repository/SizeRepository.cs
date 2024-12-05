@@ -31,9 +31,9 @@ namespace api.Repository
             return size;
         }
 
-        public async Task<List<Size>> GetAllAsync()
+        public async Task<List<SizeDto>> GetAllAsync()
         {
-            return await context.Sizes.ToListAsync();
+            return await context.Sizes.Select(s => s.ToSizeDto()).ToListAsync();
         }
 
         public async Task<Size?> GetByIdAsync(int id)

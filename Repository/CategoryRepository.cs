@@ -24,7 +24,7 @@ namespace api.Repository
 
         public async Task<List<Category>?> GetAllAsync(QueryOject query)
         {
-            var categories = context.Categories.Include(c => c.Subcategories).AsQueryable();
+            var categories = context.Categories.Include(c => c.Subcategories).AsNoTracking();
 
             if (!string.IsNullOrEmpty(query.Name))
                 categories = categories.Where(c => c.Name == query.Name);
@@ -34,7 +34,7 @@ namespace api.Repository
 
         public async Task<Category?> GetByIdAsync(int id)
         {
-            return await context.Categories.Include(c => c.Subcategories).FirstOrDefaultAsync(c => c.CategoryId == id);
+            return await context.Categories.AsNoTracking().Include(c => c.Subcategories).FirstOrDefaultAsync(c => c.CategoryId == id);
         }
 
         public async Task<Category?> UpdateAsync(int id, CategoryUpdateDto categoryUpdateDto)

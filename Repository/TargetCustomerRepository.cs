@@ -12,7 +12,7 @@ namespace api.Repository
     {
         public async Task<TargetCustomer> CreateAsync(TargetCustomer targetCustomer)
         {
-            await context.TargetCustomers.AddAsync(targetCustomer);
+            context.TargetCustomers.Add(targetCustomer);
             await context.SaveChangesAsync();
             return targetCustomer;
         }

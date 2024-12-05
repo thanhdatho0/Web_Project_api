@@ -31,12 +31,12 @@ namespace api.Repository
 
         public async Task<List<Color>?> GetAllAsync()
         {
-            return await context.Colors.Include(c => c.Images).ToListAsync();
+            return await context.Colors.AsNoTracking().Include(c => c.Images).ToListAsync();
         }
 
         public async Task<Color?> GetByIdAsync(int id)
         {
-            return await context.Colors.FindAsync(id);
+            return await context.Colors.AsNoTracking().FirstOrDefaultAsync(c => c.ColorId == id);
         }
 
         public async Task<Color?> UpdateAsync(int id, ColorUpdateDto colorUpdateDto)
