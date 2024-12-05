@@ -1,6 +1,7 @@
 using api.Data;
 using api.DTOs.Customer;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,10 +26,21 @@ public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepos
         return customer;
     }
 
-    // public async Task<Customer?> UpdateAsync(int id, CustomerUpdateDto customerUpdateDto)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    public async Task<Customer?> UpdateAsync(int id, CustomerUpdateDto customerUpdateDto)
+    {
+        var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+        if (customer == null) return null;
+
+        customer.FirstName = customerUpdateDto.FirstName;
+        customer.LastName = customerUpdateDto.LastName;
+        customer.Male = customerUpdateDto.Male;
+        customer.PhoneNumber = customerUpdateDto.PhoneNumber;
+        customer.Address = customerUpdateDto.Address;
+        customer.DateOfBirth = customerUpdateDto.DateOfBirth;
+        customer.Email = customerUpdateDto.Email;
+        await dbContext.SaveChangesAsync();
+        return customer;
+    }
     //
     // public async Task<Customer?> DeleteAsync(int id)
     // {

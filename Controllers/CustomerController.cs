@@ -1,3 +1,4 @@
+using api.DTOs.Customer;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -13,5 +14,15 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
     {
         var customers = await customerRepository.GetAllAsync();
         return Ok(customers.Select(c => c.ToCustomerDto()));
+    }
+
+    [HttpPut]
+    [Route("{id}")]
+    public async Task<ActionResult> Update([FromRoute] int id,[FromBody] CustomerUpdateDto customerUpdateDto)
+    {
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        
+        var customer = await customerRepository.UpdateAsync(id, customerUpdateDto);
+        return customer != null ? Ok(customer.ToCustomerDto()) : NotFound();
     }
 }

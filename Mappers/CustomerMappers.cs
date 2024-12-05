@@ -36,6 +36,15 @@ public static class CustomerMappers
 
     public static Customer ToCustomerUpdateDto(this CustomerUpdateDto customerUpdateDto)
     {
-        return new Customer();
+        return new Customer
+        {
+            FirstName = customerUpdateDto.FirstName,
+            LastName = customerUpdateDto.LastName,
+            Male = customerUpdateDto.Male,
+            PhoneNumber = customerUpdateDto.PhoneNumber,
+            Address = customerUpdateDto.Address,
+            DateOfBirth = customerUpdateDto.DateOfBirth,
+            Email = customerUpdateDto.Email,
+        };
     }
 }
