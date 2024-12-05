@@ -146,4 +146,9 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         return context.Products.AnyAsync(p => p.ProductId == id);
 
     }
+
+    public async Task<bool> ProductNameExists(string name)
+    {
+        return await context.Products.AnyAsync(p => p.Name == name);
+    }
 }

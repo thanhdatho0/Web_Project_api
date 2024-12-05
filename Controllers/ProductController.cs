@@ -52,11 +52,20 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await subcategoryRepo.SubcategoryExists(productDto.SubcategoryId))
+            var isSubCategoryExists = subcategoryRepo.SubcategoryExists(productDto.SubcategoryId);
+            var isProviderExists = providerRepo.ProviderExists(productDto.ProviderId);
+            var isProductExists = productRepo.ProductNameExists(productDto.Name);
+            
+            await Task.WhenAll(isSubCategoryExists, isProviderExists, isProductExists);
+            
+            if (!isSubCategoryExists.Result)
                 return BadRequest("Subcategory does not exist!");
 
-            if (!await providerRepo.ProviderExists(productDto.ProviderId))
+            if (!isProviderExists.Result)
                 return BadRequest("Provider does not exists!");
+            
+            if(isProductExists.Result)
+               return BadRequest("Product already exists!"); 
 
             var productModel = productDto.ToProductFromCreateDto();
             productModel.Quantity = productDto.Inventory.Select(p => p.Quantity).Sum();

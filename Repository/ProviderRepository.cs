@@ -42,6 +42,11 @@ namespace api.Repository
             return context.Providers.AnyAsync(p => p.ProviderId == id);
         }
 
+        public async Task<bool> ProviderNameExists(string name)
+        {
+            return await context.Providers.AnyAsync(p => p.ProviderCompanyName == name);
+        }
+
         public async Task<Provider?> UpdateAsync(int id, ProviderUpdateDto providerUpdateDto)
         {
             var provider = await context.Providers.FirstOrDefaultAsync(x => x.ProviderId == id);

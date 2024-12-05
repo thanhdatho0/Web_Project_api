@@ -36,6 +36,9 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            if(await colorRepo.ColorNameExists(colorCreateDto.HexaCode, colorCreateDto.Name))
+                return BadRequest("Color already exists");
 
             var color = colorCreateDto.ToColorFromCreateDto();
             try

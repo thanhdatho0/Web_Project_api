@@ -11,5 +11,6 @@ namespace api.Interfaces
         Task<TargetCustomer?> UpdateAsync(int id, TargetCustomerUpdateDto targetCustomerUpdateDto);
         // Task<TargetCustomer?> DeleteAsync(int id);
         Task<bool> TargetCustomerExists(int id);
+        Task<bool> TargetCustomerNameExists(string targetCustomerName);
     }
 }

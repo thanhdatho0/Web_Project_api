@@ -14,6 +14,11 @@ namespace api.Repository
             return context.Colors.AnyAsync(c => c.ColorId == id);
         }
 
+        public async Task<bool> ColorNameExists(string hexaCode, string name)
+        {
+            return await context.Colors.AnyAsync(c => c.Name == name) || await context.Colors.AnyAsync(c => c.HexaCode == hexaCode);
+        }
+
         public async Task<Color> CreateAsync(Color color)
         {
             await context.Colors.AddAsync(color);

@@ -15,6 +15,11 @@ namespace api.Repository
             return context.Categories.AnyAsync(c => c.CategoryId == id);
         }
 
+        public async Task<bool> CategoryNameExists(string name)
+        {
+            return await context.Categories.AnyAsync(c => c.Name == name);
+        }
+
         public async Task<Category> CreateAsync(Category category)
         {
             await context.Categories.AddAsync(category);

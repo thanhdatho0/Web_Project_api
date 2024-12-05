@@ -12,6 +12,6 @@ namespace api.Interfaces
         Task<Color?> UpdateAsync(int id, ColorUpdateDto colorUpdateDto);
         Task<Color?> DeleteAsync(int id);
         Task<bool> ColorExists(int id);
-
+        Task<bool> ColorNameExists(string hexaCode, string name);
     }
 }

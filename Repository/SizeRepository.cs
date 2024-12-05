@@ -31,6 +31,11 @@ namespace api.Repository
             return size;
         }
 
+        public async Task<bool> SizeNameExists(string name)
+        {
+            return await context.Sizes.AnyAsync(x => x.SizeValue == name);
+        }
+
         public async Task<List<SizeDto>> GetAllAsync()
         {
             return await context.Sizes.Select(s => s.ToSizeDto()).ToListAsync();

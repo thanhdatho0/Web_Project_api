@@ -43,8 +43,10 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var gender = genderDto.ToTargetCustomerFromCreateDto();
+            if (await targetCustomerRepo.TargetCustomerNameExists(genderDto.TargetCustomerName))
+                return BadRequest("Target customer name already exists");
 
+            var gender = genderDto.ToTargetCustomerFromCreateDto();
             await targetCustomerRepo.CreateAsync(gender);
 
             return CreatedAtAction(nameof(GetById), new { id = gender.TargetCustomerId }, gender.ToTargetCustomerDto());

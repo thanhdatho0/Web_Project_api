@@ -11,5 +11,6 @@ namespace api.Interfaces
         Task<Provider?> UpdateAsync(int id, ProviderUpdateDto providerUpdateDto);
         Task<Provider?> DeleteAsync(int id);
         Task<bool> ProviderExists(int id);
+        Task<bool> ProviderNameExists(string name);
     }
 }

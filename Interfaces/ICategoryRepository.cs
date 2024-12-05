@@ -13,6 +13,7 @@ namespace api.Interfaces
         Task<Category?> UpdateAsync(int id, CategoryUpdateDto categoryUpdateDto);
         // Task<Category?> DeleteAsync(int id);
         Task<bool> CategoryExists(int id);
+        Task<bool> CategoryNameExists(string name);
         // Task<bool> CategoryName(string name);
     }
 }

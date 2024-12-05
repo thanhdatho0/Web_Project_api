@@ -27,6 +27,11 @@ namespace api.Repository
             return context.TargetCustomers.AnyAsync(g => g.TargetCustomerId == id);
         }
 
+        public async Task<bool> TargetCustomerNameExists(string targetCustomerName)
+        {
+            return await context.TargetCustomers.AnyAsync(g => g.TargetCustomerName == targetCustomerName);
+        }
+
         public async Task<List<TargetCustomer>> GetAllAsync()
         {
             return await context.TargetCustomers

@@ -40,6 +40,9 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            if(await sizeRepo.SizeNameExists(sizeCreateDto.SizeValue))
+                return BadRequest("Size already exists");
 
             var size = sizeCreateDto.ToSizeFromCreateDto();
 
