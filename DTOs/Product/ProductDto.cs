@@ -19,6 +19,6 @@ public class ProductDto
     public DateTime UpdatedAt { get; set; }
     public int SubcategoryId { get; set; }
     public int ProviderId { get; set; }
-    public List<SizeDto>? Sizes { get; set; }
-    public List<ColorDto>? Colors { get; set; }
+    public HashSet<SizeDto>? Sizes { get; set; }
+    public HashSet<ColorDto>? Colors { get; set; }
 }

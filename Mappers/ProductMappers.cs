@@ -25,13 +25,13 @@ public static class ProductMappers
             UpdatedAt = productModel.UpdatedAt,
             SubcategoryId = productModel.SubcategoryId,
             ProviderId = productModel.ProviderId,
-
+            
             Sizes = productModel.Inventories.Where(pz => pz.ProductId == productModel.ProductId)
             .Select(pz => new SizeDto
             {
                 SizeId = pz.SizeId,
                 SizeValue = pz.Size!.SizeValue,
-            }).ToList(),
+            }).ToHashSet(),
             
 
             Colors = productModel.Inventories.Where(pc => pc.ProductId == productModel.ProductId)
@@ -42,8 +42,7 @@ public static class ProductMappers
                 HexaCode = pc.Color.HexaCode,
                 Images = pc.Color.Images?.Where(i => i.ProductId == productModel.ProductId)
                 .Select(i => i.ToImageDto()).ToList()
-            }).ToList()
-
+            }).ToHashSet()
         };
     }
     public static Product ToProductFromCreateDto(this ProductCreateDto productDto)
