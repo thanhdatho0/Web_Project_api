@@ -22,9 +22,9 @@ namespace api.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> TargetCustomerExists(int id)
+        public async Task<bool> TargetCustomerExists(int id)
         {
-            return context.TargetCustomers.AnyAsync(g => g.TargetCustomerId == id);
+            return await context.TargetCustomers.AnyAsync(g => g.TargetCustomerId == id);
         }
 
         public async Task<bool> TargetCustomerNameExists(string targetCustomerName)

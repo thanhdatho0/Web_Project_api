@@ -174,8 +174,8 @@ namespace api.Data
             ];
 
             modelBuilder.Entity<IdentityRole>().HasData(roles);
-            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(ul => new { ul.UserId, ul.LoginProvider });
-            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ut => new { ut.UserId });
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(ul => new { ul.UserId, ul.LoginProvider, ul.ProviderKey });
+            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ut => new { ut.UserId, ut.LoginProvider, ut.Name });
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ur => new { ur.UserId, ur.RoleId });
         }
     }

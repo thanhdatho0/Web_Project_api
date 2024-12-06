@@ -50,10 +50,6 @@ namespace api.Controllers
 
                 return CreatedAtAction(nameof(GetById), new { id = imageDtoResult.ImageId }, imageDtoResult);
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message); // For validation issues (e.g., "Color does not exist!")
-            }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred: {ex.Message}");

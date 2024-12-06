@@ -15,7 +15,8 @@ public class AccountController(
     SignInManager<AppUser> signInManager,
     RoleManager<IdentityRole> roleManager,
     IEmployeeRepository employeeRepository,
-    ICustomerRepository customerRepository)
+    ICustomerRepository customerRepository,
+    IAccountService accountService)
     : ControllerBase
 {
     [HttpPost("admin-register")]
@@ -202,22 +203,28 @@ public class AccountController(
 
         if (!result.Succeeded) return Unauthorized("Username or password is incorrect!");
         var tokenDto = await tokenService.CreateToken(user, true);
-        if(!await tokenService.HasLoginBefore(user.Id))
-        {
-            var userToken = new IdentityUserToken<string>
-            {
-                UserId = user.Id,
-                LoginProvider = "Identity",
-                Name = "AccessToken",
-                Value = tokenDto.AccessToken
-            };
-            await tokenService.AddTokenToUser(userToken);
-        }
+        
+        
         return Ok(new NewUserDto
         {
             Username = user.UserName!,
             Email = user.Email!,
             Token = tokenDto.AccessToken
         });
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<ActionResult> ResetPassword([FromBody] PasswordForgotAccountDto resetPasswordDto)
+    {
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        try
+        {
+            await accountService.ResetPassword(resetPasswordDto);
+            return Ok("Reset Password Successfully");
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, $"An error occured: {e.Message}");
+        }
     }
 }

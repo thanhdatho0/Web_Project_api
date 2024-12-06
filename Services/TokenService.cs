@@ -64,6 +64,12 @@ public class TokenService : ITokenService
         
         await _userManager.UpdateAsync(user);
         var accessToken = tokenHandler.WriteToken(token);
+        
+        var existingToken = await _userManager.GetAuthenticationTokenAsync(user, "Default", "RefreshToken");
+        if(string.IsNullOrEmpty(existingToken))
+        {
+            await _userManager.SetAuthenticationTokenAsync(user, "Default", "RefreshToken", user.RefreshToken);
+        }
         return new TokenDto
         {
             RefreshToken = refreshToken,
@@ -71,21 +77,8 @@ public class TokenService : ITokenService
         };
     }
 
-    public async Task<string?> AddTokenToUser(IdentityUserToken<string> user)
-    {
-        await _context.UserTokens.AddAsync(user);
-        await _context.SaveChangesAsync();
-        return Convert.ToString(user) ?? null;
-    }
-
-    public async Task<bool> HasLoginBefore(string id)
-    {
-        return await _context.UserTokens.AnyAsync(c => c.UserId == id);
-    }
-
     public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
     {
-        Console.WriteLine(tokenDto.AccessToken);
         var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
         var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
         if (user is null ||
@@ -135,6 +128,4 @@ public class TokenService : ITokenService
         }
         return principal;
     }
-    
-    
 }

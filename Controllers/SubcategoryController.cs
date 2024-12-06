@@ -47,15 +47,13 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             // Chạy các kiểm tra song song
-            var categoryExistsTask = categoryRepo.CategoryExists(subcategoryDto.CategoryId);
-            var subcategoryNameExistsTask = subcategoryRepo.SubcategoryName(subcategoryDto.SubcategoryName);
+            var categoryExistsTask = await categoryRepo.CategoryExists(subcategoryDto.CategoryId);
+            var subcategoryNameExistsTask = await subcategoryRepo.SubcategoryName(subcategoryDto.SubcategoryName);
 
-            await Task.WhenAll(categoryExistsTask, subcategoryNameExistsTask);
-
-            if (!categoryExistsTask.Result)
+            if (!categoryExistsTask)
                 return BadRequest("Category does not exist!");
 
-            if (subcategoryNameExistsTask.Result)
+            if (subcategoryNameExistsTask)
                 return BadRequest("Subcategory name has already been taken!");
 
             var subcategory = subcategoryDto.ToSubcategoryFromCreateDto();

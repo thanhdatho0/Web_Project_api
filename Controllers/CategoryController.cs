@@ -38,14 +38,12 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var targetCusterExists = targetCustomerRepo.TargetCustomerExists(categoryDto.TargetCustomerId);
-            var categoryNameExists = categoryRepo.CategoryNameExists(categoryDto.Name);
+            var targetCusterExists = await targetCustomerRepo.TargetCustomerExists(categoryDto.TargetCustomerId);
+            var categoryNameExists = await categoryRepo.CategoryNameExists(categoryDto.Name);
             
-            await Task.WhenAll(targetCusterExists, categoryNameExists);
-            
-            if (!targetCusterExists.Result)
+            if (!targetCusterExists)
                 return BadRequest("TargetCustomer does not exist!");
-            if(categoryNameExists.Result)
+            if(categoryNameExists)
                 return BadRequest("Category name has been taken!");
             
             var category = categoryDto.ToCategoryFromCreateDto();

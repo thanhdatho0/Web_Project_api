@@ -52,19 +52,17 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isSubCategoryExists = subcategoryRepo.SubcategoryExists(productDto.SubcategoryId);
-            var isProviderExists = providerRepo.ProviderExists(productDto.ProviderId);
-            var isProductExists = productRepo.ProductNameExists(productDto.Name);
+            var isSubCategoryExists = await subcategoryRepo.SubcategoryExists(productDto.SubcategoryId);
+            var isProviderExists = await providerRepo.ProviderExists(productDto.ProviderId);
+            var isProductExists = await productRepo.ProductNameExists(productDto.Name);
             
-            await Task.WhenAll(isSubCategoryExists, isProviderExists, isProductExists);
-            
-            if (!isSubCategoryExists.Result)
+            if (!isSubCategoryExists)
                 return BadRequest("Subcategory does not exist!");
 
-            if (!isProviderExists.Result)
+            if (!isProviderExists)
                 return BadRequest("Provider does not exists!");
             
-            if(isProductExists.Result)
+            if(isProductExists)
                return BadRequest("Product already exists!"); 
 
             var productModel = productDto.ToProductFromCreateDto();
