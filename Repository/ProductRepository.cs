@@ -11,89 +11,89 @@ namespace api.Repository;
 public class ProductRepository(ApplicationDbContext context) : IProductRepository
 {
     public async Task<List<Product>> GetAllAsync(ProductQuery query)
-{
-    // Bắt đầu truy vấn với IQueryable để tận dụng EF Core
-    var products = context.Products
-        .Include(p => p.Subcategory)
-            .ThenInclude(s => s!.Category)
-        .Include(p => p.Inventories)
-            .ThenInclude(pc => pc.Color)
-            .ThenInclude(c => c!.Images)
-        .Include(p => p.Inventories)
-            .ThenInclude(pz => pz.Size)
-        .AsQueryable();
-
-    // Áp dụng bộ lọc cho TargetCustomerId, CategoryId, và SubcategoryId
-    if (query.TargetCustomerId is not null)
-        products = products.Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId);
-
-    if (query.CategoryId is not null)
-        products = products.Where(p => p.Subcategory!.CategoryId == query.CategoryId);
-
-    if (query.SubcategoryId is not null)
-        products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
-
-    // Lọc theo ColorId
-    if (!string.IsNullOrEmpty(query.ColorId))
     {
-        var colorIds = query.ColorId.Split(',')
-                                    .Select(int.Parse)
-                                    .ToList();
+        // Bắt đầu truy vấn với IQueryable để tận dụng EF Core
+        var products = context.Products
+            .Include(p => p.Subcategory)
+                .ThenInclude(s => s!.Category)
+            .Include(p => p.Inventories)
+                .ThenInclude(pc => pc.Color)
+                .ThenInclude(c => c!.Images)
+            .Include(p => p.Inventories)
+                .ThenInclude(pz => pz.Size)
+            .AsQueryable();
 
-        products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.ColorId)));
-    }
+        // Áp dụng bộ lọc cho TargetCustomerId, CategoryId, và SubcategoryId
+        if (query.TargetCustomerId is not null)
+            products = products.Where(p => p.Subcategory!.Category!.TargetCustomerId == query.TargetCustomerId);
 
-    // Lọc theo SizeId
-    if (!string.IsNullOrEmpty(query.SizeId))
-    {
-        var sizeIds = query.SizeId.Split(',')
-                                  .Select(int.Parse)
-                                  .ToList();
+        if (query.CategoryId is not null)
+            products = products.Where(p => p.Subcategory!.CategoryId == query.CategoryId);
 
-        products = products.Where(p => p.Inventories.Any(pc => sizeIds.Contains(pc.SizeId)));
-    }
+        if (query.SubcategoryId is not null)
+            products = products.Where(p => p.SubcategoryId == query.SubcategoryId);
 
-    // Lọc theo Price
-    if (!string.IsNullOrEmpty(query.Price))
-    {
-        var priceRanges = query.Price.Split(',');
-
-        products = priceRanges.Aggregate(products, (current, priceRange) => priceRange switch
+        // Lọc theo ColorId
+        if (!string.IsNullOrEmpty(query.ColorId))
         {
-            "duoi-350" => current.Where(p => p.Price < 350000),
-            "350-750" => current.Where(p => p.Price >= 350000 && p.Price <= 750000),
-            "tren-750" => current.Where(p => p.Price > 750000),
-            _ => current
-        });
-    }
+            var colorIds = query.ColorId.Split(',')
+                                        .Select(int.Parse)
+                                        .ToList();
 
-    // Sắp xếp
-    if (!string.IsNullOrEmpty(query.SortBy))
-    {
-        products = query.SortBy switch
+            products = products.Where(p => p.Inventories.Any(pc => colorIds.Contains(pc.ColorId)));
+        }
+
+        // Lọc theo SizeId
+        if (!string.IsNullOrEmpty(query.SizeId))
         {
-            "date" => products.OrderByDescending(p => p.UpdatedAt),
-            "low" => products.OrderBy(p => p.Price),
-            "high" => products.OrderByDescending(p => p.Price),
-            "trend" => products
-                .Include(p => p.Inventories)
-                .ThenInclude(i => i.OrderDetails)
-                .OrderByDescending(p => p.Inventories
-                    .SelectMany(i => i.OrderDetails)
-                    .Sum(od => od.Amount)),
-            _ => products.OrderByDescending(p => p.CreatedAt)
-        };
+            var sizeIds = query.SizeId.Split(',')
+                                      .Select(int.Parse)
+                                      .ToList();
+
+            products = products.Where(p => p.Inventories.Any(pc => sizeIds.Contains(pc.SizeId)));
+        }
+
+        // Lọc theo Price
+        if (!string.IsNullOrEmpty(query.Price))
+        {
+            var priceRanges = query.Price.Split(',');
+
+            products = priceRanges.Aggregate(products, (current, priceRange) => priceRange switch
+            {
+                "duoi-350" => current.Where(p => p.Price < 350000),
+                "350-750" => current.Where(p => p.Price >= 350000 && p.Price <= 750000),
+                "tren-750" => current.Where(p => p.Price > 750000),
+                _ => current
+            });
+        }
+
+        // Sắp xếp
+        if (!string.IsNullOrEmpty(query.SortBy))
+        {
+            products = query.SortBy switch
+            {
+                "date" => products.OrderByDescending(p => p.UpdatedAt),
+                "low" => products.OrderBy(p => p.Price),
+                "high" => products.OrderByDescending(p => p.Price),
+                "trend" => products
+                    .Include(p => p.Inventories)
+                    .ThenInclude(i => i.OrderDetails)
+                    .OrderByDescending(p => p.Inventories
+                        .SelectMany(i => i.OrderDetails)
+                        .Sum(od => od.Amount)),
+                _ => products.OrderByDescending(p => p.CreatedAt)
+            };
+        }
+
+        // Phân trang
+        // var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+        // Truy vấn dữ liệu từ cơ sở dữ liệu
+        return await products
+            .Skip(query.Offset)
+            .Take(query.PageSize)
+            .ToListAsync();
     }
-
-    // Phân trang
-    var skipNumber = (query.PageNumber - 1) * query.PageSize;
-
-    // Truy vấn dữ liệu từ cơ sở dữ liệu
-    return await products
-        .Skip(skipNumber)
-        .Take(query.PageSize)
-        .ToListAsync();
-}
 
     public async Task<Product?> GetByIdAsync(int id)
     {
