@@ -18,11 +18,11 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
 
     [HttpPut]
     [Route("{id}")]
-    public async Task<ActionResult> Update([FromRoute] int id,[FromBody] CustomerUpdateDto customerUpdateDto)
+    public async Task<ActionResult> Update([FromRoute] int id, IFormFile? file, [FromForm] CustomerUpdateDto customerUpdateDto)
     {
         if(!ModelState.IsValid) return BadRequest(ModelState);
-        
-        var customer = await customerRepository.UpdateAsync(id, customerUpdateDto);
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+        var customer = await customerRepository.UpdateAsync(id, baseUrl, file, customerUpdateDto);
         return customer != null ? Ok(customer.ToCustomerDto()) : NotFound();
     }
 }

@@ -3,11 +3,12 @@ using api.DTOs.Customer;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
 
-public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepository
+public class CustomerRepository(ApplicationDbContext dbContext, IImageService imageService) : ICustomerRepository
 {
     public Task<List<Customer>> GetAllAsync()
     {
@@ -26,18 +27,17 @@ public class CustomerRepository(ApplicationDbContext dbContext) : ICustomerRepos
         return customer;
     }
 
-    public async Task<Customer?> UpdateAsync(int id, CustomerUpdateDto customerUpdateDto)
+    public async Task<Customer?> UpdateAsync(int id, string baseUrl, IFormFile? file, CustomerUpdateDto customerUpdateDto)
     {
         var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
         if (customer == null) return null;
 
         customer.ToCustomerUpdateDto(customerUpdateDto);
+        if (file != null)
+        {
+            customer.Avatar = await imageService.CreateUrlAsync(file, baseUrl);
+        }
         await dbContext.SaveChangesAsync();
         return customer;
     }
-    //
-    // public async Task<Customer?> DeleteAsync(int id)
-    // {
-    //     throw new NotImplementedException();
-    // }
 }

@@ -9,7 +9,7 @@ public class ImageService(IImageRepository imageRepo,
     IProductRepository productRepo) 
     : IImageService
 {
-    public async Task<ImageDto> CreateImageAsync(IFormFile file, ImageCreateDto imageDto, string baseUrl)
+    public async Task<ImageDto> CreateProductImagesAsync(IFormFile file, ImageCreateDto imageDto, string baseUrl)
     {
         if (!await colorRepo.ColorExists(imageDto.ColorId))
             throw new ArgumentException("Color does not exist!");
@@ -20,6 +20,16 @@ public class ImageService(IImageRepository imageRepo,
         if (file.Length == 0)
             throw new ArgumentException("No file provided!");
 
+        var imageModel = imageDto.ToImageFromCreateDto();
+        imageModel.Url = await CreateUrlAsync(file, baseUrl);
+
+        await imageRepo.CreateAsync(imageModel);
+
+        return imageModel.ToImageDto();
+    }
+
+    public async Task<string> CreateUrlAsync(IFormFile file, string baseUrl)
+    {
         var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
         var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
@@ -32,14 +42,6 @@ public class ImageService(IImageRepository imageRepo,
         {
             await file.CopyToAsync(stream);
         }
-
-        var fileUrl = $"{baseUrl}/images/{fileName}";
-
-        var imageModel = imageDto.ToImageFromCreateDto();
-        imageModel.Url = fileUrl;
-
-        await imageRepo.CreateAsync(imageModel);
-
-        return imageModel.ToImageDto();
+        return $"{baseUrl}/images/{fileName}";
     }
 }

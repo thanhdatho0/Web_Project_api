@@ -36,6 +36,7 @@ public static class CustomerMappers
 
     public static void ToCustomerUpdateDto(this Customer customer, CustomerUpdateDto customerUpdateDto)
     {
+        customer.Avatar = customerUpdateDto.Avatar;
         customer.FirstName = customerUpdateDto.FirstName;
         customer.LastName = customerUpdateDto.LastName;
         customer.Male = customerUpdateDto.Male;

@@ -123,7 +123,9 @@ public class AccountController(
                 await roleManager.AddClaimAsync(role, new Claim("Permission", "CustomerAccess"));
             }
 
-            await customerRepository.CreateAsync(customerRegisterDto.CustomerInfo.ToCustomerCreateDto());
+            var newCustomer = customerRegisterDto.CustomerInfo.ToCustomerCreateDto();
+            newCustomer.Avatar = $"{Request.Scheme}://{Request.Host}/images/customer-avatar.png";
+            await customerRepository.CreateAsync(newCustomer);
             
             return Ok("Customer Created");
         }

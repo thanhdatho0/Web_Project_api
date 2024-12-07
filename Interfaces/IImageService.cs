@@ -4,5 +4,6 @@ namespace api.Interfaces;
 
 public interface IImageService
 {
-    Task<ImageDto> CreateImageAsync(IFormFile file, ImageCreateDto imageCreateDto, string baseUrl);
+    Task<ImageDto> CreateProductImagesAsync(IFormFile file, ImageCreateDto imageCreateDto, string baseUrl);
+    Task<string> CreateUrlAsync(IFormFile file, string baseUrl);
 }

@@ -2,6 +2,7 @@ namespace api.DTOs.Customer;
 
 public class CustomerUpdateDto
 {
+    public string Avatar { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public bool Male { get; set; }

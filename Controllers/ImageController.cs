@@ -46,7 +46,7 @@ namespace api.Controllers
                 // Construct base URL in the controller
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
 
-                var imageDtoResult = await imageService.CreateImageAsync(file, imageDto, baseUrl);
+                var imageDtoResult = await imageService.CreateProductImagesAsync(file, imageDto, baseUrl);
 
                 return CreatedAtAction(nameof(GetById), new { id = imageDtoResult.ImageId }, imageDtoResult);
             }
