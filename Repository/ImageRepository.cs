@@ -11,7 +11,6 @@ namespace api.Repository
     {
         public async Task<Image?> CreateAsync(Image imageModel)
         {
-            Console.WriteLine(imageModel.ImageId);
             await context.Images.AddAsync(imageModel);
             await context.SaveChangesAsync();
             return imageModel;

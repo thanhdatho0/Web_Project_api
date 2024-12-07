@@ -15,8 +15,7 @@ public class AccountController(
     SignInManager<AppUser> signInManager,
     RoleManager<IdentityRole> roleManager,
     IEmployeeRepository employeeRepository,
-    ICustomerRepository customerRepository,
-    IAccountService accountService)
+    ICustomerRepository customerRepository)
     : ControllerBase
 {
     [HttpPost("admin-register")]
@@ -213,14 +212,24 @@ public class AccountController(
         });
     }
 
-    [HttpPost("forgot-password")]
-    public async Task<ActionResult> ResetPassword([FromBody] PasswordForgotAccountDto resetPasswordDto)
+    [HttpPost("change-password")]
+    public async Task<ActionResult> ChangePassword([FromForm] NewPasswordDto changePasswordDto)
     {
-        if(!ModelState.IsValid) return BadRequest(ModelState);
+        var user = await userManager.FindByNameAsync(changePasswordDto.UserName);
+        if(user == null) return Unauthorized("Invalid username!");
+        if(!await userManager.CheckPasswordAsync(user, changePasswordDto.OldPassword)) 
+            return Unauthorized("Incorrect password!");
+        if(!changePasswordDto.NewPassword.Equals(changePasswordDto.ConfirmNewPassword))
+            return BadRequest("Passwords don't match!");    
+        var validationPassword = await userManager.PasswordValidators[0].ValidateAsync(userManager, user, changePasswordDto.NewPassword);
+        if (!validationPassword.Succeeded)
+        {
+            return BadRequest(validationPassword.Errors);
+        }
         try
         {
-            await accountService.ResetPassword(resetPasswordDto);
-            return Ok("Reset Password Successfully");
+            await userManager.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+            return Ok("Password changed successfully!");
         }
         catch (Exception e)
         {

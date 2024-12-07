@@ -18,7 +18,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -67,8 +66,15 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
+    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
     options.Password.RequiredLength = 8;
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+}).AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(3); // Token hết hạn sau 3 giờ
+});
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -131,7 +137,6 @@ builder.Services.AddScoped<ITargetCustomerRepository, TargetCustomerRepository>(
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 var app = builder.Build();
 
@@ -154,7 +159,7 @@ app.UseCors(x => x
 );
 
 app.MapControllers();
-
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.Run();
