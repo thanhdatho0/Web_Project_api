@@ -22,7 +22,7 @@ public class ProductCreateDto
     public decimal Cost { get; set; }
 
     [Required(ErrorMessage = "DiscountPercentage is required.")]
-    [Range(0.01, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
+    [Range(0, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
     public decimal DiscountPercentage { get; set; }
     public string? Unit { get; set; }
 
