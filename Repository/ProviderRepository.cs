@@ -28,7 +28,7 @@ namespace api.Repository
 
         public async Task<List<Provider>> GetAllAsync()
         {
-            return await context.Providers.Include(p => p.ProviderProducts).ToListAsync();
+            return await context.Providers.ToListAsync();
         }
 
         public async Task<Provider?> GetByIdAsync(int id)
