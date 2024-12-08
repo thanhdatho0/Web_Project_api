@@ -1,10 +1,10 @@
 using api.DTOs.PColor;
+using api.DTOs.PSize;
 
 namespace api.DTOs.Inventory;
 
 public class InventoryCreateDto
 {
     public ColorToProductDto Color { get; set; } = new();
-    public int SizeId { get; set; }
-    public int Quantity { get; set; }
+    public List<SizeOfColorDto> Sizes { get; set; } = [];
 }
