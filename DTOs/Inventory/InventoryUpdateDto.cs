@@ -1,6 +1,6 @@
 namespace api.DTOs.Inventory;
 
-public class InventoryCreateDto
+public class InventoryUpdateDto
 {
     public int ProductId { get; set; }
     public int ColorId { get; set; }
