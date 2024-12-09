@@ -28,6 +28,11 @@ public class ProductCreateDto
 
     [Required(ErrorMessage = "SubcategoryId is required.")]
     public int SubcategoryId { get; set; }
+
+    public int TargetCustomerId { get; set; }
+    public string? newCategory { get; set; } = string.Empty;
+    public int CategoryId { get; set; }
+    public string? newSubcategory { get; set; } = string.Empty;
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
     public List<ProductInventoryCreateDto> Inventory { get; set; } = [];

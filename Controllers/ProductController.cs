@@ -16,6 +16,7 @@ namespace api.Controllers
         IProviderRepository providerRepo,
         IImageRepository imageRepo,
         IInventoryRepository inventoryRepo,
+        ICategoryRepository categoryRepo,
         ISubcategoryRepository subcategoryRepo)
         : ControllerBase
     {
@@ -52,9 +53,32 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isSubCategoryExists = await subcategoryRepo.SubcategoryExists(productCreateDto.SubcategoryId);
-            if (!isSubCategoryExists)
-                return BadRequest("Subcategory does not exist!");
+            // var isSubCategoryExists = await subcategoryRepo.SubcategoryExists(productCreateDto.SubcategoryId);
+            // if (!isSubCategoryExists)
+            // {
+            //     var subcategory = 
+            // }
+            //     await subcategoryRepo.CreateAsync()
+
+            if (productCreateDto.newCategory != null)
+            {
+                var category = new Category
+                {
+                    TargetCustomerId = productCreateDto.TargetCustomerId,
+                    Name = productCreateDto.newCategory
+                };
+                await categoryRepo.CreateAsync(category);
+            }
+
+            if (productCreateDto.newSubcategory != null)
+            {
+                var subCategory = new Subcategory
+                {
+                    CategoryId = productCreateDto.CategoryId,
+                    SubcategoryName = productCreateDto.newSubcategory,
+                };
+                await subcategoryRepo.CreateAsync(subCategory);
+            }
             
             var isProviderExists = await providerRepo.ProviderExists(productCreateDto.ProviderId);
             if (!isProviderExists)
