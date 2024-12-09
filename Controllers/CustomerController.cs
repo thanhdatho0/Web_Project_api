@@ -18,7 +18,7 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
 
     [HttpPut]
     [Route("{id}")]
-    public async Task<ActionResult> Update([FromRoute] int id, IFormFile? file, [FromForm] CustomerUpdateDto customerUpdateDto)
+    public async Task<ActionResult> Update([FromRoute] string id, IFormFile? file, [FromForm] CustomerUpdateDto customerUpdateDto)
     {
         if(!ModelState.IsValid) return BadRequest(ModelState);
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
