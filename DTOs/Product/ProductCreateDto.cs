@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using api.DTOs.Inventory;
 
@@ -30,7 +31,9 @@ public class ProductCreateDto
 
     public int TargetCustomerId { get; set; }
     public int CategoryId { get; set; }
+    [DefaultValue("")]
     public string? NewCategory { get; set; } = string.Empty;
+    [DefaultValue("")]
     public string? NewSubcategory { get; set; } = string.Empty;
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }

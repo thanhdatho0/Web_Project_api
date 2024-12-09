@@ -52,42 +52,36 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            // var isSubCategoryExists = await subcategoryRepo.SubcategoryExists(productCreateDto.SubcategoryId);
-            // if (!isSubCategoryExists)
-            // {
-            //     var subcategory = 
-            // }
-            //     await subcategoryRepo.CreateAsync()
-            var newCategoryId = 0;
-            if (productCreateDto.NewCategory != null)
-            {
-                var category = new Category
-                {
-                    TargetCustomerId = productCreateDto.TargetCustomerId,
-                    Name = productCreateDto.NewCategory
-                };
-                newCategoryId = categoryRepo.CreateAsync(category).Result.CategoryId;
-            }
-
-            var categoryId = newCategoryId == 0 ? productCreateDto.CategoryId : newCategoryId;
-            if (productCreateDto.NewSubcategory != null)
-            {
-                var subCategory = new Subcategory
-                {
-                    CategoryId = categoryId,
-                    SubcategoryName = productCreateDto.NewSubcategory,
-                };
-                productCreateDto.SubcategoryId = subcategoryRepo.CreateAsync(subCategory).Result.SubcategoryId;
-            }
+            
+            var isProductExists = await productRepo.ProductNameExists(productCreateDto.Name);
+            if(isProductExists)
+               return BadRequest("Product already exists!"); 
             
             var isProviderExists = await providerRepo.ProviderExists(productCreateDto.ProviderId);
             if (!isProviderExists)
                 return BadRequest("Provider does not exists!");
             
-            var isProductExists = await productRepo.ProductNameExists(productCreateDto.Name);
-            if(isProductExists)
-               return BadRequest("Product already exists!"); 
+            var newCategoryId = 0;
+            if (productCreateDto.NewCategory != string.Empty)
+            {
+                var category = new Category
+                {
+                    TargetCustomerId = productCreateDto.TargetCustomerId,
+                    Name = productCreateDto.NewCategory!
+                };
+                newCategoryId = categoryRepo.CreateAsync(category).Result.CategoryId;
+            }
+
+            var categoryId = newCategoryId == 0 ? productCreateDto.CategoryId : newCategoryId;
+            if (productCreateDto.NewSubcategory != string.Empty)
+            {
+                var subCategory = new Subcategory
+                {
+                    CategoryId = categoryId,
+                    SubcategoryName = productCreateDto.NewSubcategory!,
+                };
+                productCreateDto.SubcategoryId = subcategoryRepo.CreateAsync(subCategory).Result.SubcategoryId;
+            }
 
             var productModel = productCreateDto.ToProductFromCreateDto();
             productModel.Quantity = productCreateDto.Inventory.Select(p => p.Sizes.Select(s => s.Quantity).Sum()).Sum();
@@ -120,6 +114,7 @@ namespace api.Controllers
                     await imageRepo.CreateAsync(imageModel);
                 }
             }
+            
             return Ok(productCreateDto.ToProductFromCreateDto());
         }
 
