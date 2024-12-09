@@ -13,7 +13,7 @@ namespace api.Models
         [EmailAddress]
         public string? Email { get; set; }
         [MaxLength(500)]
-        public string Avatar { get; set; } = string.Empty;
+        public string? Avatar { get; set; } = string.Empty;
         public List<Order> Orders { get; set; } = [];
     }
 }
