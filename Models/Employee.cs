@@ -14,7 +14,6 @@ namespace api.Models
         [Length(10, 11, ErrorMessage = "Phone number must be 10 or 11 numbers long.")]
         [Column(TypeName = "varchar(11)")]
         public string? ParentPhoneNumber { get; set; }
-
         public List<Order> Orders { get; set; } = [];
     }
 }

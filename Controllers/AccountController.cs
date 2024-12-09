@@ -3,6 +3,7 @@ using api.DTOs.Account;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -122,11 +123,12 @@ public class AccountController(
             {
                 await roleManager.AddClaimAsync(role, new Claim("Permission", "CustomerAccess"));
             }
-
+            
             var newCustomer = customerRegisterDto.CustomerInfo.ToCustomerCreateDto();
+            newCustomer.CustomerId = appUser.Id;
             newCustomer.Avatar = $"{Request.Scheme}://{Request.Host}/images/customer-avatar.png";
             await customerRepository.CreateAsync(newCustomer);
-
+            
             return Ok("Customer Created");
         }
         catch (Exception e)
@@ -206,15 +208,20 @@ public class AccountController(
             return Unauthorized("Username or password is incorrect!");
 
         var tokenDto = await tokenService.CreateToken(user, true);
-        return Ok(new NewUserDto
-        {
-            Username = user.UserName!,
-            Email = user.Email!,
-            Token = tokenDto.AccessToken,
-        });
+        var customer = await customerRepository.GetByIdAsync(user.Id);
+        var customerDto = customer!.ToCustomerFromLoginDto();
+        customerDto.AccessToken = tokenDto.AccessToken;
+        return Ok(customerDto);
+        // new NewUserDto
+        // {
+        //     Username = user.UserName!,
+        //     Email = user.Email!,
+        //     Token = tokenDto.AccessToken,
+        // }
     }
-
+    
     [HttpPost("change-password")]
+    [Authorize(Roles = "Customer")]
     public async Task<ActionResult> ChangePassword([FromBody] NewPasswordDto changePasswordDto)
     {
         var user = await userManager.FindByNameAsync(changePasswordDto.UserName);

@@ -6,7 +6,7 @@ namespace api.DTOs.PImage
     public class ImageUpdateDto
     {
         [Required(ErrorMessage = "Url is required.")]
-        [Url(ErrorMessage = "Please enter a valid URL.")]
+        // [Url(ErrorMessage = "Please enter a valid URL.")]
         public string Url { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Alt is required.")]

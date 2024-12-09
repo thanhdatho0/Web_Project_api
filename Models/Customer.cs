@@ -6,9 +6,7 @@ namespace api.Models
     [Table("Customers")]
     public class Customer : Person
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CustomerId { get; set; }
+        [Key] public string CustomerId { get; set; } = string.Empty;
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string? Email { get; set; }
