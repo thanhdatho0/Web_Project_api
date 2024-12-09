@@ -212,12 +212,6 @@ public class AccountController(
         var customerDto = customer!.ToCustomerFromLoginDto();
         customerDto.AccessToken = tokenDto.AccessToken;
         return Ok(customerDto);
-        // new NewUserDto
-        // {
-        //     Username = user.UserName!,
-        //     Email = user.Email!,
-        //     Token = tokenDto.AccessToken,
-        // }
     }
     
     [HttpPost("change-password")]

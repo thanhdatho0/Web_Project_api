@@ -19,13 +19,15 @@ public class TokenService : ITokenService
     private readonly SymmetricSecurityKey _key;
     private readonly UserManager<AppUser> _userManager;
     private readonly ApplicationDbContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TokenService(IConfiguration config, UserManager<AppUser> userManager, ApplicationDbContext context)
+    public TokenService(IConfiguration config, UserManager<AppUser> userManager, ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
     {
         _config = config;
         _userManager = userManager;
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]!));
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<TokenDto> CreateToken(AppUser user, bool populateExp)
@@ -67,6 +69,15 @@ public class TokenService : ITokenService
         
         await _userManager.UpdateAsync(user);
         var accessToken = tokenHandler.WriteToken(token);
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = user.RefreshTokenExpiryTime,
+        };
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         
         var existingToken = await _userManager.GetAuthenticationTokenAsync(user, "Default", "RefreshToken");
         if(string.IsNullOrEmpty(existingToken))
@@ -75,7 +86,6 @@ public class TokenService : ITokenService
         }
         return new TokenDto
         {
-            RefreshToken = refreshToken,
             AccessToken = accessToken,
         };
     }
