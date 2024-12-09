@@ -60,25 +60,25 @@ namespace api.Controllers
             // }
             //     await subcategoryRepo.CreateAsync()
             var newCategoryId = 0;
-            if (productCreateDto.newCategory != null)
+            if (productCreateDto.NewCategory != null)
             {
                 var category = new Category
                 {
                     TargetCustomerId = productCreateDto.TargetCustomerId,
-                    Name = productCreateDto.newCategory
+                    Name = productCreateDto.NewCategory
                 };
                 newCategoryId = categoryRepo.CreateAsync(category).Result.CategoryId;
             }
 
             var categoryId = newCategoryId == 0 ? productCreateDto.CategoryId : newCategoryId;
-            if (productCreateDto.newSubcategory != null)
+            if (productCreateDto.NewSubcategory != null)
             {
                 var subCategory = new Subcategory
                 {
                     CategoryId = categoryId,
-                    SubcategoryName = productCreateDto.newSubcategory,
+                    SubcategoryName = productCreateDto.NewSubcategory,
                 };
-                await subcategoryRepo.CreateAsync(subCategory);
+                productCreateDto.SubcategoryId = subcategoryRepo.CreateAsync(subCategory).Result.SubcategoryId;
             }
             
             var isProviderExists = await providerRepo.ProviderExists(productCreateDto.ProviderId);

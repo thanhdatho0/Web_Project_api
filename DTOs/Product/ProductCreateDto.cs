@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using api.DTOs.Inventory;
-using api.DTOs.PColor;
 
 namespace api.DTOs.Product;
 
@@ -31,8 +30,8 @@ public class ProductCreateDto
 
     public int TargetCustomerId { get; set; }
     public int CategoryId { get; set; }
-    public string? newCategory { get; set; } = string.Empty;
-    public string? newSubcategory { get; set; } = string.Empty;
+    public string? NewCategory { get; set; } = string.Empty;
+    public string? NewSubcategory { get; set; } = string.Empty;
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
     public List<ProductInventoryCreateDto> Inventory { get; set; } = [];
