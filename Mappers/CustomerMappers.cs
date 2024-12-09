@@ -17,6 +17,7 @@ public static class CustomerMappers
             Address = customer.Address,
             DateOfBirth = customer.DateOfBirth,
             Email = customer.Email,
+            Avatar = customer.Avatar,
         };
     }
 
@@ -44,5 +45,18 @@ public static class CustomerMappers
         customer.Address = customerUpdateDto.Address;
         customer.DateOfBirth = customerUpdateDto.DateOfBirth;
         customer.Email = customerUpdateDto.Email;
+    }
+
+    public static CustomerDetailsDto ToCustomerFromLoginDto(this Customer customer)
+    {
+        return new CustomerDetailsDto
+        {
+            FullName = customer.FirstName + " " + customer.LastName,
+            Male = customer.Male,
+            PhoneNumber = customer.PhoneNumber,
+            Address = customer.Address,
+            DateOfBirth = customer.DateOfBirth,
+            Email = customer.Email,
+        };
     }
 }

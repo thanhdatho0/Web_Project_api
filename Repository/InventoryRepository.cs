@@ -1,5 +1,7 @@
 using api.Data;
+using api.DTOs.Inventory;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,10 +31,18 @@ public class InventoryRepository(ApplicationDbContext context) : IInventoryRepos
         return inventory;
     }
 
-    // public async Task<Inventory?> UpdateAsync(int id, InventoryUpdateDto inventoryUpdateDto)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    public async Task<Inventory?> UpdateAsync(int id, InventoryUpdateDto inventoryUpdateDto)
+    {
+        var inventory = await context.Inventories.FindAsync();
+        if(inventory == null) return null;
+        var latestInStock = inventory.InStock; 
+        var latestQuantity = inventory.Quantity;
+        inventory.ToInventoryFromUpdate(inventoryUpdateDto);
+        latestInStock += inventoryUpdateDto.Quantity - latestQuantity;
+        inventory.InStock = latestInStock;
+        await context.SaveChangesAsync();
+        return inventory;
+    }
 
     public async Task<Inventory?> GetByDetailsId(int productId, int colorId, int sizeId)
     {

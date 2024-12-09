@@ -10,7 +10,7 @@ namespace api.Models
         public int OrderId { get; set; }
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
-        public int? CustomerId { get; set; }
+        public string? CustomerId { get; set; } = string.Empty;
         public Customer? Customer { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime OrderExportDateTime { get; set; }

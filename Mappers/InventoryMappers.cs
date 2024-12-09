@@ -14,5 +14,25 @@ namespace api.Mappers
                 InStock = inventory.InStock
             };
         }
+
+
+        public static Inventory ToInventory(this InventoryCreateDto inventoryCreateDto)
+        {
+            return new Inventory
+            {
+                ProductId = inventoryCreateDto.ProductId,
+                ColorId = inventoryCreateDto.ColorId,
+                SizeId = inventoryCreateDto.SizeId,
+                Quantity = inventoryCreateDto.Quantity,
+                InStock = inventoryCreateDto.Quantity
+            };
+        }
+
+        public static void ToInventoryFromUpdate(this Inventory inventory, InventoryUpdateDto inventoryUpdateDto)
+        {
+            inventory.SizeId = inventoryUpdateDto.SizeId;
+            inventory.ColorId = inventoryUpdateDto.ColorId;
+            inventory.Quantity = inventoryUpdateDto.Quantity;
+        }
     }
 }

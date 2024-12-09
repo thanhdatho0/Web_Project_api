@@ -16,6 +16,7 @@ namespace api.Controllers
         IProviderRepository providerRepo,
         IImageRepository imageRepo,
         IInventoryRepository inventoryRepo,
+        ICategoryRepository categoryRepo,
         ISubcategoryRepository subcategoryRepo)
         : ControllerBase
     {
@@ -47,43 +48,69 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ProductCreateDto productDto)
+        public async Task<IActionResult> Create([FromBody] ProductCreateDto productCreateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isSubCategoryExists = await subcategoryRepo.SubcategoryExists(productDto.SubcategoryId);
-            var isProviderExists = await providerRepo.ProviderExists(productDto.ProviderId);
-            var isProductExists = await productRepo.ProductNameExists(productDto.Name);
-            
-            if (!isSubCategoryExists)
-                return BadRequest("Subcategory does not exist!");
+            // var isSubCategoryExists = await subcategoryRepo.SubcategoryExists(productCreateDto.SubcategoryId);
+            // if (!isSubCategoryExists)
+            // {
+            //     var subcategory = 
+            // }
+            //     await subcategoryRepo.CreateAsync()
+            var newCategoryId = 0;
+            if (productCreateDto.newCategory != null)
+            {
+                var category = new Category
+                {
+                    TargetCustomerId = productCreateDto.TargetCustomerId,
+                    Name = productCreateDto.newCategory
+                };
+                newCategoryId = categoryRepo.CreateAsync(category).Result.CategoryId;
+            }
 
+            var categoryId = newCategoryId == 0 ? productCreateDto.CategoryId : newCategoryId;
+            if (productCreateDto.newSubcategory != null)
+            {
+                var subCategory = new Subcategory
+                {
+                    CategoryId = categoryId,
+                    SubcategoryName = productCreateDto.newSubcategory,
+                };
+                await subcategoryRepo.CreateAsync(subCategory);
+            }
+            
+            var isProviderExists = await providerRepo.ProviderExists(productCreateDto.ProviderId);
             if (!isProviderExists)
                 return BadRequest("Provider does not exists!");
             
+            var isProductExists = await productRepo.ProductNameExists(productCreateDto.Name);
             if(isProductExists)
                return BadRequest("Product already exists!"); 
 
-            var productModel = productDto.ToProductFromCreateDto();
-            productModel.Quantity = productDto.Inventory.Select(p => p.Quantity).Sum();
+            var productModel = productCreateDto.ToProductFromCreateDto();
+            productModel.Quantity = productCreateDto.Inventory.Select(p => p.Sizes.Select(s => s.Quantity).Sum()).Sum();
             productModel.InStock = productModel.Quantity;
             
             await productRepo.CreateAsync(productModel);
-            foreach (var inventoryCreateDto in productDto.Inventory)
+            foreach (var inventoryCreateDto in productCreateDto.Inventory)
             {
                 var inventory = new Inventory
                 {
                     ProductId = productModel.ProductId, 
-                    SizeId = inventoryCreateDto.SizeId, 
                     ColorId = inventoryCreateDto.Color.ColorId, 
-                    Quantity = inventoryCreateDto.Quantity,
-                    InStock = inventoryCreateDto.Quantity,
                 };
-                await inventoryRepo.CreateAsync(inventory);
+                foreach (var sizes in inventoryCreateDto.Sizes)
+                {
+                    inventory.SizeId = sizes.SizeId;
+                    inventory.Quantity = sizes.Quantity;
+                    inventory.InStock = sizes.Quantity;
+                    await inventoryRepo.CreateAsync(inventory);
+                }
             }
 
-            foreach (var color in productDto.Inventory.Select(x => x.Color).Distinct())
+            foreach (var color in productCreateDto.Inventory.Select(x => x.Color).Distinct())
             {
                 foreach (var image in color.Images!)
                 {
@@ -93,7 +120,7 @@ namespace api.Controllers
                     await imageRepo.CreateAsync(imageModel);
                 }
             }
-            return Ok(productDto);
+            return Ok(productCreateDto.ToProductFromCreateDto());
         }
 
         [HttpPut]

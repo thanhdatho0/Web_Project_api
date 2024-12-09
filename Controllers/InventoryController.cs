@@ -1,3 +1,4 @@
+using api.DTOs.Inventory;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -28,5 +29,13 @@ namespace api.Controllers
             return Ok(inventory.ToInventoryDto());
         }
 
+        // [HttpPost]
+        // public async Task<IActionResult> Create([FromForm] InventoryCreateDto inventoryCreateDto)
+        // {
+        //     if (!ModelState.IsValid)
+        //         return BadRequest(ModelState);
+        //     
+        // }
+        
     }
 }

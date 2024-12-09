@@ -22,13 +22,18 @@ public class ProductCreateDto
     public decimal Cost { get; set; }
 
     [Required(ErrorMessage = "DiscountPercentage is required.")]
-    [Range(0.01, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
+    [Range(0, 0.9, ErrorMessage = "DiscountPercentage must be a positive value.")]
     public decimal DiscountPercentage { get; set; }
     public string? Unit { get; set; }
 
     [Required(ErrorMessage = "SubcategoryId is required.")]
     public int SubcategoryId { get; set; }
+
+    public int TargetCustomerId { get; set; }
+    public int CategoryId { get; set; }
+    public string? newCategory { get; set; } = string.Empty;
+    public string? newSubcategory { get; set; } = string.Empty;
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
-    public List<InventoryCreateDto> Inventory { get; set; } = [];
+    public List<ProductInventoryCreateDto> Inventory { get; set; } = [];
 }

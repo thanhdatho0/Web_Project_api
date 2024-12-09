@@ -26,7 +26,7 @@ public class OrderController(IOrderRepository orderRepository,
     {
         if(!ModelState.IsValid) return BadRequest(ModelState);
         var order = orderCreateDto.ToOrderCreateDto();
-        if (order.CustomerId == 0) order.CustomerId = null;
+        order.CustomerId ??= null;
         await orderRepository.CreateAsync(order);
         foreach (var orderDetailDto in orderCreateDto.OrderDetails!)
         {

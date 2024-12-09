@@ -6,8 +6,7 @@ namespace api.Models
     [Table("Employees")]
     public class Employee : Person
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Salary { get; set; }
         public DateOnly StartDate { get; set; }
@@ -15,7 +14,6 @@ namespace api.Models
         [Length(10, 11, ErrorMessage = "Phone number must be 10 or 11 numbers long.")]
         [Column(TypeName = "varchar(11)")]
         public string? ParentPhoneNumber { get; set; }
-
         public List<Order> Orders { get; set; } = [];
     }
 }
