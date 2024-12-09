@@ -46,7 +46,7 @@ public class TokenService : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = DateTime.UtcNow.AddMinutes(30), // Thời gian hết hạn của Access Token
             SigningCredentials = creds,
             Issuer = _config["Jwt:Issuer"],
             Audience = _config["Jwt:Audience"],
@@ -59,8 +59,11 @@ public class TokenService : ITokenService
         var refreshToken = GenerateRefreshToken();
         
         user.RefreshToken = refreshToken;
-        if(populateExp)
+        if (populateExp)
+        {
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
+        }
         
         await _userManager.UpdateAsync(user);
         var accessToken = tokenHandler.WriteToken(token);
@@ -83,10 +86,11 @@ public class TokenService : ITokenService
         var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
         if (user is null ||
             user.RefreshToken != tokenDto.RefreshToken ||
-            user.RefreshTokenExpiryTime <= DateTime.Now)
+            user.RefreshTokenExpiryTime <= DateTime.Now || user.AccessTokenExpiryTime <= DateTime.Now)
         {
             throw new UnauthorizedAccessException();
         }
+        user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
         
         await _userManager.UpdateAsync(user);
         return await CreateToken(user, populateExp: false);
