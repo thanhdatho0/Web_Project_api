@@ -6,8 +6,7 @@ namespace api.Models
     [Table("Employees")]
     public class Employee : Person
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Salary { get; set; }
         public DateOnly StartDate { get; set; }

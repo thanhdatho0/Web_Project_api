@@ -206,18 +206,16 @@ public class AccountController(
             return Unauthorized("Username or password is incorrect!");
 
         var tokenDto = await tokenService.CreateToken(user, true);
-
-
         return Ok(new NewUserDto
         {
             Username = user.UserName!,
             Email = user.Email!,
-            Token = tokenDto.AccessToken
+            Token = tokenDto.AccessToken,
         });
     }
 
     [HttpPost("change-password")]
-    public async Task<ActionResult> ChangePassword([FromForm] NewPasswordDto changePasswordDto)
+    public async Task<ActionResult> ChangePassword([FromBody] NewPasswordDto changePasswordDto)
     {
         var user = await userManager.FindByNameAsync(changePasswordDto.UserName);
         if (user == null) return Unauthorized("Invalid username!");

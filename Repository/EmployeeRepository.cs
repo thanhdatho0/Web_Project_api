@@ -26,7 +26,7 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
         return employee;
     }
 
-    public async Task<Employee?> UpdateAsync(int id, EmployeeUpdateDto employeeUpdateDto)
+    public async Task<Employee?> UpdateAsync(string id, EmployeeUpdateDto employeeUpdateDto)
     {
         var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == id);
         if (employee == null) return null;

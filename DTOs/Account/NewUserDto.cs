@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using api.DTOs.Customer;
 
 namespace api.DTOs.Account;
 

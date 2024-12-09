@@ -36,7 +36,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(IFormFile file, [FromForm] ImageCreateDto imageDto)
+        public async Task<IActionResult> Create(IFormFile file, [FromBody] ImageCreateDto imageDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

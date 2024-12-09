@@ -30,5 +30,5 @@ public class ProductCreateDto
     public int SubcategoryId { get; set; }
     [Required(ErrorMessage = "ProviderId is required.")]
     public int ProviderId { get; set; }
-    public List<InventoryCreateDto> Inventory { get; set; } = [];
+    public List<ProductInventoryCreateDto> Inventory { get; set; } = [];
 }
