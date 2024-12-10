@@ -31,25 +31,33 @@ public class InventoryRepository(ApplicationDbContext context) : IInventoryRepos
         return inventory;
     }
 
-    public async Task<Inventory?> UpdateAsync(int id, InventoryUpdateDto inventoryUpdateDto)
-    {
-        var inventory = await context.Inventories.FindAsync();
-        if(inventory == null) return null;
-        var latestInStock = inventory.InStock; 
-        var latestQuantity = inventory.Quantity;
-        inventory.ToInventoryFromUpdate(inventoryUpdateDto);
-        latestInStock += inventoryUpdateDto.Quantity - latestQuantity;
-        inventory.InStock = latestInStock;
-        await context.SaveChangesAsync();
-        return inventory;
-    }
+    // public async Task<Inventory?> UpdateAsync(int id, InventoryUpdateDto inventoryUpdateDto)
+    // {
+    //     var inventory = await context.Inventories.FindAsync();
+    //     if (inventory == null) return null;
+    //     var latestInStock = inventory.InStock;
+    //     var latestQuantity = inventory.Quantity;
+    //     inventory.ToInventoryFromUpdate(inventoryUpdateDto);
+    //     latestInStock += inventoryUpdateDto.Quantity - latestQuantity;
+    //     inventory.InStock = latestInStock;
+    //     await context.SaveChangesAsync();
+    //     return inventory;
+    // }
 
     public async Task<Inventory?> GetByDetailsId(int productId, int colorId, int sizeId)
     {
         var inventory = await context.Inventories.FirstOrDefaultAsync(
-            i => i.ProductId == productId 
-                 && i.ColorId == colorId 
+            i => i.ProductId == productId
+                 && i.ColorId == colorId
                  && i.SizeId == sizeId);
         return inventory ?? null;
+    }
+
+    public Task<bool> InventoryExist(int productId, int colorId, int sizeId)
+    {
+        return context.Inventories.AnyAsync(i =>
+                                        i.ProductId == productId &&
+                                        i.ColorId == colorId &&
+                                        i.SizeId == sizeId);
     }
 }

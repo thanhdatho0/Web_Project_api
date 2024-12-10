@@ -25,14 +25,14 @@ public static class ProductMappers
             UpdatedAt = productModel.UpdatedAt,
             SubcategoryId = productModel.SubcategoryId,
             ProviderId = productModel.ProviderId,
-            
+
             Sizes = productModel.Inventories.Where(pz => pz.ProductId == productModel.ProductId)
             .Select(pz => new SizeDto
             {
                 SizeId = pz.SizeId,
                 SizeValue = pz.Size!.SizeValue,
             }).ToHashSet(),
-            
+
 
             Colors = productModel.Inventories.Where(pc => pc.ProductId == productModel.ProductId)
             .Select(pc => new ColorDto
@@ -66,8 +66,17 @@ public static class ProductMappers
         product.Description = productDto.Description;
         product.Cost = productDto.Cost;
         product.Price = productDto.Price;
-        product.Quantity = productDto.Quantity;
         product.DiscountPercentage = productDto.DiscountPercentage;
         product.UpdatedAt = DateTime.Now;
+    }
+
+    public static void ToProductFromUpdateAmount(this Product product, ProductUpdateAmountDto productDto)
+    {
+        product.UpdatedAt = DateTime.Now;
+
+        if (productDto.Quantity > 0)
+            product.Quantity += productDto.Quantity;
+
+        product.InStock += productDto.InStock;
     }
 }

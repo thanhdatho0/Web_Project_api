@@ -120,9 +120,9 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         var product = await context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
         if (product == null)
             return null;
-        var latestQuantity = productUpdateDto.Quantity;
+        // var latestQuantity = productUpdateDto.Quantity;
         product.ToProductFromUpdateDto(productUpdateDto);
-        product.InStock += (product.Quantity - latestQuantity);
+        // product.InStock += (product.Quantity - latestQuantity);
         await context.SaveChangesAsync();
         return product;
     }
@@ -150,5 +150,16 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
     public async Task<bool> ProductNameExists(string name)
     {
         return await context.Products.AnyAsync(p => p.Name == name);
+    }
+
+    public async Task<Product?> UpdateAmountAsyns(int id, ProductUpdateAmountDto productAmountDto)
+    {
+        var product = await context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
+
+        if (product == null) return null;
+
+        product.ToProductFromUpdateAmount(productAmountDto);
+        await context.SaveChangesAsync();
+        return product;
     }
 }
