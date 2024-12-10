@@ -113,8 +113,7 @@ namespace api.Controllers
                     await imageRepo.CreateAsync(imageModel);
                 }
             }
-            
-            return Ok(productCreateDto);
+            return Ok("Product created successfully!");
         }
 
         [HttpPut]
