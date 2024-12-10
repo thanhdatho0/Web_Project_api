@@ -200,7 +200,7 @@ public class AccountController(
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username.ToLower());
+        var user = userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username);
 
         if (user == null
             || !(await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false)).Succeeded

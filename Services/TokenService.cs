@@ -85,7 +85,7 @@ public class TokenService : ITokenService
             await _userManager.SetAuthenticationTokenAsync(user, "Default", "RefreshToken", user.RefreshToken);
         }
         return new TokenDto
-        {
+        {   
             AccessToken = accessToken,
         };
     }
