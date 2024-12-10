@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using api.DTOs.Token;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
@@ -8,4 +9,5 @@ public interface ITokenService
 {
     Task<TokenDto> CreateToken(AppUser user, bool populateExp);
     Task<TokenDto> RefreshToken(TokenDto tokenDto);
+    ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 }

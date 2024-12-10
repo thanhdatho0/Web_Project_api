@@ -115,7 +115,7 @@ public class TokenService : ITokenService
             return Convert.ToBase64String(randomNumber);
         }
     }
-    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         var jwtSettings = _config.GetSection("JWT");
         Console.Write(jwtSettings);

@@ -9,9 +9,7 @@ public static class CustomerMappers
     {
         return new CustomerDto
         {
-            CustomerId = customer.CustomerId,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName,
+            FullName = customer.FullName,
             Male = customer.Male,
             PhoneNumber = customer.PhoneNumber,
             Address = customer.Address,

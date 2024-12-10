@@ -208,10 +208,7 @@ public class AccountController(
             return Unauthorized("Username or password is incorrect!");
 
         var tokenDto = await tokenService.CreateToken(user, true);
-        var customer = await customerRepository.GetByIdAsync(user.Id);
-        var customerDto = customer!.ToCustomerFromLoginDto();
-        customerDto.AccessToken = tokenDto.AccessToken;
-        return Ok(customerDto);
+        return Ok(tokenDto.AccessToken);
     }
     
     [HttpPost("change-password")]
