@@ -23,9 +23,4 @@ public class ProductUpdateDto
     [Required(ErrorMessage = "Cost is required.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "Cost must be a positive value.")]
     public decimal Cost { get; set; }
-
-    [Required(ErrorMessage = "Quantity is required.")]
-    [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a non-negative integer.")]
-    public int Quantity { get; set; }
-
 }
