@@ -1,11 +1,12 @@
 using api.DTOs.TargetCustomer;
+using api.Helpers;
 using api.Models;
 
 namespace api.Interfaces
 {
     public interface ITargetCustomerRepository
     {
-        Task<List<TargetCustomer>> GetAllAsync();
+        Task<List<TargetCustomer>> GetAllAsync(TargetCustomerQuery query);
         Task<TargetCustomer?> GetByIdAsync(int id);
         Task<TargetCustomer> CreateAsync(TargetCustomer targetCustomer);
         Task<TargetCustomer?> UpdateAsync(int id, TargetCustomerUpdateDto targetCustomerUpdateDto);
