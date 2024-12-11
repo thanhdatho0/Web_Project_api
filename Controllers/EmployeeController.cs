@@ -27,23 +27,4 @@ public class EmployeeController(IEmployeeRepository employeeRepository) : Contro
         if (employee == null) return NotFound();
         return Ok(employee.ToEmployeeDto());
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(EmployeeCreateDto employeeCreateDto)
-    {
-
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var employee = employeeCreateDto.ToCreateEmployeeDto();
-        try
-        {
-            await employeeRepository.CreateAsync(employee);
-            return Ok(employee.ToEmployeeDto());
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
-    }
 }

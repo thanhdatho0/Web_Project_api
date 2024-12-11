@@ -47,9 +47,8 @@ public class InventoryRepository(ApplicationDbContext context) : IInventoryRepos
     public async Task<Inventory?> GetByDetailsId(int productId, int colorId, int sizeId)
     {
         var inventory = await context.Inventories.FirstOrDefaultAsync(
-            i => i.ProductId == productId
-                 && i.ColorId == colorId
-                 && i.SizeId == sizeId);
+            i => i.ProductId == productId && i.ColorId == colorId && i.SizeId == sizeId);
+        Console.WriteLine(inventory?.InventoryId);
         return inventory ?? null;
     }
 

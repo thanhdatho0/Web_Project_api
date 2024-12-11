@@ -10,10 +10,10 @@ namespace api.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderId { get; set; }
+        [DefaultValue("")]
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
-        [DefaultValue("")]
-        public string? CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime OrderExportDateTime { get; set; }

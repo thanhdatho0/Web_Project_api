@@ -15,9 +15,14 @@ public class CustomerRepository(ApplicationDbContext dbContext, IImageService im
         return dbContext.Customers.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Customer?> GetByIdAsync(string id)
+    public async Task<Customer?> GetByIdAsync(int id)
     {
         return await dbContext.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == id) ?? null;
+    }
+
+    public async Task<Customer?> GetByCodeAsync(string id)
+    {
+        return await dbContext.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerCode == id) ?? null;
     }
 
     public async Task<Customer?> CreateAsync(Customer customer)
@@ -27,7 +32,7 @@ public class CustomerRepository(ApplicationDbContext dbContext, IImageService im
         return customer;
     }
 
-    public async Task<Customer?> UpdateAsync(string id, string baseUrl, IFormFile? file, CustomerUpdateDto customerUpdateDto)
+    public async Task<Customer?> UpdateAsync(int id, string baseUrl, IFormFile? file, CustomerUpdateDto customerUpdateDto)
     {
         var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
         if (customer == null) return null;

@@ -1,10 +1,11 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace api.DTOs.Employee;
 
 public class EmployeeCreateDto
 {
-    public required EmployeePersonalInfo PersonalInfo { get; set; }
+    public EmployeePersonalInfo PersonalInfo { get; set; }
     [Required(ErrorMessage = "Salary is required.")]
     [Range(0, double.MaxValue, ErrorMessage = "Salary must be a positive number.")]
     public decimal Salary { get; set; }

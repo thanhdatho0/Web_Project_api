@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,7 +7,10 @@ namespace api.Models
     [Table("Employees")]
     public class Employee : Person
     {
-        public string EmployeeId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int EmployeeId { get; set; }
+        [DefaultValue("")]
+        public string EmployeeCode { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Salary { get; set; }
         public DateOnly StartDate { get; set; }

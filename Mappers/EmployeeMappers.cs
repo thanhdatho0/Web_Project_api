@@ -9,6 +9,7 @@ public static class EmployeeMappers
     {
         return new EmployeeDto
         {
+            EmployeeId = employee.EmployeeId,
             PersonalInfo = new EmployeePersonalInfo
             {
                 FirstName = employee.FirstName,

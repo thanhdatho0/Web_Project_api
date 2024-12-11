@@ -28,7 +28,7 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
 
     public async Task<Employee?> UpdateAsync(string id, EmployeeUpdateDto employeeUpdateDto)
     {
-        var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+        var employee = context.Employees.FirstOrDefault(e => e.EmployeeCode == id);
         if (employee == null) return null;
         employee.ToEmployeeUpdate(employeeUpdateDto);
         await context.SaveChangesAsync();

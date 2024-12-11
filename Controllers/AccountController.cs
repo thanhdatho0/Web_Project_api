@@ -125,7 +125,7 @@ public class AccountController(
             }
             
             var newCustomer = customerRegisterDto.CustomerInfo.ToCustomerCreateDto();
-            newCustomer.CustomerId = appUser.Id;
+            newCustomer.CustomerCode = appUser.Id;
             newCustomer.Avatar = $"{Request.Scheme}://{Request.Host}/images/customer-avatar.png";
             await customerRepository.CreateAsync(newCustomer);
             
@@ -187,7 +187,7 @@ public class AccountController(
             }
 
             var employeeModel = employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto();
-            employeeModel.EmployeeId = appUser.Id;
+            employeeModel.EmployeeCode = appUser.Id;
             await employeeRepository.CreateAsync(employeeModel);
 
             return Ok("Employee Created Successfully");

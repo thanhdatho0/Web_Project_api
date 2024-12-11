@@ -7,9 +7,10 @@ namespace api.Models
     [Table("Customers")]
     public class Customer : Person
     {
-        [Key] 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CustomerId { get; set; }
         [Description("")]
-        public string CustomerId { get; set; }
+        public string CustomerCode { get; set; }
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]

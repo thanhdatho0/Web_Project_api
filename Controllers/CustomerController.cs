@@ -28,14 +28,21 @@ public class CustomerController(ICustomerRepository customerRepo, ITokenService 
         var principal = tokenService.GetPrincipalFromExpiredToken(accessToken);
         var user = await userManager.FindByNameAsync(principal.Identity!.Name!);
         if(user == null) return Unauthorized();
-        var customer = await customerRepo.GetByIdAsync(user.Id);
+        var customer = await customerRepo.GetByCodeAsync(user.Id);
         if (customer == null) return NotFound();
         return Ok(customer.ToCustomerDto());
     }
 
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult> GetById(int id)
+    {
+        var customer = await customerRepo.GetByIdAsync(id);
+        return customer == null ? NotFound() : Ok(customer.ToCustomerDto());
+    }
+    
     [HttpPut]
-    [Route("{id}")]
-    public async Task<ActionResult> Update([FromRoute] string id, IFormFile? file, [FromBody] CustomerUpdateDto customerUpdateDto)
+    [Route("{id:int}")]
+    public async Task<ActionResult> Update([FromRoute] int id, IFormFile? file, [FromForm] CustomerUpdateDto customerUpdateDto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         var baseUrl = $"{Request.Scheme}://{Request.Host}";

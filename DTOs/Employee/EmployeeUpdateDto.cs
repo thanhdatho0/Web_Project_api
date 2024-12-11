@@ -4,7 +4,7 @@ namespace api.DTOs.Employee;
 
 public class EmployeeUpdateDto
 {
-    public required EmployeePersonalInfo PersonalInfo { get; set; }
+    public EmployeePersonalInfo PersonalInfo { get; set; }
     public decimal Salary { get; set; }
 
     [Required(ErrorMessage = "Start date is required.")]
