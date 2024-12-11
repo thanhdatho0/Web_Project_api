@@ -19,14 +19,10 @@ public class TokenController(ITokenService tokenService) : ControllerBase
 
         var accessToken = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
         var tokenDto = new TokenDto { AccessToken = accessToken, RefreshToken = refreshToken };
-        try
-        {
-            var token = await tokenService.RefreshToken(tokenDto);
-            return Ok(token);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized("Invalid or expired token");
-        }
+        
+        var token = await tokenService.RefreshToken(tokenDto);
+        Console.WriteLine(token);
+        return Ok(token);
+        
     }
 }
