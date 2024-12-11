@@ -83,7 +83,7 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireRole("Admin"));
-    
+
     options.AddPolicy("EmployeePolicy", policy =>
         policy.RequireClaim("Permission", "EmployeeAccess"));
 
@@ -117,9 +117,16 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["Jwt:Audience"],
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]!))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]!)),
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
     };
 });
+
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ISubcategoryRepository, SubcategoryRepository>();
@@ -138,6 +145,7 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -156,6 +164,7 @@ app.UseCors(x => x
         .AllowAnyHeader()
         .AllowAnyMethod()
         .SetIsOriginAllowed(origin => true)
+        .AllowCredentials()
 );
 
 app.MapControllers();

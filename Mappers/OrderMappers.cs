@@ -10,7 +10,7 @@ public static class OrderMappers
         return new OrderDto
         {
             OrderId = order.OrderId,
-            EmployeeName = order.Employee!.FullName,
+            EmployeeName = order.Employee!.FirstName + " " + order.Employee!.LastName,
             OrderExportDateTime = order.OrderExportDateTime,
             OrderNotice = order.OrderNotice,
             OrderDetails = order.OrderDetails!

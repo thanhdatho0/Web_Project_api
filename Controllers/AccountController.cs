@@ -100,7 +100,7 @@ public class AccountController(
             {
                 UserName = customerRegisterDto.Username,
                 Email = customerRegisterDto.CustomerInfo.Email,
-                PhoneNumber = customerRegisterDto.CustomerInfo.PhoneNumber,
+                PhoneNumber = customerRegisterDto.CustomerInfo.PersonalInfo.PhoneNumber,
             };
 
             var createUser = await userManager.CreateAsync(appUser, customerRegisterDto.Password);
@@ -160,7 +160,7 @@ public class AccountController(
             {
                 UserName = employeeRegisterDto.Username,
                 Email = employeeRegisterDto.Email,
-                PhoneNumber = employeeRegisterDto.EmployeeInfo.PhoneNumber
+                PhoneNumber = employeeRegisterDto.EmployeeInfo.PersonalInfo.PhoneNumber
             };
 
             // Attempt to create the user
@@ -185,7 +185,10 @@ public class AccountController(
             {
                 await roleManager.AddClaimAsync(role, new Claim("Permission", "EmployeeAccess"));
             }
-            await employeeRepository.CreateAsync(employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto());
+
+            var employeeModel = employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto();
+            employeeModel.EmployeeId = appUser.Id;
+            await employeeRepository.CreateAsync(employeeModel);
 
             return Ok("Employee Created Successfully");
         }
@@ -200,7 +203,7 @@ public class AccountController(
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username.ToLower());
+        var user = userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username);
 
         if (user == null
             || !(await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false)).Succeeded
@@ -208,16 +211,7 @@ public class AccountController(
             return Unauthorized("Username or password is incorrect!");
 
         var tokenDto = await tokenService.CreateToken(user, true);
-        var customer = await customerRepository.GetByIdAsync(user.Id);
-        var customerDto = customer!.ToCustomerFromLoginDto();
-        customerDto.AccessToken = tokenDto.AccessToken;
-        return Ok(customerDto);
-        // new NewUserDto
-        // {
-        //     Username = user.UserName!,
-        //     Email = user.Email!,
-        //     Token = tokenDto.AccessToken,
-        // }
+        return Ok(tokenDto.AccessToken);
     }
     
     [HttpPost("change-password")]

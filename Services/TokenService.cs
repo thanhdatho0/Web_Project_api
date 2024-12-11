@@ -19,13 +19,15 @@ public class TokenService : ITokenService
     private readonly SymmetricSecurityKey _key;
     private readonly UserManager<AppUser> _userManager;
     private readonly ApplicationDbContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TokenService(IConfiguration config, UserManager<AppUser> userManager, ApplicationDbContext context)
+    public TokenService(IConfiguration config, UserManager<AppUser> userManager, ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
     {
         _config = config;
         _userManager = userManager;
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]!));
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<TokenDto> CreateToken(AppUser user, bool populateExp)
@@ -34,9 +36,14 @@ public class TokenService : ITokenService
         var roleClaims = userRoles.Select(role => new Claim(ClaimTypes.Role, role));
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
+            // new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            // new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
+            // new Claim(ClaimTypes.NameIdentifier, user.Id)
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? ""),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique token ID
+            new Claim("given_name", user.UserName ?? ""), // Add 'given_name' claim
+            new Claim("nameid", user.Id), // User ID claim
         };
         
         claims.AddRange(roleClaims);
@@ -67,6 +74,15 @@ public class TokenService : ITokenService
         
         await _userManager.UpdateAsync(user);
         var accessToken = tokenHandler.WriteToken(token);
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = user.RefreshTokenExpiryTime,
+        };
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         
         var existingToken = await _userManager.GetAuthenticationTokenAsync(user, "Default", "RefreshToken");
         if(string.IsNullOrEmpty(existingToken))
@@ -74,8 +90,7 @@ public class TokenService : ITokenService
             await _userManager.SetAuthenticationTokenAsync(user, "Default", "RefreshToken", user.RefreshToken);
         }
         return new TokenDto
-        {
-            RefreshToken = refreshToken,
+        {   
             AccessToken = accessToken,
         };
     }
@@ -84,10 +99,13 @@ public class TokenService : ITokenService
     {
         var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
         var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
+        Console.WriteLine(user!.RefreshToken);
+        Console.WriteLine(tokenDto.RefreshToken);
         if (user is null ||
             user.RefreshToken != tokenDto.RefreshToken ||
-            user.RefreshTokenExpiryTime <= DateTime.Now || user.AccessTokenExpiryTime <= DateTime.Now)
+            user.RefreshTokenExpiryTime <= DateTime.UtcNow || user.AccessTokenExpiryTime <= DateTime.UtcNow)
         {
+            Console.WriteLine("Sai gì đó");
             throw new UnauthorizedAccessException();
         }
         user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
@@ -105,31 +123,42 @@ public class TokenService : ITokenService
             return Convert.ToBase64String(randomNumber);
         }
     }
-    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
-        var jwtSettings = _config.GetSection("JWT");
-        Console.Write(jwtSettings);
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = jwtSettings["Issuer"],
+            ValidIssuer = _config["Jwt:Issuer"],
             ValidateAudience = true,
-            ValidAudience = jwtSettings["Audience"],
+            ValidAudience = _config["Jwt:Audience"],
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SigningKey"]!)),
-            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]!)),
+            ValidateLifetime = false,
+            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         };
         
         var tokenHandler = new JwtSecurityTokenHandler();
-        SecurityToken securityToken;
-        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-        var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-        if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
-                .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        try
         {
-            throw new SecurityTokenException("Invalid token");
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+            Console.WriteLine($"Identity Name: {principal.Identity?.Name}");
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+    
+            if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
+                    .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+            return principal;
         }
-        return principal;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Token validation failed: {ex.Message}");
+            throw;
+        }
+        //
+        // return principal;
     }
+
 }

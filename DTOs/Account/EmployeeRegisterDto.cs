@@ -5,7 +5,7 @@ namespace api.DTOs.Account;
 
 public class EmployeeRegisterDto
 {
-    public EmployeeCreateDto EmployeeInfo { get; set; } = new EmployeeCreateDto();
+    public required EmployeeCreateDto EmployeeInfo { get; set; }
     [Required(ErrorMessage = "Username is required.")]
     public string Username { get; set; } = string.Empty;
     [Required(ErrorMessage = "Password is required.")]

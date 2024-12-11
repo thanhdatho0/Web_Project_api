@@ -1,12 +1,11 @@
+
+using System.ComponentModel.DataAnnotations;
+
 namespace api.DTOs.Customer;
 
 public class CustomerCreateDto
 {
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public bool Male { get; set; }
-    public string PhoneNumber { get; set; } = string.Empty;
-    public string Address { get; set; } = string.Empty;
-    public DateOnly DateOfBirth { get; set; }
+    public required CustomerPersonalInfo PersonalInfo { get; set; }
+    [EmailAddress(ErrorMessage = "Email is required")]
     public string Email { get; set; } = string.Empty;
 }

@@ -86,7 +86,6 @@ namespace api.Controllers
             var productModel = productCreateDto.ToProductFromCreateDto();
             productModel.Quantity = productCreateDto.Inventory.Select(p => p.Sizes.Select(s => s.Quantity).Sum()).Sum();
             productModel.InStock = productModel.Quantity;
-            
             await productRepo.CreateAsync(productModel);
             foreach (var inventoryCreateDto in productCreateDto.Inventory)
             {
@@ -114,8 +113,7 @@ namespace api.Controllers
                     await imageRepo.CreateAsync(imageModel);
                 }
             }
-            
-            return Ok(productCreateDto.ToProductFromCreateDto());
+            return Ok("Product created successfully!");
         }
 
         [HttpPut]

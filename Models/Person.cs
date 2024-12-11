@@ -1,17 +1,19 @@
 
-
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace api.Models
 {
     public class Person
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        [DefaultValue("")]
+        public required string FirstName { get; set; } 
+        [DefaultValue("")]
+        public required string LastName { get; set; } 
         public bool Male { get; set; }
-        public string PhoneNumber { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
-        public DateOnly DateOfBirth { get; set; }
-        public string FullName { get => FirstName + " " + LastName; }
+        [DefaultValue("")]
+        public required string PhoneNumber { get; set; } 
+        [DefaultValue("")]
+        public required string Address { get; set; } 
+        public required DateOnly DateOfBirth { get; set; }
     }
 }
