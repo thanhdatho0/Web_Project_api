@@ -1,11 +1,77 @@
 {
   "Version": 1,
-  "Hash": "pyaMSCEWRZ4nvKCja2XnniyJFEBxfxA7VVvbHvFd6MQ=",
+  "Hash": "AZpSEAxOF4QNMlXZPmG/S4uiL1Vzq0p3iqG991hMUl4=",
   "Source": "api",
   "BasePath": "_content/api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "api\\wwwroot",
+      "Source": "api",
+      "ContentRoot": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\",
+      "BasePath": "_content/api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\images\\14bf8055-554b-48ed-a922-b443109aa0bb_Thieunhi-sach1.jpg",
+      "SourceId": "api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\",
+      "BasePath": "_content/api",
+      "RelativePath": "images/14bf8055-554b-48ed-a922-b443109aa0bb_Thieunhi-sach1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\14bf8055-554b-48ed-a922-b443109aa0bb_Thieunhi-sach1.jpg"
+    },
+    {
+      "Identity": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\images\\4940b996-0abb-4dac-8771-08aa39625c25_Giaokhoa-sach1.jpg",
+      "SourceId": "api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\",
+      "BasePath": "_content/api",
+      "RelativePath": "images/4940b996-0abb-4dac-8771-08aa39625c25_Giaokhoa-sach1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\4940b996-0abb-4dac-8771-08aa39625c25_Giaokhoa-sach1.jpg"
+    },
+    {
+      "Identity": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\images\\customer-avatar.png",
+      "SourceId": "api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BackEnd\\ProjectHK5\\Web_Project_api\\wwwroot\\",
+      "BasePath": "_content/api",
+      "RelativePath": "images/customer-avatar.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\customer-avatar.png"
+    }
+  ]
 }

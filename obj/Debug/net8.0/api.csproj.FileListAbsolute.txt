@@ -297,3 +297,4 @@ D:\BackEnd\ProjectHK5\Web_Project_api\bin\Debug\net8.0\Microsoft.Extensions.Iden
 D:\BackEnd\ProjectHK5\Web_Project_api\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 D:\BackEnd\ProjectHK5\Web_Project_api\bin\Debug\net8.0\Npgsql.dll
 D:\BackEnd\ProjectHK5\Web_Project_api\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+D:\BackEnd\ProjectHK5\Web_Project_api\bin\Debug\net8.0\api.staticwebassets.runtime.json

@@ -29,7 +29,7 @@ public class TokenService : ITokenService
         _context = context;
         _httpContextAccessor = httpContextAccessor;
     }
-    
+
     public async Task<TokenDto> CreateToken(AppUser user, bool populateExp)
     {
         var userRoles = await _userManager.GetRolesAsync(user);
@@ -45,33 +45,36 @@ public class TokenService : ITokenService
             new Claim("given_name", user.UserName ?? ""), // Add 'given_name' claim
             new Claim("nameid", user.Id), // User ID claim
         };
-        
+
         claims.AddRange(roleClaims);
-        
+
         var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(30), // Thời gian hết hạn của Access Token
+            // Expires = DateTime.UtcNow.AddMinutes(30), // Thời gian hết hạn của Access Token
+            Expires = DateTime.UtcNow.AddMinutes(5), // Thời gian hết hạn của Access Token
             SigningCredentials = creds,
             Issuer = _config["Jwt:Issuer"],
             Audience = _config["Jwt:Audience"],
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         var refreshToken = GenerateRefreshToken();
-        
+
         user.RefreshToken = refreshToken;
         if (populateExp)
         {
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-            user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
+            // user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
+            user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(5);
+
         }
-        
+
         await _userManager.UpdateAsync(user);
         var accessToken = tokenHandler.WriteToken(token);
 
@@ -83,14 +86,14 @@ public class TokenService : ITokenService
             Expires = user.RefreshTokenExpiryTime,
         };
         _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
-        
+
         var existingToken = await _userManager.GetAuthenticationTokenAsync(user, "Default", "RefreshToken");
-        if(string.IsNullOrEmpty(existingToken))
+        if (string.IsNullOrEmpty(existingToken))
         {
             await _userManager.SetAuthenticationTokenAsync(user, "Default", "RefreshToken", user.RefreshToken);
         }
         return new TokenDto
-        {   
+        {
             AccessToken = accessToken,
         };
     }
@@ -108,8 +111,10 @@ public class TokenService : ITokenService
             Console.WriteLine("Sai gì đó");
             throw new UnauthorizedAccessException();
         }
-        user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
-        
+        // user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
+        user.AccessTokenExpiryTime = DateTime.UtcNow.AddMinutes(5);
+
+
         await _userManager.UpdateAsync(user);
         return await CreateToken(user, populateExp: false);
     }
@@ -137,14 +142,14 @@ public class TokenService : ITokenService
             NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
             RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         };
-        
+
         var tokenHandler = new JwtSecurityTokenHandler();
         try
         {
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
             Console.WriteLine($"Identity Name: {principal.Identity?.Name}");
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-    
+
             if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
                     .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
