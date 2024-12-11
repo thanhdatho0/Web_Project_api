@@ -19,6 +19,7 @@ public static class ProductMappers
             Cost = productModel.Cost,
             Price = productModel.Price,
             DiscountPercentage = productModel.DiscountPercentage,
+            Quantity = productModel.Quantity,
             InStock = productModel.InStock,
             IsDeleted = productModel.IsDeleted,
             CreatedAt = productModel.CreatedAt,
