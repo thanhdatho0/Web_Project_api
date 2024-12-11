@@ -1,5 +1,6 @@
 
 using api.DTOs.TargetCustomer;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +12,12 @@ namespace api.Controllers
     public class TargetCustomerController(ITargetCustomerRepository targetCustomerRepo) : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] TargetCustomerQuery query)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var genders = await targetCustomerRepo.GetAllAsync();
+            var genders = await targetCustomerRepo.GetAllAsync(query);
 
             var genderDto = genders.Select(g => g.ToTargetCustomerDto());
 
