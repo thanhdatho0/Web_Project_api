@@ -1,5 +1,6 @@
 
 using System.ComponentModel;
+using api.CustomerValidation;
 
 namespace api.Models
 {
@@ -14,6 +15,7 @@ namespace api.Models
         public required string PhoneNumber { get; set; } 
         [DefaultValue("")]
         public required string Address { get; set; } 
+        [MinAge(18)]
         public required DateOnly DateOfBirth { get; set; }
     }
 }
