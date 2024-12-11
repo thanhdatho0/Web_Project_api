@@ -21,7 +21,7 @@ public class InventoryRepository(ApplicationDbContext context) : IInventoryRepos
         return inventory ?? null;
     }
 
-    public async Task<Inventory> CreateAsync(Inventory inventory)
+    public async Task<Inventory?> CreateAsync(Inventory inventory)
     {
         await context.Inventories.AddAsync(inventory);
         await context.SaveChangesAsync();
@@ -57,7 +57,7 @@ public class InventoryRepository(ApplicationDbContext context) : IInventoryRepos
                                         i.SizeId == sizeId);
     }
 
-    public async Task<List<Inventory>> GetAllAsync(InventoryQuery query)
+    public async Task<List<Inventory>?> GetAllAsync(InventoryQuery query)
     {
         var inventories = context.Inventories.AsNoTracking();
 
