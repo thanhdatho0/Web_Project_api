@@ -18,7 +18,7 @@ namespace api.Models
                 public string? Description { get; set; }
                 [Column(TypeName = "decimal(18,2)")]
                 public decimal Cost { get; set; } //giá nhập kho
-                public int  Quantity { get; set; } // Số hàng nhập
+                public int Quantity { get; set; } // Số hàng nhập
                 [Column(TypeName = "varchar(50)")]
                 public string Unit { get; set; } = string.Empty; // Đơn vị
                 public int InStock { get; set; } //Số lượng hàng tồn kho

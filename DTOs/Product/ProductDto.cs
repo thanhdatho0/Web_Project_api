@@ -13,6 +13,7 @@ public class ProductDto
     public string? Description { get; set; }
     public decimal Cost { get; set; }
     public decimal DiscountPercentage { get; set; }
+    public int Quantity { get; set; }
     public int InStock { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }

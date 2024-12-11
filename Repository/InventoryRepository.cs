@@ -1,5 +1,6 @@
 using api.Data;
 using api.DTOs.Inventory;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -9,10 +10,6 @@ namespace api.Repository;
 
 public class InventoryRepository(ApplicationDbContext context) : IInventoryRepository
 {
-    // public async Task<List<Inventory>> GetAllAsync()
-    // {
-    //     throw new NotImplementedException();
-    // }
 
     public async Task<Inventory?> GetByIdAsync(int id)
     {
@@ -58,5 +55,21 @@ public class InventoryRepository(ApplicationDbContext context) : IInventoryRepos
                                         i.ProductId == productId &&
                                         i.ColorId == colorId &&
                                         i.SizeId == sizeId);
+    }
+
+    public async Task<List<Inventory>> GetAllAsync(InventoryQuery query)
+    {
+        var inventories = context.Inventories.AsNoTracking();
+
+        if (query.ProductId is not null)
+            inventories = inventories.Where(i => i.ProductId == query.ProductId);
+
+        if (query.ColorId is not null)
+            inventories = inventories.Where(i => i.ColorId == query.ColorId);
+
+        if (query.SizeId is not null)
+            inventories = inventories.Where(i => i.SizeId == query.SizeId);
+
+        return await inventories.ToListAsync();
     }
 }
