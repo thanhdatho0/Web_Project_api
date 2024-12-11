@@ -24,7 +24,7 @@ public class CustomerController(ICustomerRepository customerRepo, ITokenService 
     {
         var accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
         var principal = tokenService.GetPrincipalFromExpiredToken(accessToken);
-        var user = await userManager.GetUserAsync(principal);
+        var user = await userManager.FindByNameAsync(principal.Identity!.Name!);
         if(user == null) return Unauthorized();
         var customer = await customerRepo.GetByIdAsync(user.Id);
         if(customer == null) return NotFound();
