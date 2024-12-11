@@ -4,11 +4,7 @@ namespace api.DTOs.Employee;
 
 public class EmployeeUpdateDto
 {
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-
-    [Phone(ErrorMessage = "Please enter a valid phone number.")]
-    public string? PhoneNumber { get; set; }
+    public required EmployeePersonalInfo PersonalInfo { get; set; }
     public decimal Salary { get; set; }
 
     [Required(ErrorMessage = "Start date is required.")]
@@ -20,5 +16,4 @@ public class EmployeeUpdateDto
 
     [Phone(ErrorMessage = "Please enter a valid phone number.")]
     public string? ParentPhoneNumber { get; set; }
-    public int DepartmentId { get; set; }
 }

@@ -100,7 +100,7 @@ public class AccountController(
             {
                 UserName = customerRegisterDto.Username,
                 Email = customerRegisterDto.CustomerInfo.Email,
-                PhoneNumber = customerRegisterDto.CustomerInfo.PhoneNumber,
+                PhoneNumber = customerRegisterDto.CustomerInfo.PersonalInfo.PhoneNumber,
             };
 
             var createUser = await userManager.CreateAsync(appUser, customerRegisterDto.Password);
@@ -160,7 +160,7 @@ public class AccountController(
             {
                 UserName = employeeRegisterDto.Username,
                 Email = employeeRegisterDto.Email,
-                PhoneNumber = employeeRegisterDto.EmployeeInfo.PhoneNumber
+                PhoneNumber = employeeRegisterDto.EmployeeInfo.PersonalInfo.PhoneNumber
             };
 
             // Attempt to create the user
@@ -185,7 +185,10 @@ public class AccountController(
             {
                 await roleManager.AddClaimAsync(role, new Claim("Permission", "EmployeeAccess"));
             }
-            await employeeRepository.CreateAsync(employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto());
+
+            var employeeModel = employeeRegisterDto.EmployeeInfo.ToCreateEmployeeDto();
+            employeeModel.EmployeeId = appUser.Id;
+            await employeeRepository.CreateAsync(employeeModel);
 
             return Ok("Employee Created Successfully");
         }

@@ -22,7 +22,6 @@ public class CustomerController(ICustomerRepository customerRepo, ITokenService 
     [HttpGet]
     [Route("details")]
     [Authorize]
-
     public async Task<ActionResult> GetCustomerData()
     {
         var accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");

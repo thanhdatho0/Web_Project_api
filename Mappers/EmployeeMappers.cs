@@ -9,7 +9,15 @@ public static class EmployeeMappers
     {
         return new EmployeeDto
         {
-            Name = employee.FullName,
+            PersonalInfo = new EmployeePersonalInfo
+            {
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Male = employee.Male,
+                PhoneNumber = employee.PhoneNumber,
+                Address = employee.Address,
+                DateOfBirth = employee.DateOfBirth,
+            },
             Salary = employee.Salary,
             StartDate = employee.StartDate,
             ContractUpTo = employee.ContractUpTo,
@@ -20,12 +28,12 @@ public static class EmployeeMappers
     {
         return new Employee
         {
-            FirstName = employeeCreateDto.FirstName,
-            LastName = employeeCreateDto.LastName,
-            Male = employeeCreateDto.Male,
-            PhoneNumber = employeeCreateDto.PhoneNumber,
-            Address = employeeCreateDto.Address,
-            DateOfBirth = employeeCreateDto.DateOfBirth,
+            FirstName = employeeCreateDto.PersonalInfo.FirstName,
+            LastName = employeeCreateDto.PersonalInfo.LastName,
+            Male = employeeCreateDto.PersonalInfo.Male,
+            PhoneNumber = employeeCreateDto.PersonalInfo.PhoneNumber,
+            Address = employeeCreateDto.PersonalInfo.Address,
+            DateOfBirth = employeeCreateDto.PersonalInfo.DateOfBirth,
             Salary = employeeCreateDto.Salary,
             StartDate = employeeCreateDto.StartDate,
             ContractUpTo = employeeCreateDto.ContractUpTo,
@@ -35,9 +43,9 @@ public static class EmployeeMappers
 
     public static void ToEmployeeUpdate(this Employee employee, EmployeeUpdateDto employeeUpdateDto)
     {
-            employee.FirstName = employeeUpdateDto.FirstName!;
-            employee.LastName = employeeUpdateDto.LastName!;
-            employee.PhoneNumber = employeeUpdateDto.PhoneNumber!;
+            employee.FirstName = employeeUpdateDto.PersonalInfo.FirstName;
+            employee.LastName = employeeUpdateDto.PersonalInfo.LastName;
+            employee.PhoneNumber = employeeUpdateDto.PersonalInfo.PhoneNumber;
             employee.Salary = employeeUpdateDto.Salary;
             employee.StartDate = employeeUpdateDto.StartDate;
             employee.ContractUpTo = employeeUpdateDto.ContractUpTo;
