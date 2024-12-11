@@ -1,5 +1,6 @@
 using api.DTOs.Token;
 using api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
@@ -9,6 +10,7 @@ namespace api.Controllers;
 public class TokenController(ITokenService tokenService) : ControllerBase
 {
     [HttpPost("refresh")]
+    [Authorize]
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies["RefreshToken"];
