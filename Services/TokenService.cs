@@ -143,13 +143,13 @@ public class TokenService : ITokenService
         {
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
             Console.WriteLine($"Identity Name: {principal.Identity?.Name}");
-            // var jwtSecurityToken = securityToken as JwtSecurityToken;
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
     
-            // if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
-            //         .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            // {
-            //     throw new SecurityTokenException("Invalid token");
-            // }
+            if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
+                    .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
             return principal;
         }
         catch (Exception ex)
