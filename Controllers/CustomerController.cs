@@ -2,6 +2,7 @@ using api.DTOs.Customer;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,14 +21,16 @@ public class CustomerController(ICustomerRepository customerRepo, ITokenService 
 
     [HttpGet]
     [Route("details")]
+    [Authorize]
+
     public async Task<ActionResult> GetCustomerData()
     {
         var accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
         var principal = tokenService.GetPrincipalFromExpiredToken(accessToken);
         var user = await userManager.GetUserAsync(principal);
-        if(user == null) return Unauthorized();
+        if (user == null) return Unauthorized();
         var customer = await customerRepo.GetByIdAsync(user.Id);
-        if(customer == null) return NotFound();
+        if (customer == null) return NotFound();
         return Ok(customer.ToCustomerDto());
     }
 
@@ -35,7 +38,7 @@ public class CustomerController(ICustomerRepository customerRepo, ITokenService 
     [Route("{id}")]
     public async Task<ActionResult> Update([FromRoute] string id, IFormFile? file, [FromBody] CustomerUpdateDto customerUpdateDto)
     {
-        if(!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid) return BadRequest(ModelState);
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var customer = await customerRepo.UpdateAsync(id, baseUrl, file, customerUpdateDto);
         return customer != null ? Ok(customer.ToCustomerDto()) : NotFound();
