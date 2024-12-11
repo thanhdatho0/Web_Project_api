@@ -15,6 +15,18 @@ namespace api.Mappers
             };
         }
 
+        public static InventoryAllDto ToInventoryALLDto(this Inventory inventory)
+        {
+            return new InventoryAllDto
+            {
+                InventoryId = inventory.InventoryId,
+                ProductId = inventory.ProductId,
+                ColorId = inventory.ColorId,
+                SizeId = inventory.SizeId,
+                Quantity = inventory.Quantity,
+                InStock = inventory.InStock
+            };
+        }
 
         public static Inventory ToInventory(this InventoryCreateDto inventoryCreateDto)
         {
