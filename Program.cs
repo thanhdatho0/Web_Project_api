@@ -83,7 +83,7 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireRole("Admin"));
-    
+
     options.AddPolicy("EmployeePolicy", policy =>
         policy.RequireClaim("Permission", "EmployeeAccess"));
 
@@ -117,7 +117,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["Jwt:Audience"],
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]!))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]!)),
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -162,6 +164,7 @@ app.UseCors(x => x
         .AllowAnyHeader()
         .AllowAnyMethod()
         .SetIsOriginAllowed(origin => true)
+        .AllowCredentials()
 );
 
 app.MapControllers();

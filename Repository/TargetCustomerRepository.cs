@@ -1,6 +1,7 @@
 
 using api.Data;
 using api.DTOs.TargetCustomer;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -32,11 +33,20 @@ namespace api.Repository
             return await context.TargetCustomers.AnyAsync(g => g.TargetCustomerName == targetCustomerName);
         }
 
-        public async Task<List<TargetCustomer>> GetAllAsync()
+        public async Task<List<TargetCustomer>> GetAllAsync(TargetCustomerQuery query)
         {
-            return await context.TargetCustomers
-                                .Include(t => t.Categories)
-                                .ThenInclude(c => c.Subcategories).ToListAsync();
+            // return await context.TargetCustomers
+            //                     .Include(t => t.Categories)
+            //                     .ThenInclude(c => c.Subcategories).ToListAsync();
+
+            var targetCustomer = context.TargetCustomers.Include(t => t.Categories).ThenInclude(c => c.Subcategories).AsQueryable();
+
+            if (query.subcategoryId.HasValue)
+            {
+                targetCustomer = targetCustomer.Where(tc => tc.Categories.Any(c => c.Subcategories.Any(s => s.SubcategoryId == query.subcategoryId)));
+            }
+
+            return await targetCustomer.ToListAsync();
         }
 
         public async Task<TargetCustomer?> GetByIdAsync(int id)
