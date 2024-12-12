@@ -11,6 +11,7 @@ public static class OrderMappers
         {
             OrderId = order.OrderId,
             EmployeeName = order.Employee!.FirstName + " " + order.Employee!.LastName,
+            CustomerId = order.CustomerId,
             OrderExportDateTime = order.OrderExportDateTime,
             OrderNotice = order.OrderNotice,
             OrderDetails = order.OrderDetails!

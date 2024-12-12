@@ -29,10 +29,18 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
     public async Task<Order?> GetByIdAsync(int id)
     {
         var order = await dbContext.Orders
-            .Include(o => o.Employee)
-            .Include(o => o.OrderDetails)
-            .Include(o => o.Customer)
-            .FirstOrDefaultAsync(o => o.OrderId == id);
+                .Include(o => o.Employee)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Inventory)
+                .ThenInclude(i => i!.Product)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Inventory)
+                .ThenInclude(i => i!.Color)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Inventory)
+                .ThenInclude(i => i!.Size)
+                .Include(o => o.Customer)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
         return order ?? null;
     }
 
@@ -40,6 +48,23 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
     {
         await dbContext.Orders.AddAsync(order);
         await dbContext.SaveChangesAsync();
+        return order;
+    }
+
+    public async Task<List<Order>?> GetByCustomerIdAsync(int customerId)
+    {
+        var order = await dbContext.Orders
+            .Include(o => o.Employee)
+            .Include(o => o.OrderDetails)
+            .ThenInclude(o => o.Inventory)
+            .ThenInclude(i => i!.Product)
+            .Include(o => o.OrderDetails)
+            .ThenInclude(o => o.Inventory)
+            .ThenInclude(i => i!.Color)
+            .Include(o => o.OrderDetails)
+            .ThenInclude(o => o.Inventory)
+            .ThenInclude(i => i!.Size)
+            .Where(o => o.CustomerId == customerId).ToListAsync();
         return order;
     }
 

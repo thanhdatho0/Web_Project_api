@@ -21,6 +21,24 @@ public class OrderController(IOrderRepository orderRepository,
         return Ok(order.Select(o => o.ToOrderDto()));
     }
 
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        var order = await orderRepository.GetByIdAsync(id);
+        return order != null ? Ok(order.ToOrderDto()) : NotFound();
+    }
+    
+    [HttpGet]
+    [Route("customer/{id:int}")]
+    public async Task<IActionResult> GetByCustomerId(int id)
+    {
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        var order = await orderRepository.GetByCustomerIdAsync(id);
+        if(order == null) return NotFound();
+        return Ok(order.Select(o => o.ToOrderDto()));
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(OrderCreateDto orderCreateDto)
     {
