@@ -14,7 +14,7 @@ public static class ProductMappers
         {
             ProductId = productModel.ProductId,
             Name = productModel.Name,
-            SubcategoryName = productModel.Subcategory!.SubcategoryName,
+            SubcategoryName = productModel.Subcategory?.SubcategoryName,
             Description = productModel.Description,
             Cost = productModel.Cost,
             Price = productModel.Price,
