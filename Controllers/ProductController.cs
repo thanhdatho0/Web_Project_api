@@ -5,6 +5,7 @@ using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace api.Controllers
@@ -48,6 +49,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] ProductCreateDto productCreateDto)
         {
             if (!ModelState.IsValid)
@@ -114,6 +116,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductUpdateDto productDto)
         {
             if (!ModelState.IsValid)
@@ -129,6 +132,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid)

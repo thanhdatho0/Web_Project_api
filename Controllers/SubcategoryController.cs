@@ -3,6 +3,7 @@ using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -40,7 +41,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] SubcategoryCreateDto subcategoryDto)
         {
             if (!ModelState.IsValid)
@@ -66,6 +67,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] SubcategoryUpdateDto subcategoryDto)
         {
             if (!ModelState.IsValid)
@@ -78,21 +80,6 @@ namespace api.Controllers
 
             return Ok(subcategory.ToSubcategoryDto());
         }
-
-        // [HttpDelete]
-        // [Route("{id:int}")]
-        // public async Task<IActionResult> Delete([FromRoute] int id)
-        // {
-        //     if (!ModelState.IsValid)
-        //         return BadRequest(ModelState);
-
-        //     var subcategory = await _subcategoryRepo.DeleteAsync(id);
-
-        //     if (subcategory == null)
-        //         return NotFound("Subcategory does not exist");
-
-        //     return NoContent();
-        // }
 
     }
 }

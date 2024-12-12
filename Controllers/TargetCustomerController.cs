@@ -3,6 +3,7 @@ using api.DTOs.TargetCustomer;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -39,6 +40,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] TargetCustomerCreateDto genderDto)
         {
             if (!ModelState.IsValid)
@@ -55,6 +57,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TargetCustomerUpdateDto targetCustomerUpdateDto)
         {
             if (!ModelState.IsValid)
