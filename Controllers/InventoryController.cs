@@ -1,5 +1,6 @@
 using api.DTOs.Inventory;
 using api.DTOs.Product;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -81,7 +82,12 @@ namespace api.Controllers
 
         }
 
-
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAll([FromQuery] InventoryQuery query)
+        {
+            var inventories = await _inventoryRepo.GetAllAsync(query);
+            return Ok(inventories?.Select(i => i.ToInventoryALLDto()) ?? []);
+        }
 
     }
 }
