@@ -135,8 +135,8 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
 
         if (product == null)
             return null;
-
-        product.IsDeleted = true;
+        
+        product.IsDeleted = !product.IsDeleted;
         await context.SaveChangesAsync();
         return product;
     }

@@ -10,7 +10,7 @@ public static class OrderMappers
         return new OrderDto
         {
             OrderId = order.OrderId,
-            EmployeeName = order.Employee!.FirstName + " " + order.Employee!.LastName,
+            EmployeeName = order.Employee?.FirstName + " " + order.Employee?.LastName,
             CustomerId = order.CustomerId,
             OrderExportDateTime = order.OrderExportDateTime,
             OrderNotice = order.OrderNotice,
@@ -31,8 +31,8 @@ public static class OrderMappers
     {
         return new Order
         {
-            EmployeeId = orderCreateDto.EmployeeId,
-            CustomerId = orderCreateDto.CustomerId,
+            EmployeeId = orderCreateDto?.EmployeeId,
+            CustomerId = orderCreateDto!.CustomerId,
             OrderNotice = orderCreateDto.OrderNotice,
         };
     }
