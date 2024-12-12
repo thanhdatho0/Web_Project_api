@@ -87,20 +87,16 @@ namespace api.Controllers
             productModel.Quantity = productCreateDto.Inventory.Select(p => p.Sizes.Select(s => s.Quantity).Sum()).Sum();
             productModel.InStock = productModel.Quantity;
             await productRepo.CreateAsync(productModel);
-            foreach (var inventoryCreateDto in productCreateDto.Inventory)
+            foreach (var inventory in from inventoryCreateDto in productCreateDto.Inventory from sizes in inventoryCreateDto.Sizes select new Inventory
+                     {
+                         ProductId = productModel.ProductId,
+                         ColorId = inventoryCreateDto.Color.ColorId,
+                         SizeId = sizes.SizeId,
+                         Quantity = sizes.Quantity,
+                         InStock = sizes.Quantity
+                     })
             {
-                var inventory = new Inventory
-                {
-                    ProductId = productModel.ProductId, 
-                    ColorId = inventoryCreateDto.Color.ColorId, 
-                };
-                foreach (var sizes in inventoryCreateDto.Sizes)
-                {
-                    inventory.SizeId = sizes.SizeId;
-                    inventory.Quantity = sizes.Quantity;
-                    inventory.InStock = sizes.Quantity;
-                    await inventoryRepo.CreateAsync(inventory);
-                }
+                await inventoryRepo.CreateAsync(inventory);
             }
 
             foreach (var color in productCreateDto.Inventory.Select(x => x.Color).Distinct())
