@@ -24,6 +24,8 @@ public static class OrderMappers
             Total = order.OrderDetails!
                 .Select(o => o.Amount * o.ToOrderDetailDto().PriceAfterDiscount)
                 .Sum(),
+            
+            Confirmed = order.Confirmed
         };
     }
         
