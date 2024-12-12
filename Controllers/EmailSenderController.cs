@@ -2,6 +2,7 @@ using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers;
 
@@ -24,12 +25,13 @@ public class EmailSenderController : ControllerBase
         {
             return BadRequest("Invalid email request");
         }
-        var validUser = await _userManager.FindByEmailAsync(request.Email);
-        if(validUser == null || validUser.UserName != request.Username)
+        var validUser = await _userManager.FindByNameAsync(request.Username);
+        if(validUser == null || validUser.Email != request.Email)
             return StatusCode(500, "Email or Username is incorrect");
         try
         {
             var newPassword = await _emailService.SendEmailAsync(request);
+            Console.WriteLine("Test New Password: " + newPassword);
             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(validUser);
             await _userManager.ResetPasswordAsync(validUser, resetToken, newPassword);
             return Ok("Email sent successfully.");

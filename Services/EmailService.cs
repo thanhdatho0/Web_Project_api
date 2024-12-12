@@ -18,16 +18,25 @@ public class EmailService : IEmailService
                 Port = 587,
                 Credentials = new NetworkCredential("webshoppn10@gmail.com", "wygy evem mepv ccrl"),
                 EnableSsl = true
-            };            
+            };
             var mailMessage = new MailMessage
             {
                 From = new MailAddress("webshoppn10@gmail.com"),
                 Subject = "Reset Password",
                 Body = "Password mới. Vui lòng không tiết lộ: " + newPassword,
                 IsBodyHtml = true
-            }; 
+            };
             mailMessage.To.Add(emailRequest.Email);
-            await smtpClient.SendMailAsync(mailMessage);
+            try
+            {
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            Console.WriteLine("mailMessage: " + smtpClient );
             return newPassword;
         }
         catch (SmtpException smtpEx)
