@@ -3,6 +3,7 @@ using api.DTOs.Category;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -32,7 +33,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CategoryCreateDto categoryDto)
         {
             if (!ModelState.IsValid)
@@ -60,6 +61,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CategoryUpdateDto categoryDto)
         {
             if (!ModelState.IsValid)

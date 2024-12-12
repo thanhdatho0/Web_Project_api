@@ -1,6 +1,7 @@
 using api.DTOs.Employee;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
@@ -10,6 +11,7 @@ namespace api.Controllers;
 public class EmployeeController(IEmployeeRepository employeeRepository) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
         if (!ModelState.IsValid)
@@ -19,6 +21,7 @@ public class EmployeeController(IEmployeeRepository employeeRepository) : Contro
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetById(int id)
     {
         if (!ModelState.IsValid)

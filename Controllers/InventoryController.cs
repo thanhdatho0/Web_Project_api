@@ -3,6 +3,7 @@ using api.DTOs.Product;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -40,7 +41,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] InventoryCreateDto inventoryCreateDto)
         {
             if (!ModelState.IsValid)

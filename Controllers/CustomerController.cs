@@ -42,6 +42,7 @@ public class CustomerController(ICustomerRepository customerRepo, ITokenService 
     
     [HttpPut]
     [Route("{id:int}")]
+    [Authorize(Roles = "Customer")]
     public async Task<ActionResult> Update([FromRoute] int id, IFormFile? file, [FromForm] CustomerUpdateDto customerUpdateDto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

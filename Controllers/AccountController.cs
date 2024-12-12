@@ -231,7 +231,7 @@ public class AccountController(
     }
     
     [HttpPost("change-password")]
-    [Authorize(Roles = "Customer")]
+    [Authorize]
     public async Task<ActionResult> ChangePassword([FromBody] NewPasswordDto changePasswordDto)
     {
         var user = await userManager.FindByNameAsync(changePasswordDto.UserName);

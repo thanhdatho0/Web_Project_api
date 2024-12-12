@@ -11,6 +11,6 @@ namespace api.DTOs.PImage
 
         [Required(ErrorMessage = "Alt is required.")]
         [StringLength(100, ErrorMessage = "Alt text cannot exceed 100 characters.")]
-        public string Alt { get; set; } = string.Empty;
+        public string? Alt { get; set; } = string.Empty;
     }
 }
