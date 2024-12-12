@@ -22,10 +22,11 @@ public static class OrderMappers
                 .Sum(),
             
             Total = order.OrderDetails!
-                .Select(o => o.Amount * o.Inventory!.Product!.Price)
+                .Select(o => o.Amount * o.ToOrderDetailDto().PriceAfterDiscount)
                 .Sum(),
         };
     }
+        
 
     public static Order ToOrderCreateDto(this OrderCreateDto orderCreateDto)
     {

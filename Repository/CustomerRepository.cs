@@ -4,6 +4,7 @@ using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository;
@@ -38,6 +39,11 @@ public class CustomerRepository(ApplicationDbContext dbContext, IImageService im
         if (customer == null) return null;
 
         customer.ToCustomerUpdateDto(customerUpdateDto);
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == customer.CustomerCode);
+        if (user == null) return null;
+        user.Email = customer.Email;
+        user.NormalizedEmail = customer.Email.ToUpper();
+        user.PhoneNumber = customer.PhoneNumber;
         if (file != null)
         {
             customer.Avatar = await imageService.CreateUrlAsync(file, baseUrl);
