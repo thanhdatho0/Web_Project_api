@@ -44,7 +44,6 @@ public class OrderController(IOrderRepository orderRepository,
     {
         if(!ModelState.IsValid) return BadRequest(ModelState);
         var order = orderCreateDto.ToOrderCreateDto();
-        order.CustomerId ??= null;
         await orderRepository.CreateAsync(order);
         foreach (var orderDetailDto in orderCreateDto.OrderDetails!)
         {
@@ -57,5 +56,14 @@ public class OrderController(IOrderRepository orderRepository,
             await orderDetailRepository.CreateAsync(orderDetail);
         }
         return Ok(orderCreateDto);
+    }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    public async Task<IActionResult> Update(int id)
+    {
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        var orderConfirmed = await orderRepository.ConfirmOrder(id);
+        return orderConfirmed != null ? Ok(orderConfirmed) : NotFound();
     }
 }

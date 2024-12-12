@@ -10,4 +10,5 @@ public interface IOrderRepository
     public Task<Order> CreateAsync(Order order);
 
     public Task<List<Order>?> GetByCustomerIdAsync(int customerId);
+    public Task<Order?> ConfirmOrder(int id);
 }

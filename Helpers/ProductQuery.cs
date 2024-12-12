@@ -13,6 +13,8 @@ namespace api.Helpers
         public string? ColorId { get; set; } = null;
         public string? SizeId { get; set; } = null;
         public string? Price { get; set; } = null;
+
+        public bool? IsDelete { get; set; } = null;
         // public int PageNumber { get; set; } = 1;
         public int Offset { get; set; } = 0;
         public int PageSize { get; set; } = 16;

@@ -22,6 +22,8 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
             .Include(p => p.Inventories)
                 .ThenInclude(pz => pz.Size)
             .AsQueryable();
+        
+        products = query.IsDelete is not null ? products.Where(p => p.IsDeleted == query.IsDelete) : products.Where(p => p.IsDeleted == false);
 
         // Áp dụng bộ lọc cho TargetCustomerId, CategoryId, và SubcategoryId
         if (query.TargetCustomerId is not null)
@@ -134,10 +136,8 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         if (product == null)
             return null;
 
-        context.Products.Remove(product);
-
+        product.IsDeleted = true;
         await context.SaveChangesAsync();
-
         return product;
     }
 

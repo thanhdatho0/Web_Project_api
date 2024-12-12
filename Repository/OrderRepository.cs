@@ -68,15 +68,11 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
         return order;
     }
 
-    public async Task<Order?> UpdateAsync(int id, OrderUpdateDto orderUpdateDto)
+    public async Task<Order?> ConfirmOrder(int id)
     {
-        var order = await dbContext.Orders
-            .Include(o => o.Employee)
-            .Include(o => o.OrderDetails)
-            .Include(o => o.Customer)
-            .FirstOrDefaultAsync(o => o.OrderId == id);
-        if(order == null) return null;
-        dbContext.Entry(order).CurrentValues.SetValues(orderUpdateDto);
+        var order = await dbContext.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+        if (order == null) return null;
+        order.Confirmed = true;
         await dbContext.SaveChangesAsync();
         return order;
     }
