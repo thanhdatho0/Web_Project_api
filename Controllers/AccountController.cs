@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
 
-[Route("api/account")]
+[Route("api/[controller]")]
 public class AccountController(
     UserManager<AppUser> userManager,
     ITokenService tokenService,
@@ -208,6 +208,22 @@ public class AccountController(
         if (user == null
             || !(await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false)).Succeeded
          )
+            return Unauthorized("Username or password is incorrect!");
+
+        var tokenDto = await tokenService.CreateToken(user, true);
+        return Ok(tokenDto.AccessToken);
+    }
+    
+    [HttpPost("admin/login")]
+    public async Task<ActionResult> AdminLogin([FromBody] LoginDto loginDto)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var user = userManager.Users.FirstOrDefault(x => x.UserName == loginDto.Username);
+
+        if (user == null
+            || !(await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false)).Succeeded
+           )
             return Unauthorized("Username or password is incorrect!");
 
         var tokenDto = await tokenService.CreateToken(user, true);
