@@ -5,6 +5,6 @@ namespace api.DTOs.Inventory;
 
 public class ProductInventoryCreateDto
 {
-    public ColorToProductDto Color { get; set; } = new();
+    public int ColorId { get; set; } = new();
     public List<SizeOfColorDto> Sizes { get; set; } = [];
 }

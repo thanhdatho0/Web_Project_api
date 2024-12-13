@@ -92,24 +92,13 @@ namespace api.Controllers
             foreach (var inventory in from inventoryCreateDto in productCreateDto.Inventory from sizes in inventoryCreateDto.Sizes select new Inventory
                      {
                          ProductId = productModel.ProductId,
-                         ColorId = inventoryCreateDto.Color.ColorId,
+                         ColorId = inventoryCreateDto.ColorId,
                          SizeId = sizes.SizeId,
                          Quantity = sizes.Quantity,
                          InStock = sizes.Quantity
                      })
             {
                 await inventoryRepo.CreateAsync(inventory);
-            }
-
-            foreach (var color in productCreateDto.Inventory.Select(x => x.Color).Distinct())
-            {
-                foreach (var image in color.Images!)
-                {
-                    var imageModel = image.ToImageFromCreateProductDto();
-                    imageModel.ColorId = color.ColorId;
-                    imageModel.ProductId = productModel.ProductId;
-                    await imageRepo.CreateAsync(imageModel);
-                }
             }
             return Ok("Product created successfully!");
         }
