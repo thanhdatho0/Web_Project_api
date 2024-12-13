@@ -24,6 +24,23 @@ docker ps
 docker stop <container-name>
 docker rm <container-name>
 
+
+--Kiểm tra phiên bản .NET SDK:
+dotnet --version
+
+--Kiểm tra công cụ toàn cầu:
+dotnet tool list --global
+
+--Cài đặt dotnet-ef:
+dotnet tool install --global dotnet-ef
+
+--mẫu
+  "DefaultConnection": "Host=dpg-ctdjqjrtq21c73fqvst0-a.singapore-postgres.render.com;
+  Port=5432;Username=shopdatabase;
+  Password=qFnk1d9fON1Wh4ATPbmZOSYDCixxN0Cq;
+  Database=DatabasePostgre;
+  SSL Mode=Require;"
+
 -- Tạo database
 dotnet ef migrations add InitialCreate
 dotnet ef database update
